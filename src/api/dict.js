@@ -2,7 +2,7 @@ import request from "@/utils/request";
 
 export function getCacheDictCodeList(params) {
   return request({
-    url: '/sys/dict/getCacheDictCodeList',
+    url: '/admin/dict/getCacheDictCodeList',
     method: 'get',
     params
   })
@@ -10,7 +10,7 @@ export function getCacheDictCodeList(params) {
 
 export function getDictTypeList(params) {
   return request({
-    url: '/sys/dict/getDictTypeList',
+    url: '/admin/dict/getDictTypeList',
     method: 'get',
     params
   })
@@ -18,7 +18,7 @@ export function getDictTypeList(params) {
 
 export function getDictCodeList(params) {
   return request({
-    url: '/sys/dict/getDictCodeList',
+    url: '/admin/dict/getDictCodeList',
     method: 'get',
     params
   })
@@ -26,7 +26,7 @@ export function getDictCodeList(params) {
 
 export function saveDictCode(data) {
   return request({
-    url: '/sys/dict/saveDictCode',
+    url: '/admin/dict/saveDictCode',
     method: 'post',
     data
   })

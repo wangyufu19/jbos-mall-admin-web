@@ -119,14 +119,16 @@ export default {
     initHeadShip(){
       this.loading = true
       getCacheDictCodeList({typeId: 'JBOS_HEADSHIP'}).then(response => {
-        this.headShipDict = response.data.dictCodes
+        const res = response.data
+        this.headShipDict = res.data
         this.loading = false
       })
     },
     initEmpStatus(){
       this.loading = true
       getCacheDictCodeList({typeId: 'JBOS_EMP_STATUS'}).then(response => {
-        this.empStatusDict = response.data.dictCodes
+        const res = response.data
+        this.empStatusDict = res.data
         this.loading = false
       })
     },
@@ -135,7 +137,8 @@ export default {
         this.loading = true
         this.formObj.depNameS = query
         getDepList(this.formObj).then(response => {
-          this.deps = response.data.deps
+          const res = response.data
+          this.deps = res.data
           this.loading = false
         })
       } else {

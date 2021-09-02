@@ -132,7 +132,8 @@ export default {
     initDepLevel(){
       this.loading = true
       getCacheDictCodeList({typeId: 'JBOS_DEP_LEVEL'}).then(response => {
-        this.devLevelDict = response.data.dictCodes
+        const res = response.data
+        this.devLevelDict = res.data
         this.loading = false
       })
     },
@@ -141,7 +142,8 @@ export default {
         this.loading = true
         this.formObj.empNameS = query
         getEmpList(this.formObj).then(response => {
-          this.emps = response.data.emps
+          const res = response.data
+          this.emps = res.data
           this.loading = false
         })
       } else {
