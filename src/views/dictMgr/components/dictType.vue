@@ -67,7 +67,8 @@ export default {
     getDictTypeList() {
       this.listLoading = true
       getDictTypeList(this.search).then(response => {
-        this.datas = response.data.dictTypes
+        const res=response.data
+        this.datas = res.data
         this.listLoading = false
       })
     },

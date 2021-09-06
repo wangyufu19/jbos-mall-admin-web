@@ -77,7 +77,8 @@ export default {
       this.listLoading = true
       this.search.parentId = this.getParentId
       getFuncList(this.search).then(response => {
-        this.datas = response.data.funcs
+        const res=response.data
+        this.datas = res.data
         this.listLoading = false
       })
     },

@@ -75,8 +75,9 @@ export default {
   methods: {
     getDictCodeList() {
       this.listLoading = true
-      getDictCodeList({ typeId: this.typeId }).then(response => {
-        this.datas = response.data.dictCodes
+      getDictCodeList({ typeId: this.typeId }).then(response =>{
+        const res=response.data
+        this.datas = res.data
         this.listLoading = false
       })
     },

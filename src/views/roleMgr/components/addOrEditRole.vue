@@ -71,7 +71,8 @@ export default {
     },
     async loadTreeData(parentId) {
       await getFuncTree({ parentId: parentId }).then(response => {
-        this.items = response.data.funcTree
+        const res=response.data
+        this.items = res.data
       })
     },
     async loadNode(node, resolve) {

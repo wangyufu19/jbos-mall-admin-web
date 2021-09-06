@@ -36,7 +36,8 @@ export default {
   methods: {
     async loadTreeData(parentId) {
       await getRoleChildrenNode({ parentId: parentId }).then(response => {
-        this.items = response.data.childrenNode
+        const res=response.data
+        this.items = res.data
       })
     },
     async loadNode(node, resolve) {

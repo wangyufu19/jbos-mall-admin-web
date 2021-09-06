@@ -43,10 +43,12 @@ export default {
 
     async loadTreeData(parentId) {
       await getFuncTree({ parentId: parentId }).then(response => {
-        this.items = response.data.funcTree
+        const res=response.data
+        this.items = res.data
       })
       await getRoleFuncs({ roleId: this.getRoleId}).then(response => {
-        this.hasCheckedKeyIds = response.data.roleFuncs
+        const res=response.data
+        this.hasCheckedKeyIds = res.data
         this.$refs.tree.setCheckedKeys(this.hasCheckedKeyIds,false)
       })
     },

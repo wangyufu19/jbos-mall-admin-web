@@ -78,8 +78,9 @@ export default {
       this.listLoading = true
       this.queryPage.parentId = this.getRoleId
       getRoleList(this.queryPage).then(response => {
-        this.datas = response.data.page.list
-        this.total = response.data.page.total
+        const res=response.data
+        this.datas = res.data.list
+        this.total = res.data.total
         this.listLoading = false
       })
     },

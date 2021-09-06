@@ -88,8 +88,9 @@ export default {
       this.queryPage.isPage = 'true'
       this.queryPage.roleId = this.getRoleId
       getRoleEmpList(this.queryPage).then(response => {
-        this.datas = response.data.page.list
-        this.total = response.data.page.total
+        const res=response.data
+        this.datas = res.data.list
+        this.total = res.data.total
         this.listLoading = false
       })
     },
