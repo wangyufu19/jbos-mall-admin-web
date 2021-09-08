@@ -82,6 +82,7 @@ export default {
       loginForm: {
         username: 'admin',
         password: '111111',
+        captchaToken: '',
         captcha:'',
         captchaSrc:''
       },
@@ -120,6 +121,7 @@ export default {
     refreshCaptcha(){
       captcha().then(response=>{
         const res=response.data
+        this.loginForm.captchaToken=res.data.captchaToken
         this.loginForm.captchaSrc='data:image/jpeg;base64,'+res.data.captchaSrc
       })
     },
