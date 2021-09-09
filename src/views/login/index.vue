@@ -41,13 +41,13 @@
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
-      <el-form-item prop="captcha">
+      <el-form-item prop="captchaText">
         <el-col :span="13">
           <el-input
             ref="captcha"
-            v-model="loginForm.captcha"
+            v-model="loginForm.captchaText"
             placeholder="验证码"
-            name="captcha"
+            name="captchaText"
             type="text"
             tabindex="3"
             @keyup.enter.native="handleLogin"
@@ -66,7 +66,10 @@
 
 <script>
 import { captcha } from '@/api/captcha'
+import { login } from '@/api/user'
 import { validUsername } from '@/utils/validate'
+import http from "../../utils/request";
+import {Message} from "element-ui";
 
 export default {
   name: 'Login',
@@ -82,8 +85,8 @@ export default {
       loginForm: {
         username: 'admin',
         password: '111111',
-        captchaToken: '',
-        captcha:'',
+        captchaToken: '111',
+        captchaText:'',
         captchaSrc:''
       },
       loginRules: {
@@ -129,11 +132,12 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
+          this.$store.dispatch('user/login', this.loginForm).then(response => {
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
           }).catch(() => {
             this.loading = false
+            this.refreshCaptcha()
           })
         } else {
           console.log('error submit!!')
