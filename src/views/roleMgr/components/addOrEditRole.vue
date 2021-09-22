@@ -2,7 +2,8 @@
   <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
     <el-form ref="formObj" :model="formObj" :rules="rules" label-width="100px" class="demo-ruleForm">
       <el-form-item label="角色编码" prop="roleCode">
-        <el-input v-model="formObj.roleCode" />
+        <el-input v-model="formObj.roleCode" v-if="dialogStatus==='create'" :disabled="false"/>
+        <el-input v-model="formObj.roleCode" v-else-if="dialogStatus==='update'" :disabled="true"/>
       </el-form-item>
       <el-form-item label="角色名称" prop="roleName">
         <el-input v-model="formObj.roleName" />
