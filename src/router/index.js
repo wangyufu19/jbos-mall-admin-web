@@ -109,7 +109,12 @@ function fnAddDynamicMenuRoutes(menuList = []) {
     const funcRoute = fnAddDynamicMenuRoute(menuList[i])
     if (menuList[i].children && menuList[i].children.length >= 1) {
       funcRoute.path = '/' + menuList[i].funcCode
-      funcRoute.component = Layout
+      //支持三级菜单
+      if(menuList[i].funcType==='1'){
+        funcRoute.component =  loadView(menuList[i].funcUrl)
+      }else{
+        funcRoute.component = Layout
+      }
       funcRoute.children = fnAddDynamicMenuRoutes(menuList[i].children)
       funcRoutes.push(funcRoute)
     } else {
