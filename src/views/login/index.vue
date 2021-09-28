@@ -14,7 +14,7 @@
         <el-input
           ref="username"
           v-model="loginForm.username"
-          placeholder="Username"
+          placeholder="用户名"
           name="username"
           type="text"
           tabindex="1"
@@ -31,7 +31,7 @@
           ref="password"
           v-model="loginForm.password"
           :type="passwordType"
-          placeholder="Password"
+          placeholder="密码"
           name="password"
           tabindex="2"
           auto-complete="on"
@@ -76,7 +76,7 @@ export default {
   data() {
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+        callback(new Error('密码长度必须大于6位数字'))
       } else {
         callback()
       }
@@ -90,9 +90,9 @@ export default {
         captchaSrc:''
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur'}],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
-        captcha: [{ required: true, trigger: 'blur'}]
+        username: [{ required: true,message: '用户名必须填写', trigger: 'blur'}],
+        password: [{ required: true, message: '密码必须填写',trigger: 'blur', validator: validatePassword }],
+        captchaText: [{ required: true, message: '验证码必须填写',trigger: 'blur'}]
       },
       loading: false,
       passwordType: 'password',
@@ -150,8 +150,6 @@ export default {
 </script>
 
 <style lang="scss">
-/* 修复input 背景不协调 和光标变色 */
-/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
 $bg:#283443;
 $light_gray:#fff;
