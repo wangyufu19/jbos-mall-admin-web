@@ -8,35 +8,41 @@
       <el-row>
         <el-col span="12">
           <el-form-item label="业务编号" prop="bizNo">
-            <el-input v-model="formObj.bizNo" v-if="dialogStatus==='create'" :disabled="false" />
-            <el-input v-model="formObj.bizNo" v-else-if="dialogStatus==='update'" :disabled="true"/>
+            <el-input v-model="formObj.bizNo" :disabled="true"/>
           </el-form-item>
         </el-col>
         <el-col span="12">
           <el-form-item label="申请人" prop="applyUserId">
-            <el-input v-model="formObj.applyUserId" v-if="dialogStatus==='create'" :disabled="false"/>
-            <el-input v-model="formObj.applyUserId" v-else-if="dialogStatus==='update'" :disabled="true"/>
+            <el-input v-model="formObj.applyUserName" :disabled="true"/>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col span="12">
           <el-form-item label="申请部门" prop="applyDepId">
-            <el-input v-model="formObj.applyDepId" v-if="dialogStatus==='create'" :disabled="false"/>
-            <el-input v-model="formObj.applyDepId" v-else-if="dialogStatus==='update'" :disabled="true"/>
+            <el-input v-model="formObj.applyDepName" :disabled="true"/>
           </el-form-item>
         </el-col>
         <el-col span="12">
           <el-form-item label="申请日期" prop="applyTime">
-            <el-input v-model="formObj.applyTime" v-if="dialogStatus==='create'" :disabled="false"/>
-            <el-input v-model="formObj.applyTime" v-if="dialogStatus==='update'" :disabled="true"/>
+            <el-date-picker
+              :disabled="true"
+              v-model="formObj.applyTime"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="选择日期"/>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col span="12">
-          <el-form-item  label-width="110px" align="" label="总办会议日期" prop="gmoTime">
-            <el-input v-model="formObj.gmoTime"/>
+          <el-form-item  label="总办日期" prop="gmoTime">
+            <el-date-picker
+              v-model="formObj.gmoTime"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="选择日期">
+            </el-date-picker>
           </el-form-item>
         </el-col>
         <el-col span="12">
@@ -123,21 +129,27 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
     import EditableCell from './components/EditableCell'
-    import { add,infoById,update } from '@/api/im/materialBuy'
-    import { getMaterailList }  from '@/api/im/materialList'
+    import { getBizno,add,infoById,update } from '@/api/im/materialBuy'
+    import { getMaterialList }  from '@/api/im/materialList'
     export default {
       name: "addOrUpdate",
       components: {
         EditableCell
+      },
+      computed: {
+        ...mapGetters([
+          'user'
+        ])
       },
       data() {
         return {
           dialogFormVisible: false,
           dialogStatus: '',
           textMap: {
-            create: '物品采购-新增',
-            update: '物品采购-修改'
+            create: '物品采购-发起流程',
+            update: '物品采购-修改流程'
           },
           formObj: {
             bizNo: '',
@@ -170,9 +182,11 @@
             this.formObj = {
               id: undefined,
               bizNo: '',
-              applyUserId: '',
-              applyDepId: '',
-              applyTime: '',
+              applyUserId: this.user.LOGINNAME,
+              applyUserName: this.user.USERNAME,
+              applyDepId:this.user.DEPID,
+              applyDepName:this.user.DEPNAME,
+              applyTime:  new Date (),
               gmoTime: '',
               totalAmt: '',
               purpose: ''
@@ -181,11 +195,12 @@
               this.$refs['formObj'].clearValidate()
             })
             this.datas=[]
+            this.getBizno()
           } else {
             this.dialogStatus = dialogStatus
             this.dialogFormVisible = true
-            this.onInfoById(formObj.id)
-            this.onMaterailList(formObj.id)
+            this.getInfoById(formObj.id)
+            this.getMaterialList(formObj.id)
           }
         },
         tableRowClassName({ row, rowIndex }) {
@@ -205,7 +220,15 @@
             return item
           })
         },
-        onInfoById(id){
+        getBizno(){
+          this.loading = true
+          getBizno().then(response => {
+            const res = response.data
+            this.formObj.bizNo = res.data
+            this.loading = false
+          })
+        },
+        getInfoById(id){
           this.loading = true
           infoById({id: id}).then(response => {
             const res = response.data
@@ -213,9 +236,9 @@
             this.loading = false
           })
         },
-        onMaterailList(id){
+        getMaterialList(id){
           this.loading = true
-          getMaterailList({bizid: id}).then(response => {
+          getMaterialList({bizid: id}).then(response => {
             const res = response.data
             this.datas = res.data
             this.loading = false
@@ -258,6 +281,21 @@
             }
           })
         },
+        onUpdate() {
+          this.$refs['formObj'].validate((valid) => {
+            if (valid) {
+              const data={formObj:this.formObj,materials:this.datas}
+              update(data).then(response => {
+                this.dialogFormVisible = false
+                this.$emit('refreshDataList')
+                this.$message({
+                  message: '操作成功',
+                  type: 'success'
+                })
+              })
+            }
+          })
+        }
       }
     }
 </script>

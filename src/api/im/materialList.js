@@ -1,6 +1,6 @@
 import request from "@/utils/request";
 
-export function getMaterailList(params) {
+export function getMaterialList(params) {
   return request({
     url: '/admin//material/list/list',
     method: 'get',

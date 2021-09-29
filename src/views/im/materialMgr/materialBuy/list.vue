@@ -9,6 +9,8 @@
       <el-input v-model="search.applyTimes" placeholder="申请日期" class="filter-item" style="width: 200px;" />
       <el-button size="medium" type="primary" @click="onSearch">查询</el-button>
       <el-button size="medium" type="primary" @click="onReset">重置</el-button>
+    </div>
+    <div class="filter-container">
       <el-button size="medium" style="margin-left: 10px;" type="primary" @click="onShowAdd">发起流程</el-button>
     </div>
     <el-table
@@ -22,18 +24,18 @@
       <el-table-column
         prop="bizNo"
         label="业务编号"
-        width="120"
+        width="180"
       >
       </el-table-column>
       <el-table-column
-        prop="applyUserId"
+        prop="applyUserName"
         label="申请人"
         width="100"
       />
       <el-table-column
-        prop="applyDepId"
+        prop="applyDepName"
         label="申请部门"
-        width="100"
+        width="180"
       />
       <el-table-column
         prop="applyTime"
@@ -44,6 +46,7 @@
         prop="gmoTime"
         label="总办日期"
         width="100"
+        value-format="yyyy-MM-dd"
       />
       <el-table-column
         prop="totalAmt"

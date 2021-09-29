@@ -1,5 +1,13 @@
 import request from "@/utils/request";
 
+
+export function getBizno(params) {
+  return request({
+    url: '/admin//material/buy/bizno',
+    method: 'get',
+    params
+  })
+}
 export function list(params) {
   return request({
     url: '/admin//material/buy/list',
