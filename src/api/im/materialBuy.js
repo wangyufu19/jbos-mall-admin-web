@@ -7,9 +7,9 @@ export function list(params) {
     params
   })
 }
-export function byId(params) {
+export function infoById(params) {
   return request({
-    url: '/admin//material/buy/id',
+    url: '/admin//material/buy/infoById',
     method: 'get',
     params
   })

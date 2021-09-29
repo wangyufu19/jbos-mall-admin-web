@@ -124,7 +124,8 @@
 
 <script>
     import EditableCell from './components/EditableCell'
-    import { add,byId,update } from '@/api/im/materialBuy'
+    import { add,infoById,update } from '@/api/im/materialBuy'
+    import { getMaterailList }  from '@/api/im/materialList'
     export default {
       name: "addOrUpdate",
       components: {
@@ -183,7 +184,8 @@
           } else {
             this.dialogStatus = dialogStatus
             this.dialogFormVisible = true
-            this.onLoad(formObj.id)
+            this.onInfoById(formObj.id)
+            this.onMaterailList(formObj.id)
           }
         },
         tableRowClassName({ row, rowIndex }) {
@@ -203,12 +205,21 @@
             return item
           })
         },
-        onLoad(id){
+        onInfoById(id){
           this.loading = true
-          byId({id: id}).then(response => {
+          infoById({id: id}).then(response => {
             const res = response.data
             this.formObj = res.data
             this.loading = false
+          })
+        },
+        onMaterailList(id){
+          this.loading = true
+          getMaterailList({bizid: id}).then(response => {
+            const res = response.data
+            this.datas = res.data
+            this.loading = false
+            this.editModeEnabled= false
           })
         },
         onAddRow() {
