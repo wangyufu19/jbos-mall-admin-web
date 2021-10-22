@@ -5,8 +5,20 @@
     </div>
     <div class="filter-container">
       <el-input v-model="search.bizNoS" placeholder="业务编号" class="filter-item" style="width: 200px;" />
-      <el-input v-model="search.feeTypes" placeholder="费用类型" class="filter-item" style="width: 200px;" />
-      <el-input v-model="search.applyTimes" placeholder="申请日期" class="filter-item" style="width: 200px;" />
+      <el-select
+        v-model="search.feeTypeS"
+        clearable
+        :loading="loading"
+        placeholder="费用类型">
+
+      </el-select>
+      <el-date-picker
+        v-model="search.applyTimeS"
+        type="date"
+        value-format="yyyy-MM-dd"
+        placeholder="申请日期">
+      </el-date-picker>
+
       <el-button size="medium" type="primary" @click="onSearch">查询</el-button>
       <el-button size="medium" type="primary" @click="onReset">重置</el-button>
     </div>

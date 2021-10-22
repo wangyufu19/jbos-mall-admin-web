@@ -207,7 +207,6 @@
           // 把每一行的索引放进row
           row.index = rowIndex
         },
-
         onRowClick(row,column,event) {
           this.currentRow = row.index
           row.status=1
@@ -242,7 +241,6 @@
             const res = response.data
             this.datas = res.data
             this.loading = false
-            this.editModeEnabled= false
           })
         },
         onAddRow() {
