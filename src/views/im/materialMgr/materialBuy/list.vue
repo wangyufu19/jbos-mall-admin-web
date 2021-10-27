@@ -73,7 +73,7 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="onShowUpdate(row)"> 编辑</el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="onDeleteOne(row,$index)"> 删除 </el-button>
+          <el-button v-if="row.bizState==='10'" size="mini" type="danger" @click="onDeleteOne(row,$index)"> 删除 </el-button>
         </template>
       </el-table-column>
     </el-table>
