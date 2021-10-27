@@ -36,6 +36,13 @@ export function update(data) {
     data
   })
 }
+export function startTrans(data) {
+  return request({
+    url: '/admin//material/buy/startTrans',
+    method: 'post',
+    data
+  })
+}
 export function deleteOne(data) {
   return request({
     url: '/admin//material/buy/deleteOne',

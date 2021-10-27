@@ -84,8 +84,8 @@ export default {
     return {
       loginForm: {
         username: 'admin',
-        password: '111111',
-        captchaToken: '111',
+        password: '123456',
+        captchaToken: '',
         captchaText:'',
         captchaSrc:''
       },

@@ -124,7 +124,6 @@
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取消</el-button>
       <el-button type="primary" @click="dialogStatus==='create'?onAdd():onUpdate()">确定 </el-button>
-      <el-button type="primary" @click="onStartTrans()">流转</el-button>
     </div>
   </el-dialog>
 </template>
@@ -132,7 +131,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import EditableCell from './components/EditableCell'
-    import { getBizno,add,infoById,update,startTrans } from '@/api/im/materialBuy'
+    import { getBizno,add,infoById,update } from '@/api/im/materialBuy'
     import { getMaterialList }  from '@/api/im/materialList'
     export default {
       name: "addOrUpdate",
@@ -149,7 +148,7 @@
           dialogFormVisible: false,
           dialogStatus: '',
           textMap: {
-            create: '物品采购-发起流程',
+            trans: '物品采购-审批流程',
             update: '物品采购-修改流程'
           },
           formObj: {
@@ -285,21 +284,6 @@
             if (valid) {
               const data={formObj:this.formObj,materials:this.datas}
               update(data).then(response => {
-                this.dialogFormVisible = false
-                this.$emit('refreshDataList')
-                this.$message({
-                  message: '操作成功',
-                  type: 'success'
-                })
-              })
-            }
-          })
-        },
-        onStartTrans(){
-          this.$refs['formObj'].validate((valid) => {
-            if (valid) {
-              const data={action:this.dialogStatus,formObj:this.formObj,materials:this.datas}
-              startTrans(data).then(response => {
                 this.dialogFormVisible = false
                 this.$emit('refreshDataList')
                 this.$message({

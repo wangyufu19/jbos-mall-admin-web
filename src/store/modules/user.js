@@ -1,6 +1,9 @@
 import { login, logout, getInfo, getUserFunc } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken,setUserId,removeUserId } from '@/utils/auth'
 import { resetRouter } from '@/router'
+
+const TokenKey = 'mall_admin_web_token'
+const UserIdKey = 'mall_admin_web_userid'
 
 const getDefaultState = () => {
   return {
@@ -35,6 +38,7 @@ const actions = {
         const res = response.data
         commit('SET_TOKEN', res.data.accessToken)
         setToken(res.data.accessToken)
+        setUserId(res.data.username)
         resolve()
       }).catch(error => {
         reject(error)
@@ -73,6 +77,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       logout(state.accessToken).then(response => {
         removeToken() // must remove  token  first
+        removeUserId();
         resetRouter()
         commit('RESET_STATE')
         resolve()

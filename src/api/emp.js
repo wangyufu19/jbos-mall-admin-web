@@ -28,3 +28,10 @@ export function deleteEmp(data) {
     data
   })
 }
+export function synchToCamunda(data) {
+  return request({
+    url: '/admin/emp/synchToCamunda',
+    method: 'post',
+    data
+  })
+}

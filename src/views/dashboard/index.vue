@@ -1,16 +1,20 @@
 <template>
-  <div class="dashboard-container">
-    <adminDashboard/>
+  <div class="app-container">
+    <div>
+      <el-row :gutter="20">
+        <el-col :span="24" :xs="24">
+          <my-work/>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import adminDashboard from './admin'
-import editorDashboard from './editor'
+import myWork from './components/myWork'
 export default {
   name: 'Dashboard',
-  components: { adminDashboard }
+  components: { myWork }
 }
 </script>
 

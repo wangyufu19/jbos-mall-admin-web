@@ -44,6 +44,7 @@
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="onShowUpdate(row)"> 编辑</el-button>
           <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="onDeleteOne(row,$index)"> 删除 </el-button>
+          <el-button size="mini"  @click="onSynchToCamunda(row,$index)"> 同步到CAMUNDA </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -55,7 +56,7 @@
 </template>
 <script>
 import Pagination from '@/components/Pagination'
-import { getEmpList, deleteEmp } from '@/api/emp'
+import { getEmpList, deleteEmp ,synchToCamunda} from '@/api/emp'
 import AddOrEditEmp from './addOrEditEmp'
 export default {
   components: { Pagination, AddOrEditEmp },
@@ -131,6 +132,14 @@ export default {
           type: 'success'
         })
         this.datas.splice(index, 1)
+      })
+    },
+    onSynchToCamunda(row, index){
+      synchToCamunda({ userId: row.badge,userName:row.empName }).then(response => {
+        this.$message({
+          message: '操作成功',
+          type: 'success'
+        })
       })
     }
   }

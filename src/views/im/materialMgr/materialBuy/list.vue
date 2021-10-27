@@ -36,7 +36,7 @@
       <el-table-column
         prop="bizNo"
         label="业务编号"
-        width="180"
+        width="200"
       >
       </el-table-column>
       <el-table-column
@@ -65,6 +65,11 @@
         label="总金额"
         width="100"
       />
+      <el-table-column
+        prop="bizState"
+        label="状态"
+        width="100"
+      />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="onShowUpdate(row)"> 编辑</el-button>
@@ -85,6 +90,9 @@
   import Pagination from '@/components/Pagination'
   import AddOrUpdate from './addOrUpdate'
   import { list,deleteOne } from '@/api/im/materialBuy'
+
+
+
   export default {
     name: "materialBuyList",
     components: { Pagination,AddOrUpdate,EditableCell },
