@@ -69,6 +69,7 @@
         prop="bizState"
         label="状态"
         width="100"
+        :formatter="onFormatter"
       />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">
@@ -140,6 +141,15 @@
           bizNoS: '',
           feeTypeS: '',
           applyTimeS: ''
+        }
+      },
+      onFormatter(row,column){
+        if(column.property==='bizState'){
+          if(row.bizState==='10'){
+            return '草稿中'
+          }else if(row.bizState==='20') {
+            return '审批中'
+          }
         }
       },
       onShowAdd() {

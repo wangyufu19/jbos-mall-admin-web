@@ -97,7 +97,9 @@
           >
             <editable-cell slot-scope="{row}"
                            :can-edit="editModeEnabled"
-                           v-model="row.amount">
+                           v-model="row.amount"
+                           @input="e => onAmountChange(row,$index,e)"
+            >
               <span slot="content">{{row.amount}}</span>
             </editable-cell>
           </el-table-column>
@@ -106,9 +108,11 @@
             label="单价"
             width="120"
           >
-            <editable-cell slot-scope="{row}"
+            <editable-cell slot-scope="{row,$index}"
                            :can-edit="editModeEnabled"
-                           v-model="row.price">
+                           v-model="row.price"
+                           @input="e => onPriceChange(row,$index,e)"
+            >
               <span slot="content">{{row.price}}</span>
             </editable-cell>
           </el-table-column>
@@ -123,8 +127,8 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取消</el-button>
-      <el-button type="primary" @click="dialogStatus==='create'?onAdd():onUpdate()">确定 </el-button>
-      <el-button v-if="this.formObj.bizState==='10'" type="primary" @click="onStartTrans()">流转</el-button>
+      <el-button v-if="this.formObj.bizState==='10'" type="primary" @click="dialogStatus==='create'?onAdd():onUpdate()">确定 </el-button>
+      <el-button type="primary" @click="onStartTrans()">流转</el-button>
     </div>
   </el-dialog>
 </template>
@@ -159,7 +163,8 @@
             applyTime: '',
             gmoTime: '',
             totalAmt: '',
-            purpose: ''
+            purpose: '',
+            bizState:'10'
           },
           loading: false,
           rules: {
@@ -190,7 +195,8 @@
               applyTime:  new Date (),
               gmoTime: '',
               totalAmt: '',
-              purpose: ''
+              purpose: '',
+              bizState:'10'
             }
             this.$nextTick(() => {
               this.$refs['formObj'].clearValidate()
@@ -264,6 +270,20 @@
           }
           this.datas.splice(this.currentRow, 1)
           this.currentRow=this.currentRow-1
+        },
+        onAmountChange(row,index,value){
+          if(row.amount && row.price){
+            row.sumAmt = row.amount*row.price
+          }else{
+            row.sumAmt=0
+          }
+        },
+        onPriceChange(row,index,value){
+          if(row.amount && row.price){
+            row.sumAmt = row.amount*row.price
+          }else{
+            row.sumAmt=0
+          }
         },
         onAdd() {
           this.$refs['formObj'].validate((valid) => {
