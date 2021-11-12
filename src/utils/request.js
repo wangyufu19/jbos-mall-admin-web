@@ -56,7 +56,7 @@ http.interceptors.response.use(
     if(error.response.status===401){
       store.commit('logout',this)
       router.replace({
-        name: 'login'
+        name: 'home'
       })
     }
     Message({

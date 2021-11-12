@@ -17,6 +17,7 @@ const loadView = (view) => { // 路由懒加载
 // 全局路由
 const globalRoutes = [
   { path: '/login', component: () => import('@/views/login/index'), name: 'login', hidden: true },
+  { path: '/home', component: () => import('@/views/home/index'), name: 'home', hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
   {
     path: '/profile',
@@ -58,7 +59,7 @@ router.beforeEach((to, from, next) => {
   } else {
     const accessToken = getToken()
     if (!accessToken || !/\S/.test(accessToken)) {
-      next({ name: 'login' })
+      next({ name: 'home' })
     } else {
       http({
         url: '/admin/user/getUserFunc',
