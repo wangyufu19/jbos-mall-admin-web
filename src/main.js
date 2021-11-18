@@ -12,7 +12,8 @@ import App from './App'
 import store from './store'
 import router from './router'
 
-import '@/icons' // icon
+import '@/icons' //
+import './permission'
 
 // set ElementUI lang to EN
 // Vue.use(ElementUI, { locale })

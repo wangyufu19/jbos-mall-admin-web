@@ -77,7 +77,7 @@ export default {
       registryRules: {
         username: [{ required: true,message: '用户名必须填写', trigger: 'blur'}],
         password: [{ required: true, message: '密码必须填写',trigger: 'blur', validator: validatePassword }],
-        confirmPassword: [{ required: true, message: '确认密码必须填写',trigger: 'blur'}]
+        confirmPassword: [{ required: true, message: '确认密码必须填写',trigger: 'blur',validator: validatePassword}]
       },
       loading: false,
       passwordType: 'password',

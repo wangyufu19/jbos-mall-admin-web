@@ -14,10 +14,9 @@
           <router-link to="/profile/index">
             <el-dropdown-item>个人中心 </el-dropdown-item>
           </router-link>
-          <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
+          <router-link to="/profile/password">
             <el-dropdown-item>修改密码</el-dropdown-item>
-          </a>
-
+          </router-link>
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">退出</span>
           </el-dropdown-item>
@@ -46,7 +45,7 @@ export default {
     ])
   },
   created() {
-    this.getUserInfo()
+
   },
   methods: {
     toggleSideBar() {
