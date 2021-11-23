@@ -1,13 +1,16 @@
 <template>
   <el-form ref="formObj" :model="formObj">
-    <el-form-item label="用户名称">
-      <el-input v-model.trim="formObj.username" :disabled="true"/>
+    <el-form-item label="姓名">
+      <el-input v-model.trim="formObj.fullName"/>
     </el-form-item>
     <el-form-item label="昵称">
       <el-input v-model.trim="formObj.nickName" />
     </el-form-item>
     <el-form-item label="性别">
-      <el-input v-model.trim="formObj.sex" />
+      <el-radio-group v-model="formObj.sex">
+        <el-radio :label="1">男</el-radio>
+        <el-radio :label="2">女</el-radio>
+      </el-radio-group>
     </el-form-item>
     <el-form-item label="手机">
       <el-input v-model.trim="formObj.mobilePhone" />
@@ -29,8 +32,7 @@ export default {
       type: Object,
       default: () => {
         return {
-          account:'',
-          username: ''
+          account:''
         }
       }
     }
@@ -39,7 +41,7 @@ export default {
     return {
       formObj: {
         account: this.base.account,
-        username: this.base.username,
+        fullName: '',
         nickName: '',
         sex: '',
         mobilePhone: '',
@@ -66,7 +68,7 @@ export default {
           this.loading = true
           const data={
             account:this.formObj.account,
-            username:this.formObj.username,
+            fullName:this.formObj.fullName,
             nickName:this.formObj.nickName,
             sex:this.formObj.sex,
             mobilePhone:this.formObj.mobilePhone,

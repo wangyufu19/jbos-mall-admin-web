@@ -11,8 +11,8 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import store from './store'
 import router from './router'
-
-import '@/icons' //
+import i18n from './lang'
+import '@/icons'
 import './permission'
 
 // set ElementUI lang to EN
@@ -27,5 +27,6 @@ new Vue({
   el: '#app',
   router,
   store,
+  i18n,
   render: h => h(App)
 })
