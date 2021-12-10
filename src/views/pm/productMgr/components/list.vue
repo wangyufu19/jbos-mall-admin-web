@@ -26,16 +26,15 @@
       fit
       highlight-current-row
       style="width: 100%"
-      @row-click="onRowClick"
     >
       <el-table-column
         prop="productCode"
         label="商品编号"
-        width="120"
+        width="200"
       />
       <el-table-column
-        prop="productName"
-        label="商品名称"
+        prop="title"
+        label="商品标题"
         width="120"
       />
       <el-table-column
@@ -60,22 +59,23 @@
       />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" @click="onLock(row)"> 锁定</el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="onUnLock(row,$index)">解锁</el-button>
+          <el-button type="primary" size="mini" @click="onShowUpdate(row)"> 编辑</el-button>
+          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="onOffShelf(row,$index)">下架</el-button>
         </template>
       </el-table-column>
     </el-table>
     <!--分页信息-->
-    <pagination v-show="total>0" :total="total" :page.sync="queryPage.page" :limit.sync="queryPage.limit" @pagination="getProductList" />
+    <pagination v-show="total>0" :total="total" :page.sync="queryPage.page" :limit.sync="queryPage.limit" @pagination="onList" />
     <!--新增或编辑-->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="onList" />
   </el-card>
 </template>
 
 <script>
-import { list,deleteOne } from '@/api/pm/product'
+import { list,offShelf } from '@/api/pm/product'
 import Pagination from '@/components/Pagination'
 import AddOrUpdate from "./addOrUpdate";
+
 export default {
   name: 'List',
   components: { Pagination,AddOrUpdate },
@@ -115,12 +115,12 @@ export default {
     onList() {
       this.listLoading = true
       this.queryPage.isPage = 'true'
-      list(this.search).then(response => {
+      list(this.queryPage).then(response => {
         const res=response.data
         this.datas = res.data.list
         this.total = res.data.total
+        this.listLoading = false
       })
-      this.listLoading = false
     },
     onShowPublish() {
       this.addOrUpdateVisible = true
@@ -136,8 +136,8 @@ export default {
         this.$refs['addOrUpdate'].init(formObj, 'update')
       })
     },
-    onDeleteOne(row, index) {
-      deleteOne({ id: row.id, bizNo: row.bizNo }).then(response => {
+    onOffShelf(row, index) {
+      offShelf({ id: row.id, bizNo: row.bizNo }).then(response => {
         this.$message({
           message: '操作成功',
           type: 'success'
