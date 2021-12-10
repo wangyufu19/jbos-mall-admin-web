@@ -10,11 +10,11 @@
       <el-button size="medium" type="primary" @click="onReset">重置</el-button>
     </div>
     <div class="button-container">
-      <el-radio-group v-model="actionType">
-        <el-radio-button label="10">全部</el-radio-button>
+      <el-radio-group v-model="actionType" @change="onChangeActionType">
+        <el-radio-button label="">全部</el-radio-button>
         <el-radio-button label="20">销售中</el-radio-button>
-        <el-radio-button label="30">已下架</el-radio-button>
-        <el-radio-button label="40">草稿箱</el-radio-button>
+        <el-radio-button label="50">已下架</el-radio-button>
+        <el-radio-button label="10">草稿箱</el-radio-button>
       </el-radio-group>
       <el-button type="primary" @click="onShowPublish">发布商品</el-button>
     </div>
@@ -60,7 +60,8 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="onShowUpdate(row)"> 编辑</el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="onOffShelf(row,$index)">下架</el-button>
+          <el-button v-if="row.status==='20'" size="mini" type="danger" @click="offShelfOne(row,$index)">下架</el-button>
+          <el-button v-if="row.status==='50'" size="mini" type="success" @click="shelfOne(row,$index)">上架</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -72,7 +73,7 @@
 </template>
 
 <script>
-import { list,offShelf } from '@/api/pm/product'
+import { list,offShelfOne,shelfOne} from '@/api/pm/product'
 import Pagination from '@/components/Pagination'
 import AddOrUpdate from "./addOrUpdate";
 
@@ -114,6 +115,7 @@ export default {
     },
     onList() {
       this.listLoading = true
+      this.queryPage.status=this.actionType
       this.queryPage.isPage = 'true'
       list(this.queryPage).then(response => {
         const res=response.data
@@ -121,6 +123,9 @@ export default {
         this.total = res.data.total
         this.listLoading = false
       })
+    },
+    onChangeActionType(){
+      this.onList()
     },
     onShowPublish() {
       this.addOrUpdateVisible = true
@@ -136,13 +141,22 @@ export default {
         this.$refs['addOrUpdate'].init(formObj, 'update')
       })
     },
-    onOffShelf(row, index) {
-      offShelf({ id: row.id, bizNo: row.bizNo }).then(response => {
+    offShelfOne(row, index) {
+      offShelfOne({ seqId: row.productSeqId}).then(response => {
         this.$message({
           message: '操作成功',
           type: 'success'
         })
         this.datas.splice(index, 1)
+      })
+    },
+    shelfOne(row, index){
+      shelfOne({ seqId: row.productSeqId}).then(response => {
+        this.$message({
+          message: '操作成功',
+          type: 'success'
+        })
+        this.onList()
       })
     }
   }

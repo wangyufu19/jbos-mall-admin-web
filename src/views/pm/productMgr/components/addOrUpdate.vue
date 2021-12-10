@@ -286,6 +286,7 @@
       onUpdate() {
         this.$refs['formObj'].validate((valid) => {
           if (valid) {
+            this.formObj.status='20'
             const data={formObj:this.formObj,sku:this.sku}
             update(data).then(response => {
               this.dialogFormVisible = false

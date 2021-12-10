@@ -28,6 +28,13 @@ export function add(data) {
     data
   })
 }
+export function saveDraft(data) {
+  return request({
+    url: '/product/saveDraft',
+    method: 'post',
+    data
+  })
+}
 
 export function update(data) {
   return request({
@@ -36,10 +43,18 @@ export function update(data) {
     data
   })
 }
-export function deleteOne(data) {
+export function offShelfOne(data) {
   return request({
-    url: '/product/deleteOne',
+    url: '/product/offShelfOne',
     method: 'post',
     data
   })
 }
+export function shelfOne(data) {
+  return request({
+    url: '/product/shelfOne',
+    method: 'post',
+    data
+  })
+}
+
