@@ -10,6 +10,7 @@
             <el-form-item label="商品分类" prop="categoryCode">
               <treeselect
                 v-model="formObj.categoryCode"
+                :formatter="formatter"
                 placeholder="请选择"
                 :multiple="false"
                 :options="options"
@@ -142,6 +143,13 @@
           title: '',
           bizState:'10'
         },
+        formatter(node){
+         return {
+            id: node.categoryCode,
+            label: node.categoryName,
+            children: null
+          }
+        },
         rules: {
           categoryName: [{ required: true, message: '商品分类必须填写', trigger: 'change' }],
           productCode: [{ required: true, message: '商品编号必须填写', trigger: 'change' }],
@@ -178,7 +186,6 @@
         }else {
           this.dialogStatus = dialogStatus
           this.dialogFormVisible = true
-          this.options=[]
           this.getById(formObj.productSeqId)
         }
       },
@@ -195,11 +202,17 @@
         get({seqId:productSeqId}).then(response => {
           const res = response.data
           this.formObj = res.data.base
+          this.options=[{
+            id: this.formObj.categoryCode,
+            label: this.formObj.categoryName,
+            children: null
+          }]
           this.sku= res.data.skuList
           this.loading = false
         })
       },
       loadRootOptions(){
+        this.options=[]
         tree().then(response => {
           const res = response.data
           res.data.forEach((item, index, arr) => {
@@ -224,7 +237,7 @@
               options.push({
                 id: item.code,
                 label: item.text,
-                children: null
+                children: item.children
               })
             })
             parentNode.children=options
