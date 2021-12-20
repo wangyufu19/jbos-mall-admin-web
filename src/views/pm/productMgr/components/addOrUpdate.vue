@@ -10,10 +10,9 @@
             <el-form-item label="商品分类" prop="categoryCode">
               <treeselect
                 v-model="formObj.categoryCode"
-                :formatter="formatter"
                 placeholder="请选择"
                 :multiple="false"
-                :options="options"
+                :options="category.options"
                 :auto-load-root-options="false"
                 :load-options="loadCategoryOptions"
                 @open="loadRootOptions"
@@ -40,8 +39,27 @@
       </el-card>
       <el-card>
         <div slot="header" class="clearfix">
-          <span>商品详情</span>
+          <span>商品主图</span>
         </div>
+        <el-row>
+          <el-upload
+            multiple
+            :action="mainPic.actionUrl"
+            :headers="mainPic.headers"
+            :data="mainPic.data"
+            list-type="picture-card"
+            :on-preview="handlePictureCardPreview"
+            :on-success="handleUploadSuccess"
+            :on-error="handleUploadError"
+            :on-remove="handleRemove"
+            :file-list="mainPic.photoList"
+            :class="{hide: mainPic.hideUpload}">
+            <i class="el-icon-plus"></i>
+          </el-upload>
+          <el-dialog :visible.sync="mainPic.dialogVisible">
+            <img width="100%" :src="mainPic.dialogImageUrl" alt="">
+          </el-dialog>
+        </el-row>
       </el-card>
       <el-card>
         <div slot="header" class="clearfix">
@@ -118,6 +136,7 @@
   import Treeselect,{ LOAD_ROOT_OPTIONS,LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
   import '@riophae/vue-treeselect/dist/vue-treeselect.css'
   import EditableCell from '@/components/EditableCell'
+  import {getToken} from "../../../../utils/auth";
 
   export default {
     name: "addOrUpdate",
@@ -133,7 +152,6 @@
           create: '商品列表-发布商品',
           update: '商品列表-修改商品'
         },
-        options: [],
         formObj: {
           seqId: undefined,
           categoryCode:null,
@@ -143,12 +161,17 @@
           title: '',
           bizState:'10'
         },
-        formatter(node){
-         return {
-            id: node.categoryCode,
-            label: node.categoryName,
-            children: null
-          }
+        category:{
+          options: [],
+        },
+        mainPic:{
+          actionUrl:process.env.VUE_APP_BASE_API+'/product/upload',
+          headers:{'accessToken':getToken()},
+          data:{},
+          hideUpload: false,
+          photoList:[],
+          dialogImageUrl: '',
+          dialogVisible: false
         },
         rules: {
           categoryName: [{ required: true, message: '商品分类必须填写', trigger: 'change' }],
@@ -158,7 +181,6 @@
         },
         sku: [],
         loading: false,
-        categoryTreeVisible: false,
         editModeEnabled: true,
         currentRow: ''
       }
@@ -181,11 +203,13 @@
             this.$refs['formObj'].clearValidate()
           })
           this.options=[]
+          this.mainPic.photoList=[]
           this.sku=[]
           this.getNo()
         }else {
           this.dialogStatus = dialogStatus
           this.dialogFormVisible = true
+          this.mainPic.photoList=[]
           this.getById(formObj.productSeqId)
         }
       },
@@ -193,6 +217,8 @@
         this.loading = true
         getNo().then(response => {
           const res = response.data
+          this.formObj.seqId = res.data.seqId
+          this.mainPic.data={productSeqId:this.formObj.seqId}
           this.formObj.productCode = res.data.productCode
           this.loading = false
         })
@@ -202,21 +228,23 @@
         get({seqId:productSeqId}).then(response => {
           const res = response.data
           this.formObj = res.data.base
-          this.options=[{
+          this.category.options=[{
             id: this.formObj.categoryCode,
             label: this.formObj.categoryName,
             children: null
           }]
+          this.mainPic.data={productSeqId:this.formObj.seqId}
+          this.mainPic.photoList=res.data.mainPics
           this.sku= res.data.skuList
           this.loading = false
         })
       },
       loadRootOptions(){
-        this.options=[]
+        this.category.options=[]
         tree().then(response => {
           const res = response.data
           res.data.forEach((item, index, arr) => {
-            this.options.push({
+            this.category.options.push({
               id: item.code,
               label: item.text,
               children: null
@@ -225,7 +253,7 @@
         })
       },
       clearRootOptions(){
-        this.options=[]
+        this.category.options=[]
       },
       loadCategoryOptions({ action, parentNode, callback }){
         this.loading = true
@@ -244,6 +272,16 @@
             callback()
           })
         }
+      },
+      handleRemove(file, fileList) {
+        console.log(file, fileList)
+      },
+      handlePictureCardPreview(file) {
+        this.mainPic.dialogImageUrl = file.url
+        this.mainPic.dialogVisible = true
+      },
+      handleUploadSuccess(response,file){
+        console.log(response)
       },
       tableRowClassName({ row, rowIndex }) {
         // 把每一行的索引放进row
