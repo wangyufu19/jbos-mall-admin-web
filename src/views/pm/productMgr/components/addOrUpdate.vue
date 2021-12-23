@@ -274,7 +274,7 @@
         }
       },
       handleRemove(file, fileList) {
-        console.log(file, fileList)
+        console.log(file)
       },
       handlePictureCardPreview(file) {
         this.mainPic.dialogImageUrl = file.url
