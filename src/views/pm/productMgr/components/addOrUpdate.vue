@@ -1,5 +1,10 @@
 <template>
-  <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="80%" :append-to-body="true">
+  <el-dialog
+    :title="textMap[dialogStatus]"
+    :visible.sync="dialogFormVisible"
+    @close="onCloseAddOrUpdate"
+    width="80%"
+    :append-to-body="true">
     <el-form ref="formObj" :model="formObj" :rules="rules" label-width="100px" class="demo-ruleForm" >
       <el-card>
         <div slot="header" class="clearfix">
@@ -132,6 +137,7 @@
 
 <script>
   import { getNo,get,add,update,save } from '@/api/pm/product'
+  import { deletePic } from '@/api/pm/pic'
   import { tree } from '@/api/pm/category'
   import Treeselect,{ LOAD_ROOT_OPTIONS,LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
   import '@riophae/vue-treeselect/dist/vue-treeselect.css'
@@ -159,13 +165,13 @@
           productCode: '',
           productName: '',
           title: '',
-          bizState:'10'
+          status:'10'
         },
         category:{
           options: [],
         },
         mainPic:{
-          actionUrl:process.env.VUE_APP_BASE_API+'/product/upload',
+          actionUrl:process.env.VUE_APP_BASE_API+'/product/io/upload',
           headers:{'accessToken':getToken()},
           data:{},
           hideUpload: false,
@@ -174,7 +180,7 @@
           dialogVisible: false
         },
         rules: {
-          categoryName: [{ required: true, message: '商品分类必须填写', trigger: 'change' }],
+          categoryCode: [{ required: true, message: '商品分类必须填写', trigger: 'change' }],
           productCode: [{ required: true, message: '商品编号必须填写', trigger: 'change' }],
           productName: [{ required: true, message: '商品名称必须填写', trigger: 'change' }],
           title: [{ required: true, message: '商品标题必须填写', trigger: 'change' }]
@@ -197,7 +203,7 @@
             productCode: '',
             productName: '',
             title: '',
-            bizState:'10'
+            status:'10'
           }
           this.$nextTick(() => {
             this.$refs['formObj'].clearValidate()
@@ -212,6 +218,11 @@
           this.mainPic.photoList=[]
           this.getById(formObj.productSeqId)
         }
+      },
+      onCloseAddOrUpdate(){
+        this.options=[]
+        this.mainPic.photoList=[]
+        this.sku=[]
       },
       getNo(){
         this.loading = true
@@ -274,7 +285,12 @@
         }
       },
       handleRemove(file, fileList) {
-        console.log(file)
+        deletePic(file).then(response => {
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          })
+        })
       },
       handlePictureCardPreview(file) {
         this.mainPic.dialogImageUrl = file.url

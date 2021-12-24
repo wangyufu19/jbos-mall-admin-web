@@ -40,7 +40,7 @@
       <el-table-column
         prop="priceScope"
         label="价格"
-        width="80"
+        width="150"
       />
       <el-table-column
         prop="amount"
