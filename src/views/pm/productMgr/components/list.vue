@@ -50,12 +50,12 @@
       <el-table-column
         prop="inventory"
         label="库存数量"
-        width="150"
+        width="120"
       />
       <el-table-column
         prop="createTime"
         label="创建时间"
-        width="150"
+        width="165"
       />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">

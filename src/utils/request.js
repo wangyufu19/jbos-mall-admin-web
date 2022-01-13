@@ -52,11 +52,9 @@ http.interceptors.response.use(
     }
   },
   error => {
-    console.log('err' + error) // for debug
     if(error.response.status===401){
-      store.commit('logout',this)
-      router.replace({
-        name: 'home'
+      store.dispatch('user/resetToken').then(() => {
+        location.reload()
       })
     }
     Message({
