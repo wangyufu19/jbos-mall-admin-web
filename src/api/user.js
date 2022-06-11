@@ -1,5 +1,9 @@
 import request from '@/utils/request'
-
+/**
+ * 用户登录
+ * @param {*} data 
+ * @returns 
+ */
 export function login(data) {
   return request({
     url: '/auth/login',
@@ -7,6 +11,11 @@ export function login(data) {
     data
   })
 }
+/**
+ * 用户登出
+ * @param {*} accessToken 
+ * @returns 
+ */
 export function logout(accessToken) {
   return request({
     url: '/auth/logout',
