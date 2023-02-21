@@ -57,4 +57,12 @@ export function shelfOne(data) {
     data
   })
 }
+export function deleteOne(data) {
+  return request({
+    url: '/product/deleteOne',
+    method: 'post',
+    data
+  })
+}
+
 

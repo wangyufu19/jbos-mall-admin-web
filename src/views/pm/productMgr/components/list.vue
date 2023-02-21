@@ -11,7 +11,7 @@
     </div>
     <div class="button-container">
       <el-radio-group v-model="actionType" @change="onChangeActionType">
-        <el-radio-button label="">全部</el-radio-button>
+        <el-radio-button label="all">全部</el-radio-button>
         <el-radio-button label="20">销售中</el-radio-button>
         <el-radio-button label="50">已下架</el-radio-button>
         <el-radio-button label="10">草稿箱</el-radio-button>
@@ -62,6 +62,7 @@
           <el-button type="primary" size="mini" @click="onShowUpdate(row)"> 编辑</el-button>
           <el-button v-if="row.status==='20'" size="mini" type="danger" @click="offShelfOne(row,$index)">下架</el-button>
           <el-button v-if="row.status==='50'" size="mini" type="success" @click="shelfOne(row,$index)">上架</el-button>
+          <el-button v-if="row.status==='10'" size="mini" type="danger" @click="onDeleteOne(row,$index)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -73,7 +74,7 @@
 </template>
 
 <script>
-import { list,offShelfOne,shelfOne} from '@/api/pm/product'
+import { list,offShelfOne,shelfOne,deleteOne} from '@/api/pm/product'
 import Pagination from '@/components/Pagination'
 import AddOrUpdate from "./addOrUpdate";
 
@@ -158,7 +159,16 @@ export default {
         })
         this.onList()
       })
-    }
+    },
+    onDeleteOne(row, index) {
+      deleteOne({ productSeqId: row.productSeqId, productCode: row.productCode }).then(response => {
+        this.$message({
+          message: '操作成功',
+          type: 'success'
+        })
+        this.datas.splice(index, 1)
+      })
+    },
   }
 }
 </script>

@@ -55,7 +55,6 @@ router.addRoutes(globalRoutes)
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
-  //document.title = getPageTitle(to.meta.title)
   const accessToken = getToken()
   //判断会话令牌
   if (accessToken) {
