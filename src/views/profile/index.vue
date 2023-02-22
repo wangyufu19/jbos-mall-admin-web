@@ -53,8 +53,8 @@ export default {
     getBase() {
       const email=this.user.LOGINNAME+'@nbcb.com'
       this.base = {
-        account:this.user.LOGINNAME,
-        username: this.user.USERNAME,
+        account:this.user.username,
+        username: this.user.userInfo,
         email: email
       }
     }

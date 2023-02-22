@@ -7,7 +7,7 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          {{user.USERNAME}}
+          {{user.userInfo}}
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -135,7 +135,7 @@ export default {
           cursor: pointer;
           position: absolute;
           right: -20px;
-          top: 25px;
+          top: 20px;
           font-size: 12px;
         }
       }

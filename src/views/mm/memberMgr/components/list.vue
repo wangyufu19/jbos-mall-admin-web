@@ -31,7 +31,7 @@
       <el-table-column
         prop="sex"
         label="性别"
-        width="80"
+        width="50"
         :formatter="onFormatter"
       />
       <el-table-column
@@ -53,17 +53,23 @@
       <el-table-column
         prop="integral"
         label="积分"
-        width="80"
+        width="50"
       />
       <el-table-column
         prop="registryTime"
         label="注册时间"
         width="150"
       />
+      <el-table-column
+        prop="status"
+        label="状态"
+        width="80"
+        :formatter="onFormatter"
+      />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" @click="onLock(row)"> 锁定</el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="onUnLock(row,$index)">解锁</el-button>
+          <el-button v-if="row.status==='10'" type="warning" size="mini" @click="onLock(row)"> 锁定</el-button>
+          <el-button v-if="row.status==='99'" type="success" size="mini"  @click="onUnLock(row,$index)">解锁</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -73,9 +79,12 @@
 </template>
 
 <script>
-import { list } from '@/api/mm/member'
+import { list} from '@/api/mm/member'
+import { lock,unlock } from '@/api/mm/account'
+import Pagination from '@/components/Pagination'
 export default {
   name: 'List',
+  components: { Pagination },
   data() {
     return {
       search: {
@@ -92,19 +101,26 @@ export default {
     }
   },
   created() {
-    this.getMemberList()
+    this.onList()
   },
   methods: {
+    onSearch() {
+      this.queryPage.page = 1
+      this.queryPage.fullNameS = this.search.fullNameS
+      this.onList()
+    },
     onReset() {
       this.search = {
         fullNameS: ''
       }
     },
-    getMemberList() {
+    onList() {
       this.listLoading = true
-      list(this.search).then(response => {
+      this.queryPage.isPage = 'true'
+      list(this.queryPage).then(response => {
         const res=response.data
-        this.datas = res.data
+        this.datas = res.data.list
+        this.total = res.data.total
         this.listLoading = false
       })
     },
@@ -117,7 +133,31 @@ export default {
         }
       }else if(column.property==='grade'){
         return '普通会员'
+      }else if(column.property==='status'){        
+        if(row.status==='10'){
+          return '正常'
+        }else if(row.status==='99') {
+          return '锁定'
+        }
       }
+    },
+    onLock(row) {
+      lock({ account: row.account }).then(response => {
+        this.$message({
+          message: '操作成功',
+          type: 'success'
+        })
+        this.onList()
+      })
+    },
+    onUnLock(row, index) {
+      unlock({ account: row.account }).then(response => {
+        this.$message({
+          message: '操作成功',
+          type: 'success'
+        })
+        this.onList()
+      })
     },
   }
 }

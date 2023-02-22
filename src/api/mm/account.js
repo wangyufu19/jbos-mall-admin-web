@@ -7,3 +7,21 @@ export function registry(data) {
     data
   })
 }
+
+export function lock(data) {
+  return request({
+    url: '/member/account/lock',
+    method: 'post',
+    data
+  })
+}
+
+export function unlock(data) {
+  return request({
+    url: '/member/account/unlock',
+    method: 'post',
+    data
+  })
+}
+
+
