@@ -2,7 +2,7 @@ import router from './router'
 import store from './store'
 import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
-import { getToken } from '@/utils/auth' // get token from cookie
+import { getToken,getUserId } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 import http from '@/utils/request'
 import { isURL } from '@/utils/validate'
@@ -68,10 +68,11 @@ router.beforeEach((to, from, next) => {
         next()
       }else{
         store.dispatch('user/getInfo')
+        const userId=getUserId()
         http({
           url: '/admin/user/getUserFunc',
           method: 'get',
-          params: { accessToken:accessToken }
+          params: { accessToken:accessToken,userId:userId }
         }).then((response) => {
           const res = response.data
           if (res && res.retCode === '0000') {
