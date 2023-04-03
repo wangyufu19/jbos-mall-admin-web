@@ -2,7 +2,7 @@ import request from "@/utils/request";
 
 export function deletePic(data) {
   return request({
-    url: '/product/io/delete',
+    url: '/business/io/delete',
     method: 'post',
     data
   })

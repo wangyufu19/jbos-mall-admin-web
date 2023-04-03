@@ -171,7 +171,7 @@
           options: [],
         },
         mainPic:{
-          actionUrl:process.env.VUE_APP_BASE_API+'/product/io/upload',
+          actionUrl:process.env.VUE_APP_BASE_API+'/business/io/upload',
           headers:{'accessToken':getToken()},
           data:{},
           hideUpload: false,
