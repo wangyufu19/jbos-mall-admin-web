@@ -24,7 +24,7 @@ export function logout(accessToken) {
 }
 export function getInfo(accessToken) {
   return request({
-    url: '/admin/user/getUserInfo',
+    url: '/auth/getPrincipalInfo',
     method: 'get',
     params: { accessToken }
   })
