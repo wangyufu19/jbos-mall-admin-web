@@ -2,21 +2,21 @@ import request from "@/utils/request";
 
 export function list(params) {
   return request({
-    url: '/member/info/list',
+    url: '/admin/member/info/list',
     method: 'get',
     params
   })
 }
 export function get(params) {
   return request({
-    url: '/member/info/get',
+    url: '/admin/member/info/get',
     method: 'get',
     params
   })
 }
 export function update(data) {
   return request({
-    url: '/member/info/update',
+    url: '/admin/member/info/update',
     method: 'post',
     data
   })

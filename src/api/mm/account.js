@@ -2,7 +2,7 @@ import request from "@/utils/request";
 
 export function registry(data) {
   return request({
-    url: '/member/account/registry',
+    url: '/admin/member/account/registry',
     method: 'post',
     data
   })
@@ -10,7 +10,7 @@ export function registry(data) {
 
 export function lock(data) {
   return request({
-    url: '/member/account/lock',
+    url: '/admin/member/account/lock',
     method: 'post',
     data
   })
@@ -18,7 +18,7 @@ export function lock(data) {
 
 export function unlock(data) {
   return request({
-    url: '/member/account/unlock',
+    url: '/admin/member/account/unlock',
     method: 'post',
     data
   })

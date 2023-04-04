@@ -72,8 +72,8 @@ export default {
     }
   },
   created() {
-    this.pwdForm.loginName=this.user.LOGINNAME
-    this.pwdForm.username=this.user.USERNAME
+    this.pwdForm.loginName=this.user.username
+    this.pwdForm.username=this.user.nickName
   },
   methods: {
     save() {
