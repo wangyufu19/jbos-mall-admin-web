@@ -1,5 +1,4 @@
 <template>
-  <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="80%" :append-to-body="true">
     <el-form ref="formObj" :model="formObj" :rules="rules" label-width="100px" class="demo-ruleForm" >
       <el-card>
         <div slot="header" class="clearfix">
@@ -97,7 +96,9 @@
           >
             <editable-cell slot-scope="{row}"
                            :can-edit="editModeEnabled"
-                           v-model="row.amount">
+                           v-model="row.amount"
+                           @input="e => onAmountChange(row,$index,e)"
+            >
               <span slot="content">{{row.amount}}</span>
             </editable-cell>
           </el-table-column>
@@ -106,9 +107,11 @@
             label="单价"
             width="120"
           >
-            <editable-cell slot-scope="{row}"
+            <editable-cell slot-scope="{row,$index}"
                            :can-edit="editModeEnabled"
-                           v-model="row.price">
+                           v-model="row.price"
+                           @input="e => onPriceChange(row,$index,e)"
+            >
               <span slot="content">{{row.price}}</span>
             </editable-cell>
           </el-table-column>
@@ -120,18 +123,17 @@
           </el-table-column>
         </el-table>
       </el-card>
+      <el-card>
+        <el-button  type="primary" @click="onStartTrans()">流转</el-button>
+      </el-card>
     </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="dialogFormVisible = false">取消</el-button>
-      <el-button type="primary" @click="dialogStatus==='create'?onAdd():onUpdate()">确定 </el-button>
-    </div>
-  </el-dialog>
+
 </template>
 
 <script>
     import { mapGetters } from 'vuex'
     import EditableCell from './components/EditableCell'
-    import { getBizno,add,infoById,update } from '@/api/im/materialBuy'
+    import { getBizno,add,infoById,update,startTrans } from '@/api/im/materialBuy'
     import { getMaterialList }  from '@/api/im/materialList'
     export default {
       name: "addOrUpdate",
@@ -145,20 +147,16 @@
       },
       data() {
         return {
-          dialogFormVisible: false,
-          dialogStatus: '',
-          textMap: {
-            trans: '物品采购-审批流程',
-            update: '物品采购-修改流程'
-          },
           formObj: {
+            bizId: '',
             bizNo: '',
             applyUserId: '',
             applyDepId: '',
             applyTime: '',
             gmoTime: '',
             totalAmt: '',
-            purpose: ''
+            purpose: '',
+            bizState:'10'
           },
           loading: false,
           rules: {
@@ -174,35 +172,15 @@
           currentRow: ''
         }
       },
+      created() {
+  
+        if (this.formObj.bizId === undefined || this.formObj.bizId === '') {
+          this.formObj.bizId=this.$route.params.bizId
+        }     
+        this.getInfoById(this.formObj.bizId)
+        this.getMaterialList(this.formObj.bizId)
+      },
       methods: {
-        init(formObj, dialogStatus) {
-          if (dialogStatus === 'create') {
-            this.dialogStatus = dialogStatus
-            this.dialogFormVisible = true
-            this.formObj = {
-              id: undefined,
-              bizNo: '',
-              applyUserId: this.user.LOGINNAME,
-              applyUserName: this.user.USERNAME,
-              applyDepId:this.user.DEPID,
-              applyDepName:this.user.DEPNAME,
-              applyTime:  new Date (),
-              gmoTime: '',
-              totalAmt: '',
-              purpose: ''
-            }
-            this.$nextTick(() => {
-              this.$refs['formObj'].clearValidate()
-            })
-            this.datas=[]
-            this.getBizno()
-          } else {
-            this.dialogStatus = dialogStatus
-            this.dialogFormVisible = true
-            this.getInfoById(formObj.id)
-            this.getMaterialList(formObj.id)
-          }
-        },
         tableRowClassName({ row, rowIndex }) {
           // 把每一行的索引放进row
           row.index = rowIndex
@@ -264,6 +242,20 @@
           this.datas.splice(this.currentRow, 1)
           this.currentRow=this.currentRow-1
         },
+        onAmountChange(row,index,value){
+          if(row.amount && row.price){
+            row.sumAmt = row.amount*row.price
+          }else{
+            row.sumAmt=0
+          }
+        },
+        onPriceChange(row,index,value){
+          if(row.amount && row.price){
+            row.sumAmt = row.amount*row.price
+          }else{
+            row.sumAmt=0
+          }
+        },
         onAdd() {
           this.$refs['formObj'].validate((valid) => {
             if (valid) {
@@ -279,11 +271,11 @@
             }
           })
         },
-        onUpdate() {
+        onStartTrans(){
           this.$refs['formObj'].validate((valid) => {
             if (valid) {
-              const data={formObj:this.formObj,materials:this.datas}
-              update(data).then(response => {
+              const data={action:this.dialogStatus,formObj:this.formObj,materials:this.datas}
+              startTrans(data).then(response => {
                 this.dialogFormVisible = false
                 this.$emit('refreshDataList')
                 this.$message({

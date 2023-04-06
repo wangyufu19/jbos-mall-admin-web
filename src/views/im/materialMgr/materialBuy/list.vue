@@ -73,8 +73,9 @@
       />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" @click="onShowUpdate(row)"> 编辑</el-button>
+          <el-button v-if="row.bizState==='10'" type="primary" size="mini" @click="onShowUpdate(row)"> 编辑</el-button>
           <el-button v-if="row.bizState==='10'" size="mini" type="danger" @click="onDeleteOne(row,$index)"> 删除 </el-button>
+          <el-button size="mini" type="view" @click="onShowView(row,$index)"> 查看 </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -173,6 +174,13 @@
             type: 'success'
           })
           this.datas.splice(index, 1)
+        })
+      },
+      onShowView(row){
+        const formObj = Object.assign({}, row)
+        this.addOrUpdateVisible = true
+        this.$nextTick(() => {
+          this.$refs['addOrUpdate'].init(formObj, 'view')
         })
       }
     }
