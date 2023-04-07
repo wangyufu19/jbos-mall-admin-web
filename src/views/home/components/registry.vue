@@ -49,7 +49,7 @@
           @keyup.enter.native="doRegistry"
         />
       </el-form-item>
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="doRegistry">登录</el-button>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="doRegistry">注册</el-button>
 
 
     </el-form>

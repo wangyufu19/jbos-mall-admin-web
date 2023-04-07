@@ -4,10 +4,16 @@
       <span>字典类型列表</span>
     </div>
     <div class="filter-container">
+      <el-input v-model="search.typeIdS" placeholder="类型编号" class="filter-item" style="width: 200px;" />
+    </div>
+    <div class="filter-container">
       <el-input v-model="search.typeNameS" placeholder="类型名称" class="filter-item" style="width: 200px;" />
       <el-button size="medium" type="primary" @click="onSearch">查询</el-button>
       <el-button size="medium" type="primary" @click="onReset">重置</el-button>
-      <el-button size="medium" style="margin-left: 10px;" type="primary" @click="onShowAdd">新增</el-button>
+    </div>
+    <div class="filter-container">
+      <el-button type="primary" @click="onShowAdd">新增</el-button>
+      <el-button type="success" @click="onRefreshCache">刷新缓存</el-button>
     </div>
     <el-table
       v-loading="listLoading"
@@ -38,16 +44,22 @@
     </el-table>
     <!--角色列表分页信息-->
     <pagination v-show="total>0" :total="total" :page.sync="queryPage.page" :limit.sync="queryPage.limit" @pagination="getDictTypeList" />
+    <!--新增或编辑-->
+    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDictTypeList" />
   </el-card>
 </template>
 
 <script>
-import { getDictTypeList } from '@/api/dict'
+import { getDictTypeList,deleteDictType } from '@/api/dict'
+import AddOrUpdate from "./addOrUpdate";
+
 export default {
   name: 'DictType',
+  components: {AddOrUpdate },
   data() {
     return {
       search: {
+        typeIdS: '',
         typeNameS: ''
       },
       datas: [],
@@ -70,6 +82,39 @@ export default {
         const res=response.data
         this.datas = res.data
         this.listLoading = false
+      })
+    },
+    onSearch() {
+        this.getDictTypeList()
+      },
+    onReset() {
+      this.search = {
+        bizNoS: '',
+        bizTypeS: ''
+      }
+      this.onSearch()
+    },
+    onShowAdd() {
+      this.addOrUpdateVisible = true
+      const formObj = Object()
+      this.$nextTick(() => {
+        this.$refs['addOrUpdate'].init(formObj, 'create')
+      })
+    },
+    onShowUpdate(row) {
+      const formObj = Object.assign({}, row)
+      this.addOrUpdateVisible = true
+      this.$nextTick(() => {
+        this.$refs['addOrUpdate'].init(formObj, 'update')
+      })
+    },
+    onDeleteOne(row, index) {
+      deleteDictType({ typeId: row.typeId}).then(response => {
+        this.$message({
+          message: '操作成功',
+          type: 'success'
+        })
+        this.datas.splice(index, 1)
       })
     },
     onRowClick(row) {
