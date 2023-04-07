@@ -16,6 +16,9 @@
       <el-form-item label="路由地址" prop="funcUrl">
         <el-input v-model="formObj.funcUrl" />
       </el-form-item>
+      <el-form-item label="图标" prop="funcUrl">
+        <el-input v-model="formObj.icon" />
+      </el-form-item>
       <el-form-item label="排序" prop="orderNo">
         <el-input v-model.number="formObj.orderNo" />
       </el-form-item>
@@ -45,6 +48,7 @@ export default {
         funcName: '',
         funcType: '',
         funcUrl: '',
+        icon: '',
         orderNo: ''
       },
       rules: {
@@ -70,6 +74,7 @@ export default {
           funcName: '',
           funcType: '',
           funcUrl: '',
+          icon: '',
           orderNo: ''
         }
         this.$nextTick(() => {

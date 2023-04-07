@@ -154,7 +154,7 @@ function fnAddDynamicMenuRoute(func) {
     meta: {
       menuId: func.id,
       title: func.funcName,
-      icon: 'dashboard'
+      icon: func.icon
     }
   }
   return route

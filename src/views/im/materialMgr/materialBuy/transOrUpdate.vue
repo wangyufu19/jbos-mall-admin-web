@@ -135,6 +135,7 @@
     import EditableCell from './components/EditableCell'
     import { getBizno,add,infoById,update,startTrans } from '@/api/im/materialBuy'
     import { getMaterialList }  from '@/api/im/materialList'
+    
     export default {
       name: "addOrUpdate",
       components: {

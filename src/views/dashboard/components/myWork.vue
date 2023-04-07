@@ -3,6 +3,23 @@
     <div slot="header" class="clearfix">
       <span>我的待办</span>
     </div>
+    <div class="filter-container">
+      <el-input v-model="search.bizNoS" placeholder="业务编号" class="filter-item" style="width: 200px;" />
+      <el-select
+        v-model="search.bizTypeS"
+        clearable
+        :loading="loading"
+        placeholder="业务类型">
+        <el-option
+            v-for="item in bizTypeItems"
+            :key="item.DICTID"
+            :label="item.DICTNAME"
+            :value="item.DICTID"
+        />
+      </el-select>
+      <el-button size="medium" type="primary" icon="el-icon-search" @click="onSearch">查询</el-button>
+      <el-button size="medium" type="primary" @click="onReset">重置</el-button>
+    </div>
     <el-table
       v-loading="listLoading"
       :data="datas"
@@ -42,6 +59,7 @@
         </template>
       </el-table-column>
     </el-table>
+    <pagination v-show="total>0" :total="total" :page.sync="queryPage.page" :limit.sync="queryPage.limit" @pagination="getMyWorkList" />
   </el-card>
 </template>
 
@@ -49,25 +67,45 @@
   import Layout from '@/layout'
   import { getUserId } from '@/utils/auth'
   import Pagination from '@/components/Pagination'
+  import { getCacheDictCodeList } from '@/api/dict'
   import { getMyWorkList } from '@/api/dashboard'
+
+  const loadView = (view) => { // 路由懒加载
+    return resolve => require([`@/views/${view}`], resolve)
+  }
   export default {
     name: "myWork",
     components: { Pagination, getMyWorkList },
     data(){
       return {
+        search: {
+          bizNoS: '',
+          bizTypeS: ''
+        },
         datas: [],
+        bizTypeItems: [],
         listLoading: true,
+        loading: false,
         total: 0,
         queryPage: {
           pageNum: 1,
-          pageSize: 5
+          pageSize: 10
         }
       }
     },
     created() {
+      this.initBizType()
       this.getMyWorkList()
     },
     methods: {
+      initBizType(){
+        this.loading = true
+        getCacheDictCodeList({typeId: 'JBOS_PROC_BIZTYPE'}).then(response => {
+          const res = response.data
+          this.bizTypeItems = res.data
+          this.loading = false
+        })
+      },
       getMyWorkList() {
         this.listLoading = true
         this.queryPage.userId=getUserId()
@@ -79,18 +117,31 @@
           this.listLoading = false
         })
       },
+      onSearch() {
+        this.queryPage.page = 1
+        this.queryPage.bizNoS = this.search.bizNoS
+        this.queryPage.bizTypeS = this.search.bizTypeS
+        this.getMyWorkList()
+      },
+      onReset() {
+        this.search = {
+          bizNoS: '',
+          bizTypeS: ''
+        }
+        this.onSearch()
+      },
       onTrans(row){
         const formObj = Object.assign({}, row)
+        const title='我的待办-'+row.bizType
         const myWorkRoute = [
           {
             path: '/user', component: Layout, redirect: '/myWork',
-
             children: [
               {
                 path: 'myWork',
-                component: () => import('@/views/im/materialMgr/materialBuy/transOrUpdate'),
+                component: loadView(row.routeUrl),
                 name: 'myWork',
-                meta: { title: '我的待办', icon: 'user', noCache: true }
+                meta: { title: title, icon: 'user', noCache: true }
               }
             ]
           }
@@ -105,6 +156,9 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  .filter-container{
+    margin-bottom: 10px;
+  }
 
 </style>
