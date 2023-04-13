@@ -10,7 +10,7 @@
       <el-button size="medium" type="primary" @click="onShowAdd">新增</el-button>
       <el-button size="medium" type="primary" :loading="downloadLoading" @click="onExport">导出</el-button>
       <el-upload      
-        style="margin-left: 180px;" 
+        style="margin-top: 5px;" 
         :action="upload.actionUrl"
         :headers="upload.headers"
         :show-file-list="false"
