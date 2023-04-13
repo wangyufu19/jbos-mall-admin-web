@@ -10,7 +10,7 @@
       <el-button size="medium" type="primary" @click="onShowAdd">新增</el-button>
       <el-button size="medium" type="primary" :loading="downloadLoading" @click="onExport">导出</el-button>
       <el-upload      
-        style="margin-top: 5px;" 
+        style="margin-top: -36px;margin-left: 168px;" 
         :action="upload.actionUrl"
         :headers="upload.headers"
         :show-file-list="false"
@@ -18,7 +18,7 @@
         :before-upload="onBeforeUpoad"
         :on-success="onUploadSuccess"
         :on-error="onUploadError">
-        <el-button size="medium" type="primary">点击上传</el-button>
+        <el-button size="medium" type="primary">导入</el-button>
       </el-upload>
     </div>
     <el-table
