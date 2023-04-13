@@ -4,8 +4,11 @@
       <el-input v-model="search.badgeS" placeholder="工号" class="filter-item" style="width: 200px;" />
       <el-input v-model="search.empNameS" placeholder="姓名" class="filter-item" style="width: 200px;" />
       <el-button size="medium" type="primary" @click="onSearch">查询</el-button>
-      <el-button size="medium" type="primary" @click="onReset">重置</el-button>
-      <el-button size="medium" style="margin-left: 10px;" type="primary" @click="onShowAdd">新增</el-button>
+      <el-button size="medium" type="primary" @click="onReset">重置</el-button>     
+    </div>
+    <div class="filter-container">
+      <el-button size="medium" type="primary" @click="onShowAdd">新增</el-button>
+      <el-button size="medium" type="primary" :loading="downloadLoading" @click="onExport">导出</el-button>
     </div>
     <el-table
       v-loading="listLoading"
@@ -55,9 +58,11 @@
   </div>
 </template>
 <script>
+import { exportExcel } from '@/utils/export'
 import Pagination from '@/components/Pagination'
-import { getEmpList, deleteEmp ,synchToCamunda} from '@/api/emp'
+import { getEmpList, deleteEmp ,synchToCamunda, exportEmp} from '@/api/emp'
 import AddOrEditEmp from './addOrEditEmp'
+
 export default {
   components: { Pagination, AddOrEditEmp },
   props: ['getOrgId', 'getOrgName'],
@@ -69,6 +74,7 @@ export default {
       },
       datas: [],
       listLoading: true,
+      downloadLoading: false,
       total: 0,
       queryPage: {
         page: 1,
@@ -116,6 +122,15 @@ export default {
       formObj.orgName = this.getOrgName
       this.$nextTick(() => {
         this.$refs['addOrEditEmp'].init(formObj, 'create')
+      })
+    },
+    onExport(){
+      this.listLoading = true
+      exportEmp().then(response => {
+        if(response.data instanceof Blob){
+          exportExcel(response.data,'员工信息表');
+        }     
+        this.listLoading = false
       })
     },
     onShowUpdate(row) {

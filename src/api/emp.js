@@ -35,3 +35,11 @@ export function synchToCamunda(data) {
     data
   })
 }
+export function exportEmp(data) {
+  return request({
+    url: '/admin/emp/export',
+    method: 'post',
+    data,
+    responseType: "blob"
+  })
+}

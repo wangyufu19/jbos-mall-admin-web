@@ -2,6 +2,21 @@
     <el-form ref="formObj" :model="formObj" :rules="rules" label-width="100px" class="demo-ruleForm" >
       <el-card>
         <div slot="header" class="clearfix">
+          <span>流程信息</span>
+        </div>
+        <el-row>
+          <el-steps>
+            <el-step 
+              v-for="item in taskItems"
+              :title="item.taskName"
+              :description="item.description"
+              :status="item.status">
+            </el-step>
+          </el-steps>
+        </el-row>
+      </el-card>
+      <el-card>
+        <div slot="header" class="clearfix">
           <span>基本信息</span>
         </div>
       <el-row>
@@ -168,6 +183,12 @@
             gmoTime: [{ required: true, message: '总办会议必须填写', trigger: 'change' }],
             totalAmt: [{ required: true, message: '采购总金额必须填写', trigger: 'change' }]
           },
+          taskItems: [
+            {taskName:'申请人',description:'张三(k0091)',status:'finish'},
+            {taskName:'部门领导',status:'wait'},
+            {taskName:'分管领导',status:'wait'},
+            {taskName:'仓库管理员',status:'wait'}
+          ],
           datas: [],
           editModeEnabled: true,
           currentRow: ''

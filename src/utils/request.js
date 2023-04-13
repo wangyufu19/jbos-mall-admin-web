@@ -40,7 +40,7 @@ http.interceptors.request.use(
 http.interceptors.response.use(
   response => {
     const res = response.data
-    if (res.retCode !== '0000') {
+    if (res.retCode !==undefined&&res.retCode !== '0000') {
       Message({
         message: res.retMsg || 'Error',
         type: 'error',
@@ -52,6 +52,7 @@ http.interceptors.response.use(
     }
   },
   error => {
+    alert(error.response.status)
     if(error.response.status===401){
       store.dispatch('user/resetToken').then(() => {
         location.reload()
