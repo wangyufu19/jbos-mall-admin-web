@@ -9,6 +9,17 @@
     <div class="filter-container">
       <el-button size="medium" type="primary" @click="onShowAdd">新增</el-button>
       <el-button size="medium" type="primary" :loading="downloadLoading" @click="onExport">导出</el-button>
+      <el-upload      
+        style="margin-left: 180px;" 
+        :action="upload.actionUrl"
+        :headers="upload.headers"
+        :show-file-list="false"
+        :data="upload.data"
+        :before-upload="onBeforeUpoad"
+        :on-success="onUploadSuccess"
+        :on-error="onUploadError">
+        <el-button size="medium" type="primary">点击上传</el-button>
+      </el-upload>
     </div>
     <el-table
       v-loading="listLoading"
@@ -58,9 +69,11 @@
   </div>
 </template>
 <script>
-import { exportExcel } from '@/utils/export'
+import {exportExcel } from '@/utils/export'
+import {getToken} from "@/utils/auth";
+import {Message } from 'element-ui'
 import Pagination from '@/components/Pagination'
-import { getEmpList, deleteEmp ,synchToCamunda, exportEmp} from '@/api/emp'
+import {getEmpList, deleteEmp ,synchToCamunda, exportEmp} from '@/api/emp'
 import AddOrEditEmp from './addOrEditEmp'
 
 export default {
@@ -75,6 +88,11 @@ export default {
       datas: [],
       listLoading: true,
       downloadLoading: false,
+      upload:{
+        actionUrl:process.env.VUE_APP_BASE_API+'/admin/io/upload',
+        headers:{'accessToken':getToken()},
+        data:{}
+      },
       total: 0,
       queryPage: {
         page: 1,
@@ -131,6 +149,30 @@ export default {
           exportExcel(response.data,'员工信息表');
         }     
         this.listLoading = false
+      })
+    },
+    onBeforeUpoad(file){
+      console.log(file)
+    },
+    onUploadSuccess(response,file, fileList){
+      if(response.retCode !==undefined&&response.retCode==='0000'){
+        this.$message({
+            message: '操作成功',
+            type: 'success'
+        })
+      }else{
+        Message({
+          message: response.retMsg || 'Error',
+          type: 'error',
+          duration: 3 * 1000
+        })
+      }
+    },
+    onUploadError(response,file, fileList){
+      Message({
+        message: '服务器响应异常，请联系管理员!',
+        type: 'error',
+        duration: 3 * 1000
       })
     },
     onShowUpdate(row) {

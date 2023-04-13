@@ -136,13 +136,14 @@
 </template>
 
 <script>
+  import { getToken } from "@/utils/auth";
   import { getNo,get,add,update,save } from '@/api/pm/product'
   import { deletePic } from '@/api/pm/pic'
   import { tree } from '@/api/pm/category'
   import Treeselect,{ LOAD_ROOT_OPTIONS,LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
   import '@riophae/vue-treeselect/dist/vue-treeselect.css'
   import EditableCell from '@/components/EditableCell'
-  import {getToken} from "../../../../utils/auth";
+
 
   export default {
     name: "addOrUpdate",
