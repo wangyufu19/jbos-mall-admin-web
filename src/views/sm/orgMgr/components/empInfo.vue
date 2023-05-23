@@ -146,7 +146,7 @@ export default {
       this.listLoading = true
       exportEmp().then(response => {
         if(response.data instanceof Blob){
-          exportExcel(response.data,'员工信息表');
+          exportExcel(response.data,'application/vnd.ms-excel','员工信息表.xlsx');
         }     
         this.listLoading = false
       })
