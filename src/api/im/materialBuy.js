@@ -50,3 +50,17 @@ export function deleteOne(data) {
     data
   })
 }
+export function doTrans(data) {
+  return request({
+    url: '/admin/material/buy/doTrans',
+    method: 'post',
+    data
+  })
+}
+export function doDrawback(data) {
+  return request({
+    url: '/admin/material/buy/doDrawback',
+    method: 'post',
+    data
+  })
+}

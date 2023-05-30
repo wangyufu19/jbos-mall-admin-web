@@ -1,8 +1,5 @@
 <template>
   <el-card style="margin-bottom:20px;">
-    <div slot="header" class="clearfix">
-      <span>我的待办</span>
-    </div>
     <div class="filter-container">
       <el-input v-model="search.bizNoS" placeholder="业务编号" class="filter-item" style="width: 200px;" />
       <el-select
@@ -55,7 +52,8 @@
       />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">
-          <el-button v-if="row.taskState==='处理中'" type="primary" size="mini" @click="onTrans(row)">办理</el-button>
+          <el-button v-if="getWorkType==='db' && row.taskState==='处理中'" type="primary" size="mini" @click="onTrans(row)">办理</el-button>
+          <el-button v-if="getWorkType==='yb'" type="primary" size="mini" @click="onTrans(row)">查看</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -75,6 +73,7 @@
   }
   export default {
     name: "myWork",
+    props: ['getWorkType'],
     components: { Pagination, getMyWorkList },
     data(){
       return {
@@ -108,6 +107,7 @@
       },
       getMyWorkList() {
         this.listLoading = true
+        this.queryPage.workType=this.getWorkType
         this.queryPage.userId=getUserId()
         this.queryPage.isPage = 'true'
         getMyWorkList(this.queryPage).then(response => {
@@ -149,7 +149,7 @@
         this.$router.addRoutes(myWorkRoute)
         this.$router.push({ 
           name: 'myWork',
-          params: { bizId:row.bizId,procInstId:row.procInstId,taskState:row.taskState } 
+          params: { workType:this.getWorkType,bizId:row.bizId,procInstId:row.procInstId,taskId:row.taskId,taskDefKey:row.taskDefKey,taskState:row.taskState } 
         })
       }
     }

@@ -8,7 +8,7 @@
           <el-steps>
             <el-step 
               v-for="item in taskItems"
-              :title="item.taskName"
+              :title="item.title"
               :description="item.description"
               :status="item.status">
             </el-step>
@@ -139,7 +139,9 @@
         </el-table>
       </el-card>
       <el-card>
-        <el-button  type="primary" @click="onStartTrans()">流转</el-button>
+        <el-button v-if="this.$route.params.workType==='db'" type="primary" @click="onDoTrans()">流转</el-button>
+        <el-button v-if="this.$route.params.workType==='yb'" type="primary" @click="onDoDrawback()">撤回</el-button>
+        
       </el-card>
     </el-form>
 
@@ -148,8 +150,10 @@
 <script>
     import { mapGetters } from 'vuex'
     import EditableCell from './components/EditableCell'
-    import { getBizno,add,infoById,update,startTrans } from '@/api/im/materialBuy'
+    import { getUserId } from '@/utils/auth'
+    import { getBizno,infoById,doTrans,doDrawback} from '@/api/im/materialBuy'
     import { getMaterialList }  from '@/api/im/materialList'
+    import { getUserTaskStepList } from '@/api/dashboard'
     
     export default {
       name: "addOrUpdate",
@@ -164,6 +168,11 @@
       data() {
         return {
           formObj: {
+            processInstanceId: '',
+            taskId: '',
+            taskDefKey: '',
+            userId: '',
+            depId: '',
             bizId: '',
             bizNo: '',
             applyUserId: '',
@@ -183,22 +192,17 @@
             gmoTime: [{ required: true, message: '总办会议必须填写', trigger: 'change' }],
             totalAmt: [{ required: true, message: '采购总金额必须填写', trigger: 'change' }]
           },
-          taskItems: [
-            {taskName:'申请人',description:'张三(k0091)',status:'finish'},
-            {taskName:'部门领导',status:'wait'},
-            {taskName:'分管领导',status:'wait'},
-            {taskName:'仓库管理员',status:'wait'}
-          ],
+          taskItems: [],
           datas: [],
           editModeEnabled: true,
           currentRow: ''
         }
       },
-      created() {
-  
+      created() {  
         if (this.formObj.bizId === undefined || this.formObj.bizId === '') {
           this.formObj.bizId=this.$route.params.bizId
         }     
+        this.getUserTaskStepList()
         this.getInfoById(this.formObj.bizId)
         this.getMaterialList(this.formObj.bizId)
       },
@@ -227,12 +231,25 @@
             this.loading = false
           })
         },
+        getUserTaskStepList(){
+          this.loading = true
+          getUserTaskStepList({procInstId: this.$route.params.procInstId}).then(response => {
+            const res = response.data
+            this.taskItems = res.data
+            this.loading = false
+          })
+        },
         getInfoById(id){
           this.loading = true
           infoById({id: id}).then(response => {
             const res = response.data
             this.formObj = res.data
             this.loading = false
+            this.formObj.processInstanceId=this.$route.params.procInstId
+            this.formObj.taskId=this.$route.params.taskId
+            this.formObj.taskDefKey=this.$route.params.taskDefKey
+            this.formObj.userId=getUserId()
+            this.formObj.depId=this.user.depId
           })
         },
         getMaterialList(id){
@@ -278,13 +295,11 @@
             row.sumAmt=0
           }
         },
-        onAdd() {
+        onDoTrans(){
           this.$refs['formObj'].validate((valid) => {
             if (valid) {
-              const data={formObj:this.formObj,materials:this.datas}
-              add(data).then(response => {
-                this.dialogFormVisible = false
-                this.$emit('refreshDataList')
+              const data={formObj:this.formObj}
+              doTrans(data).then(response => {
                 this.$message({
                   message: '操作成功',
                   type: 'success'
@@ -293,13 +308,11 @@
             }
           })
         },
-        onStartTrans(){
+        onDoDrawback(){
           this.$refs['formObj'].validate((valid) => {
             if (valid) {
-              const data={action:this.dialogStatus,formObj:this.formObj,materials:this.datas}
-              startTrans(data).then(response => {
-                this.dialogFormVisible = false
-                this.$emit('refreshDataList')
+              const data={formObj:this.formObj}
+              doDrawback(data).then(response => {
                 this.$message({
                   message: '操作成功',
                   type: 'success'

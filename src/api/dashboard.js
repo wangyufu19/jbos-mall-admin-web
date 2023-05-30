@@ -7,3 +7,11 @@ export function getMyWorkList(params) {
     params
   })
 }
+
+export function getUserTaskStepList(params) {
+    return request({
+      url: '/admin/dashboard/getUserTaskStepList',
+      method: 'get',
+      params
+    })
+}
