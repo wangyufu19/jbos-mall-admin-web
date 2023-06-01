@@ -127,8 +127,8 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取消</el-button>
-      <el-button v-if="this.formObj.bizState==='10'&&this.dialogStatus==='update'" type="primary" @click="dialogStatus==='create'?onAdd():onUpdate()">确定 </el-button>
-      <el-button v-if="this.dialogStatus==='update'" type="primary" @click="onStartTrans()">流转</el-button>
+      <el-button v-if="this.formObj.bizState!=='20'" type="primary" @click="dialogStatus==='create'?onAdd():onUpdate()">确定 </el-button>
+      <el-button v-if="this.formObj.bizState!=='20'" type="primary" @click="onStartTrans()">流转</el-button>
     </div>
   </el-dialog>
 </template>
@@ -189,10 +189,10 @@
             this.formObj = {
               id: undefined,
               bizNo: '',
-              applyUserId: this.user.LOGINNAME,
-              applyUserName: this.user.USERNAME,
-              applyDepId:this.user.DEPID,
-              applyDepName:this.user.DEPNAME,
+              applyUserId: this.user.username,
+              applyUserName: this.user.nickName,
+              applyDepId:this.user.depId,
+              applyDepName:this.user.depName,
               applyTime:  new Date (),
               gmoTime: '',
               totalAmt: '',
@@ -289,7 +289,7 @@
         onAdd() {
           this.$refs['formObj'].validate((valid) => {
             if (valid) {
-              const data={formObj:this.formObj,materials:this.datas}
+              const data={action:this.dialogStatus,formObj:this.formObj,materials:this.datas}
               add(data).then(response => {
                 this.dialogFormVisible = false
                 this.$emit('refreshDataList')

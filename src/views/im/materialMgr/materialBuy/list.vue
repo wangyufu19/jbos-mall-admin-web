@@ -88,6 +88,7 @@
 </template>
 
 <script>
+  import { getUserId } from '@/utils/auth'
   import EditableCell from './components/EditableCell'
   import Pagination from '@/components/Pagination'
   import AddOrUpdate from './addOrUpdate'
@@ -122,6 +123,7 @@
     methods: {
       onList() {
         this.listLoading = true
+        this.queryPage.userId=getUserId()
         this.queryPage.isPage = 'true'
         list(this.queryPage).then(response => {
           const res = response.data
@@ -150,6 +152,8 @@
             return '草稿中'
           }else if(row.bizState==='20') {
             return '审批中'
+          }else if(row.bizState==='90') {
+            return '已结束'
           }
         }
       },
