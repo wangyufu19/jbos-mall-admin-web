@@ -80,7 +80,7 @@
       </el-table-column>
     </el-table>
     <!--分页信息-->
-    <pagination v-show="total>0" :total="total" :page.sync="queryPage.page" :limit.sync="queryPage.limit" @pagination="getMaterialBuyList" />
+    <pagination v-show="total>0" :total="total" :page.sync="queryPage.page" :limit.sync="queryPage.limit" @pagination="onList" />
     <!--新增或编辑物品采购信息-->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="onList" />
   </el-card>

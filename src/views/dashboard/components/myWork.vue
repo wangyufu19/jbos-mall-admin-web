@@ -52,8 +52,8 @@
       />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">
-          <el-button v-if="getWorkType==='db' && row.taskState==='处理中'" type="primary" size="mini" @click="onTrans(row)">办理</el-button>
-          <el-button v-if="getWorkType==='yb'" type="primary" size="mini" @click="onTrans(row)">查看</el-button>
+          <el-button v-if="getWorkType==='waiting' && row.taskState==='处理中'" type="primary" size="mini" @click="onTrans(row)">办理</el-button>
+          <el-button v-if="getWorkType==='processed'" type="primary" size="mini" @click="onTrans(row)">查看</el-button>
         </template>
       </el-table-column>
     </el-table>

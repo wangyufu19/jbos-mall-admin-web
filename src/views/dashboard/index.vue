@@ -2,11 +2,11 @@
   <div class="app-container">
     <el-card>
       <el-tabs v-model="activeName"  @tab-click="handleClick">
-        <el-tab-pane  label="我的待办" name="db">
-          <my-work ref="db" v-if="activeName=='db'" :getWorkType="activeName"/>
+        <el-tab-pane  label="我的待办" name="waiting">
+          <my-work ref="waiting" v-if="activeName=='waiting'" :getWorkType="activeName"/>
         </el-tab-pane>
-        <el-tab-pane  label="我的已办" name="yb">
-          <my-work ref="yb" v-if="activeName=='yb'" :getWorkType="activeName"/>
+        <el-tab-pane  label="我的已办" name="processed">
+          <my-work ref="processed" v-if="activeName=='processed'" :getWorkType="activeName"/>
         </el-tab-pane>
       </el-tabs>
     </el-card>
@@ -22,7 +22,7 @@ export default {
   components: { myWork },
   data() {
     return {
-      activeName: 'db'
+      activeName: 'waiting'
     }
   },
   watch: {
