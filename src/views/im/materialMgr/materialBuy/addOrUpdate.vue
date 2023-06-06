@@ -127,8 +127,8 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取消</el-button>
-      <el-button v-if="this.formObj.bizState!=='20'" type="primary" @click="dialogStatus==='create'?onAdd():onUpdate()">确定 </el-button>
-      <el-button v-if="this.formObj.bizState!=='20'" type="primary" @click="onStartTrans()">流转</el-button>
+      <el-button v-if="this.formObj.bizState==='10'" type="primary" @click="dialogStatus==='create'?onAdd():onUpdate()">确定 </el-button>
+      <el-button v-if="this.formObj.bizState==='10'" type="primary" @click="onStartTrans()">流转</el-button>
     </div>
   </el-dialog>
 </template>

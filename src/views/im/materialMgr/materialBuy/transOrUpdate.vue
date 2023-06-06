@@ -139,8 +139,8 @@
         </el-table>
       </el-card>
       <el-card>
-        <el-button v-if="this.$route.params.workType==='db'" type="primary" @click="onDoTrans()">流转</el-button>
-        <el-button v-if="this.$route.params.workType==='yb'" type="primary" @click="onDoDrawback()">撤回</el-button>
+        <el-button v-if="this.$route.params.workType==='waiting'" type="primary" @click="onDoTrans()">流转</el-button>
+        <el-button v-if="this.$route.params.workType==='processed'" type="primary" @click="onDoDrawback()">撤回</el-button>
         
       </el-card>
     </el-form>
@@ -171,6 +171,7 @@
             processInstanceId: '',
             taskId: '',
             taskDefKey: '',
+            taskName:'',
             userId: '',
             depId: '',
             bizId: '',
@@ -248,6 +249,7 @@
             this.formObj.processInstanceId=this.$route.params.procInstId
             this.formObj.taskId=this.$route.params.taskId
             this.formObj.taskDefKey=this.$route.params.taskDefKey
+            this.formObj.taskName=this.$route.params.taskName
             this.formObj.userId=getUserId()
             this.formObj.depId=this.user.depId
           })

@@ -132,7 +132,10 @@
       },
       onTrans(row){
         const formObj = Object.assign({}, row)
-        const title='我的待办-'+row.bizType
+        var title='我的待办-'+row.bizType
+        if(this.getWorkType==='processed'){
+          title='我的已办-'+row.bizType
+        }
         const myWorkRoute = [
           {
             path: '/user', component: Layout, redirect: '/myWork',
@@ -147,9 +150,18 @@
           }
         ]
         this.$router.addRoutes(myWorkRoute)
+
         this.$router.push({ 
           name: 'myWork',
-          params: { workType:this.getWorkType,bizId:row.bizId,procInstId:row.procInstId,taskId:row.taskId,taskDefKey:row.taskDefKey,taskState:row.taskState } 
+          params: { 
+            workType:this.getWorkType,
+            bizId:row.bizId,
+            procInstId:row.procInstId,
+            taskId:row.taskId,
+            taskDefKey:row.taskDefKey,
+            taskName:row.taskName,
+            taskState:row.taskState 
+          } 
         })
       }
     }
