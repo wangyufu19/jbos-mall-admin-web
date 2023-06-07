@@ -137,7 +137,7 @@
     import { mapGetters } from 'vuex'
     import EditableCell from './components/EditableCell'
     import { getBizno,add,infoById,update,startTrans } from '@/api/im/materialBuy'
-    import { getMaterialList }  from '@/api/im/materialList'
+
     export default {
       name: "addOrUpdate",
       components: {
@@ -208,7 +208,6 @@
             this.dialogStatus = dialogStatus
             this.dialogFormVisible = true
             this.getInfoById(formObj.id)
-            this.getMaterialList(formObj.id)
           }
         },
         tableRowClassName({ row, rowIndex }) {
@@ -239,15 +238,8 @@
           this.loading = true
           infoById({id: id}).then(response => {
             const res = response.data
-            this.formObj = res.data
-            this.loading = false
-          })
-        },
-        getMaterialList(id){
-          this.loading = true
-          getMaterialList({bizid: id}).then(response => {
-            const res = response.data
-            this.datas = res.data
+            this.formObj = res.data.materialBuyDto.materialBuy
+            this.datas = res.data.materialBuyDto.materialList
             this.loading = false
           })
         },

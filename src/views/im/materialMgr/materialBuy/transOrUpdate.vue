@@ -2,21 +2,6 @@
     <el-form ref="formObj" :model="formObj" :rules="rules" label-width="100px" class="demo-ruleForm" >
       <el-card>
         <div slot="header" class="clearfix">
-          <span>流程信息</span>
-        </div>
-        <el-row>
-          <el-steps>
-            <el-step 
-              v-for="item in taskItems"
-              :title="item.title"
-              :description="item.description"
-              :status="item.status">
-            </el-step>
-          </el-steps>
-        </el-row>
-      </el-card>
-      <el-card>
-        <div slot="header" class="clearfix">
           <span>基本信息</span>
         </div>
       <el-row>
@@ -139,8 +124,53 @@
         </el-table>
       </el-card>
       <el-card>
+        <div slot="header" class="clearfix">
+          <span>审批信息</span>
+        </div>
+        <el-row>
+          <el-steps>
+            <el-step 
+              v-for="item in taskItems"
+              :title="item.title"
+              :description="item.description"
+              :status="item.status">
+            </el-step>
+          </el-steps>
+        </el-row>
+      </el-card>
+      <el-card v-if="this.$route.params.workType==='waiting'">
+        <div slot="header" class="clearfix">
+          <span>审批意见</span>
+        </div>
+        <el-row>
+          <el-col>
+            <el-form-item label="审批意见" prop="opinion">
+              <el-select
+                v-model="opinion"
+                clearable
+                :loading="loading"
+                placeholder="请选择">
+                <el-option
+                  v-for="item in processOpinionDict"
+                  :key="item.DICTID"
+                  :label="item.DICTNAME"
+                  :value="item.DICTID"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col span="24">
+            <el-form-item label="意见内容" prop="opinionDesc">
+              <el-input type="textarea" rows="5" v-model="opinionDesc"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-card>
+      <el-card>
         <el-button v-if="this.$route.params.workType==='waiting'" type="primary" @click="onDoTrans()">流转</el-button>
-        <el-button v-if="this.$route.params.workType==='processed'" type="primary" @click="onDoDrawback()">撤回</el-button>
+        <el-button v-if="this.$route.params.workType==='processed'&&this.formObj.isDrawback==='true'" type="primary" @click="onDoDrawback()">撤回</el-button>
         
       </el-card>
     </el-form>
@@ -152,9 +182,9 @@
     import EditableCell from './components/EditableCell'
     import { getUserId } from '@/utils/auth'
     import { getBizno,infoById,doTrans,doDrawback} from '@/api/im/materialBuy'
-    import { getMaterialList }  from '@/api/im/materialList'
     import { getUserTaskStepList } from '@/api/dashboard'
-    
+    import { getCacheDictCodeList } from '@/api/dict'
+
     export default {
       name: "addOrUpdate",
       components: {
@@ -182,8 +212,12 @@
             gmoTime: '',
             totalAmt: '',
             purpose: '',
-            bizState:'10'
-          },
+            bizState:'10',
+            isDrawback:''
+          },        
+          opinion: '100',
+          opinionDesc:'',
+          processOpinionDict: [],
           loading: false,
           rules: {
             bizNo: [{ required: true, message: '业务编号必须填写', trigger: 'change' }],
@@ -205,7 +239,7 @@
         }     
         this.getUserTaskStepList()
         this.getInfoById(this.formObj.bizId)
-        this.getMaterialList(this.formObj.bizId)
+        this.initOpinion()
       },
       methods: {
         tableRowClassName({ row, rowIndex }) {
@@ -242,9 +276,18 @@
         },
         getInfoById(id){
           this.loading = true
-          infoById({id: id}).then(response => {
+          const params ={
+            id: id,
+            userId: getUserId(),
+            processInstanceId:this.$route.params.procInstId,
+            taskId:this.$route.params.taskId
+          }
+          infoById(params).then(response => {
             const res = response.data
-            this.formObj = res.data
+            this.formObj = res.data.materialBuyDto.materialBuy
+            this.datas = res.data.materialBuyDto.materialList
+            this.formObj.isDrawback = res.data.isDrawback
+        
             this.loading = false
             this.formObj.processInstanceId=this.$route.params.procInstId
             this.formObj.taskId=this.$route.params.taskId
@@ -254,11 +297,11 @@
             this.formObj.depId=this.user.depId
           })
         },
-        getMaterialList(id){
+        initOpinion(){
           this.loading = true
-          getMaterialList({bizid: id}).then(response => {
+          getCacheDictCodeList({typeId: 'IM_PROCESS_OPINION'}).then(response => {
             const res = response.data
-            this.datas = res.data
+            this.processOpinionDict = res.data
             this.loading = false
           })
         },
@@ -300,6 +343,8 @@
         onDoTrans(){
           this.$refs['formObj'].validate((valid) => {
             if (valid) {
+              this.formObj.opinion=this.opinion
+              this.formObj.opinionDesc=this.opinionDesc
               const data={formObj:this.formObj}
               doTrans(data).then(response => {
                 this.$message({
