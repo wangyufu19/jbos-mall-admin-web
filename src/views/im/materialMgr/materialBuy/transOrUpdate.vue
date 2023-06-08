@@ -125,7 +125,7 @@
       </el-card>
       <el-card>
         <div slot="header" class="clearfix">
-          <span>审批信息</span>
+          <span>流程信息</span>
         </div>
         <el-row>
           <el-steps>
@@ -140,7 +140,7 @@
       </el-card>
       <el-card v-if="this.$route.params.workType==='waiting'">
         <div slot="header" class="clearfix">
-          <span>审批意见</span>
+          <span>审批信息</span>
         </div>
         <el-row>
           <el-col>

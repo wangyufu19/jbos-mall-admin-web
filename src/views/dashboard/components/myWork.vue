@@ -136,6 +136,7 @@
         if(this.getWorkType==='processed'){
           title='我的已办-'+row.bizType
         }
+
         const myWorkRoute = [
           {
             path: '/user', component: Layout, redirect: '/myWork',
@@ -149,6 +150,7 @@
             ]
           }
         ]
+
         this.$router.addRoutes(myWorkRoute)
 
         this.$router.push({ 
