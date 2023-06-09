@@ -1,44 +1,115 @@
 <template>
-    <el-card>
-    <div slot="header" class="clearfix">
-        <span>流程信息</span>
-    </div>
-    <el-row>
-        <el-steps>
-        <el-step 
-            v-for="item in taskItems"
-            :title="item.title"
-            :description="item.description"
-            :status="item.status">
-        </el-step>
-        </el-steps>
-    </el-row>
-    </el-card>
+    <el-dialog 
+        :title="title" 
+        width="80%"
+        :visible.sync="dialogFormVisible">      
+        <el-table
+            v-loading="listLoading"
+            :data="datas"
+            border
+            stripe
+            fit
+            highlight-current-row
+            style="width: 100%"
+        >
+            <el-table-column
+                prop="taskName"
+                label="任务名称"
+                width="120"
+            />
+            <el-table-column
+                prop="assigneeName"
+                label="任务用户"
+                width="200"
+            />
+            <el-table-column
+                prop="startTime"
+                label="开始时间"
+                width="200"
+            />
+            <el-table-column
+                prop="endTime"
+                label="结束时间"
+                width="200"
+            />
+            <el-table-column
+                prop="taskState"
+                label="状态"
+                width="120"
+                :formatter="onFormatter"
+            />
+            <el-table-column
+                prop="opinion"
+                label="审批意见"
+                width="120"
+                :formatter="onFormatter"
+            />
+            
+        </el-table> 
+        <el-row>
+            <el-steps>
+                <el-step 
+                    v-for="item in taskItems"
+                    :title="item.title"
+                    :description="item.description"
+                    :status="item.status">
+                </el-step>
+            </el-steps>
+        </el-row>    
+    </el-dialog>
 </template>
 
 <script>
-    import { getUserTaskStepList } from '@/api/wf/task'
+    import { getProcessTaskDetailList } from '@/api/wf/task'
     export default {
-        name: 'task',
+        name: 'processTask',
         data() {
             return {
-                taskItems: [],
-                loading: false,
+                title:'实例任务',
+                dialogFormVisible: false,
+                datas: [],
+                listLoading: false,
             }
         },
         created() {    
-            this.getUserTaskStepList()
+           
         },
         
         methods: {
-            getUserTaskStepList(){
+            init(procInstId) {
+                this.dialogFormVisible = true
+                this.getProcessTaskDetailList(procInstId)
+            },
+            getProcessTaskDetailList(procInstId){
                 this.loading = true
-                getUserTaskStepList({procInstId: this.$route.params.procInstId}).then(response => {
+                getProcessTaskDetailList({procInstId: procInstId}).then(response => {
                     const res = response.data
-                    this.taskItems = res.data
-                    this.loading = false
+                    this.datas = res.data.list
+                    this.listLoading = false
                 })
+            },
+            onFormatter(row,column){
+                if(column.property==='taskState'){        
+                    if(row.taskState==='20'){
+                        return '审批中'
+                    }else if(row.taskState==='90') {
+                        return '审批成功'
+                    }else if(row.taskState==='99') {
+                        return '审批退回'
+                    }
+                }else if(column.property==='opinion'){
+                    if(row.opinion==='100'){
+                        return '同意'
+                    }else if(row.opinion==='101') {
+                        return '驳回'
+                    }
+                }
             },
         }
     }
 </script>
+<style scoped>
+  .filter-container{
+    margin-bottom: 10px;
+  }
+</style>

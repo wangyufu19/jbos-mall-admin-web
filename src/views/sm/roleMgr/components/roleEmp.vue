@@ -53,7 +53,7 @@
 </template>
 <script>
 import Pagination from '@/components/Pagination'
-import { getRoleEmpList } from '@/api/sm/role'
+import { getRoleEmpList,deleteRoleUser } from '@/api/sm/role'
 import SelectRoleEmp from './selectRoleEmp'
 export default {
   components: { Pagination , SelectRoleEmp},
@@ -114,7 +114,7 @@ export default {
       })
     },
     onDeleteOne(row, index) {
-      deleteEmp({ id: row.id, badge: row.badge }).then(response => {
+      deleteRoleUser({ roleId: this.getRoleId, userId: row.userId }).then(response => {
         this.$message({
           message: '操作成功',
           type: 'success'

@@ -1,24 +1,26 @@
 <template>
   <el-card>
     <div slot="header" class="clearfix">
-      <span>流程实例列表</span>
+      <span>流程部署列表</span>
     </div>
     <div class="filter-container">
-      <el-input v-model="search.bizNoS" placeholder="业务编号" class="filter-item" style="width: 200px;" />
-      <el-select
-        v-model="search.bizTypeS"
-        clearable
-        :loading="loading"
-        placeholder="业务类型">
-        <el-option
-            v-for="item in bizTypeItems"
-            :key="item.DICTID"
-            :label="item.DICTNAME"
-            :value="item.DICTID"
-        />
-      </el-select>
+      <el-input v-model="search.procKeyS" placeholder="流程编码" class="filter-item" style="width: 200px;" />
+      <el-input v-model="search.procNameS" placeholder="流程名称" class="filter-item" style="width: 200px;" />
       <el-button size="medium" type="primary" @click="onSearch">查询</el-button>
       <el-button size="medium" type="primary" @click="onReset">重置</el-button>
+    </div>
+    <div class="filter-container">
+      <el-upload      
+        style="margin-top:10px;" 
+        :action="upload.actionUrl"
+        :headers="upload.headers"
+        :show-file-list="false"
+        :data="upload.data"
+        :before-upload="onBeforeUpoad"
+        :on-success="onUploadSuccess"
+        :on-error="onUploadError">
+        <el-button size="medium" type="primary">部署</el-button>
+      </el-upload>
     </div>
     <el-table
       v-loading="listLoading"
@@ -28,38 +30,31 @@
       fit
       highlight-current-row
       style="width: 100%"
-      @row-dblclick="onViewTask"
     >
       <el-table-column
-        prop="procInstId"
-        label="实例ID"
-        width="280"
-      />
-      <el-table-column
-        prop="bizNo"
-        label="业务编号"
+        prop="procKey"
+        label="流程编码"
         width="200"
       />
       <el-table-column
-        prop="bizType"
-        label="业务类型"
+        prop="procName"
+        label="流程名称"
+        width="200"
+      />
+      <el-table-column
+        prop="version"
+        label="版本"
         width="120"
       />
       <el-table-column
-        prop="startTime"
-        label="开始时间"
-        width="160"
+        prop="resource"
+        label="部署资源"
+        width="200"
       />
       <el-table-column
-        prop="endTime"
-        label="结束时间"
+        prop="deployTime"
+        label="部署时间"
         width="160"
-      />
-      <el-table-column
-        prop="procState"
-        label="状态"
-        width="120"
-        :formatter="onFormatter"
       />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">
@@ -70,28 +65,31 @@
     </el-table>
     <!--分页信息-->
     <pagination v-show="total>0" :total="total" :page.sync="queryPage.page" :limit.sync="queryPage.limit" @pagination="onList" />
-    <!--查看实例任务信息-->
-    <task v-if="taskVisible" ref="processTask"  />
+
   </el-card>
 </template>
 
 <script>
-import { getProcessInstanceList,suspendProcessInstance,activateProcessInstance} from '@/api/wf/instance'
-import { getCacheDictCodeList } from '@/api/sm/dict'
+import {getToken} from "@/utils/global";
+import { getProcessDeploymentList,deploy,unDeploy} from '@/api/wf/deployment'
 import Pagination from '@/components/Pagination'
-import Task from './task.vue'
+
 
 export default {
   name: 'List',
-  components: { Pagination,Task },
+  components: { Pagination},
   data() {
     return {
       search: {
-        bizNoS: '',
-        bizTypeS: ''
+        procKeyS: '',
+        procNameS: ''
       },
       datas: [],
-      bizTypeItems: [],
+      upload:{
+        actionUrl:process.env.VUE_APP_BASE_API+'/workflow/deployment/deploy',
+        headers:{'accessToken':getToken()},
+        data:{}
+      },
       listLoading: true,
       total: 0,
       queryPage: {
@@ -102,55 +100,53 @@ export default {
     }
   },
   created() {
-    this.initBizType()
     this.onList()
   },
   methods: {
     onSearch() {
       this.queryPage.page = 1
-      this.queryPage.bizNoS = this.search.bizNoS
-      this.queryPage.bizTypeS = this.search.bizTypeS
+      this.queryPage.procKeyS = this.search.procKeyS
+      this.queryPage.procNameS = this.search.procNameS
       this.onList()
     },
     onReset() {
       this.search = {
-        bizNoS: '',
-        bizTypeS: ''
+        procKeyS: '',
+        procNameS: ''
       }
-    },
-    initBizType(){
-      this.loading = true
-      getCacheDictCodeList({typeId: 'JBOS_PROC_BIZTYPE'}).then(response => {
-        const res = response.data
-        this.bizTypeItems = res.data
-        this.loading = false
-      })
     },
     onList() {
       this.listLoading = true
       this.queryPage.isPage = 'true'
-      getProcessInstanceList(this.queryPage).then(response => {
+      getProcessDeploymentList(this.queryPage).then(response => {
         const res=response.data
         this.datas = res.data.list
         this.total = res.data.total
         this.listLoading = false
       })
     },
-    onFormatter(row,column){
-      if(column.property==='procState'){        
-        if(row.procState==='20'){
-          return '运行中'
-        }else if(row.procState==='90') {
-          return '已结束'
-        }else if(row.procState==='99') {
-          return '已暂停'
-        }
+    onBeforeUpoad(file){
+      console.log(file)
+    },
+    onUploadSuccess(response,file, fileList){
+      if(response.retCode !==undefined&&response.retCode==='0000'){
+        this.$message({
+            message: '操作成功',
+            type: 'success'
+        })
+      }else{
+        Message({
+          message: response.retMsg || 'Error',
+          type: 'error',
+          duration: 3 * 1000
+        })
       }
     },
-    onViewTask(row){
-      this.taskVisible = true
-      this.$nextTick(() => {
-        this.$refs['processTask'].init(row.procInstId)
+    onUploadError(response,file, fileList){
+      Message({
+        message: '服务器响应异常，请联系管理员!',
+        type: 'error',
+        duration: 3 * 1000
       })
     },
     onSuspend(row) {

@@ -58,7 +58,7 @@ export default {
       this.$router.options.isInitMenu=false
       this.$router.replace({path: '/home'})
       location.reload()
-      //this.$router.push(`/home?redirect=${this.$route.fullPath}`)
+      this.$router.push('home')
     }
   }
 }

@@ -72,4 +72,12 @@ export function addRoleUser(data) {
     data
   })
 }
+export function deleteRoleUser(data) {
+  return request({
+    url: '/admin/role/deleteRoleUser',
+    method: 'post',
+    data
+  })
+}
+
 

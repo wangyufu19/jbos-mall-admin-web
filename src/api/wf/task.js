@@ -7,7 +7,13 @@ export function getMyWorkList(params) {
     params
   })
 }
-
+export function getProcessTaskDetailList(params) {
+  return request({
+    url: '/admin/workflow/task/getProcessTaskDetailList',
+    method: 'get',
+    params
+  })
+}
 export function getUserTaskStepList(params) {
     return request({
       url: '/admin/workflow/task/getUserTaskStepList',
@@ -15,3 +21,5 @@ export function getUserTaskStepList(params) {
       params
     })
 }
+
+
