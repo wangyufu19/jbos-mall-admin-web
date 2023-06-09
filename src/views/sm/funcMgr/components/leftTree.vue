@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { getFuncChildrenNode } from '@/api/func'
+import { getFuncChildrenNode } from '@/api/sm/func'
 export default {
   data() {
     return {

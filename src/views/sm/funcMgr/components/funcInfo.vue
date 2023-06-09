@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { getFuncList, deleteFunc } from '@/api/func'
+import { getFuncList, deleteFunc } from '@/api/sm/func'
 import AddOrEditFunc from './addOrEditFunc'
 export default {
   props: ['getParentId'],

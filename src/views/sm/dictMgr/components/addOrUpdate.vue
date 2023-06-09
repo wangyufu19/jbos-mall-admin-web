@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { addDictType, updateDictType } from '@/api/dict'
+import { addDictType, updateDictType } from '@/api/sm/dict'
 export default {
   name: 'AddOrUpdate',
   data() {

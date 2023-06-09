@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { getRoleList, deleteRole } from '@/api/role'
+import { getRoleList, deleteRole } from '@/api/sm/role'
 import Pagination from '@/components/Pagination'
 import AddOrEditRole from './addOrEditRole'
 

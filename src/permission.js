@@ -20,7 +20,6 @@ const whiteList = ['/home', '/auth-redirect']
 
 // 全局路由
 const globalRoutes = [
-  { path: '/login', component: () => import('@/views/login/index'), name: 'login', hidden: true },
   { path: '/home', component: () => import('@/views/home/index'), name: 'home', hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
   {

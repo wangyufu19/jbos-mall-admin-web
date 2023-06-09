@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import { addRole, updateRole } from '@/api/role'
-import { getFuncTree } from '@/api/func'
+import { addRole, updateRole } from '@/api/sm/role'
+import { getFuncTree } from '@/api/sm/func'
 export default {
   name: 'AddOrEditRole',
   data() {

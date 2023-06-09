@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { getOgrTree } from '@/api/org'
+import { getOgrTree } from '@/api/sm/org'
 export default {
   data() {
     return {

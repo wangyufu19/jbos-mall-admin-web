@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { getDictCodeList, saveDictCode} from '@/api/dict'
+import { getDictCodeList, saveDictCode} from '@/api/sm/dict'
 export default {
   name: 'DictCode',
   props: ['typeId'],

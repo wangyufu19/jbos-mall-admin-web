@@ -54,7 +54,7 @@
 </template>
 <script>
 import Pagination from '@/components/Pagination'
-import { getSelectRoleEmpList, addRoleUser } from '@/api/role'
+import { getSelectRoleEmpList, addRoleUser } from '@/api/sm/role'
 
 export default {
   components: { Pagination },

@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { getDepList , deleteDep } from '@/api/dep'
+import { getDepList , deleteDep } from '@/api/sm/dep'
 import AddOrEditDep from './addOrEditDep'
 export default {
   props: ['getOrgId'],

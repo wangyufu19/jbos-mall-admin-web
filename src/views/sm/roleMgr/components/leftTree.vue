@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { getRoleChildrenNode } from '@/api/role'
+import { getRoleChildrenNode } from '@/api/sm/role'
 
 export default {
   data() {

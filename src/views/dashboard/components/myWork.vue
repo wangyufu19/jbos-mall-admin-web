@@ -65,8 +65,8 @@
   import Layout from '@/layout'
   import { getUserId } from '@/utils/auth'
   import Pagination from '@/components/Pagination'
-  import { getCacheDictCodeList } from '@/api/dict'
-  import { getMyWorkList } from '@/api/dashboard'
+  import { getCacheDictCodeList } from '@/api/sm/dict'
+  import { getMyWorkList } from '@/api/wf/task'
 
   const loadView = (view) => { // 路由懒加载
     return resolve => require([`@/views/${view}`], resolve)

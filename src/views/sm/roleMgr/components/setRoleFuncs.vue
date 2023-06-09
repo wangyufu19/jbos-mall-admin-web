@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import { getFuncTree } from '@/api/func'
-import { getRoleFuncs,saveRoleFuncs } from '@/api/role'
+import { getFuncTree } from '@/api/sm/func'
+import { getRoleFuncs,saveRoleFuncs } from '@/api/sm/role'
 export default {
   name: 'SetRoleFuncs',
   props: ['getRoleId', 'getRoleName'],

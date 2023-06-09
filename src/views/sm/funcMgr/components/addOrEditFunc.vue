@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { addFunc, updateFunc } from '@/api/func'
+import { addFunc, updateFunc } from '@/api/sm/func'
 export default {
   name: 'AddOrEditFunc',
   data() {

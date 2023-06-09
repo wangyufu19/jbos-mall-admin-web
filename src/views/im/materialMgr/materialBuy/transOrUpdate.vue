@@ -182,8 +182,8 @@
     import EditableCell from './components/EditableCell'
     import { getUserId } from '@/utils/auth'
     import { getBizno,infoById,doTrans,doDrawback} from '@/api/im/materialBuy'
-    import { getUserTaskStepList } from '@/api/dashboard'
-    import { getCacheDictCodeList } from '@/api/dict'
+    import { getUserTaskStepList } from '@/api/wf/task'
+    import { getCacheDictCodeList } from '@/api/sm/dict'
 
     export default {
       name: "addOrUpdate",

@@ -54,9 +54,9 @@
 </template>
 
 <script>
-import { getCacheDictCodeList } from '@/api/dict'
-import { addEmp, updateEmp } from '@/api/emp'
-import { getDepList } from '@/api/dep'
+import { getCacheDictCodeList } from '@/api/sm/dict'
+import { addEmp, updateEmp } from '@/api/sm/emp'
+import { getDepList } from '@/api/sm/dep'
 export default {
   name: 'AddOrEditEmp',
   data() {

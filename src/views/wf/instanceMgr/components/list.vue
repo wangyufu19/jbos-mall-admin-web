@@ -52,6 +52,7 @@
       />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">
+          <el-button size="mini" @click="onViewProcessTask(row)">查看任务</el-button>
           <el-button v-if="row.procState==='20'" type="warning" size="mini" @click="onSuspend(row)">暂停</el-button>
           <el-button v-if="row.procState==='99'" type="success" size="mini"  @click="onActivate(row,$index)">激活</el-button>
         </template>
@@ -59,15 +60,18 @@
     </el-table>
     <!--分页信息-->
     <pagination v-show="total>0" :total="total" :page.sync="queryPage.page" :limit.sync="queryPage.limit" @pagination="getMemberList" />
+   
   </el-card>
 </template>
 
 <script>
-import { getProcessInstanceList,suspendProcessInstance,activateProcessInstance} from '@/api/wfm/instance'
+import { getProcessInstanceList,suspendProcessInstance,activateProcessInstance} from '@/api/wf/instance'
 import Pagination from '@/components/Pagination'
+import { task } from './task.vue'
+
 export default {
   name: 'List',
-  components: { Pagination },
+  components: { Pagination,task },
   data() {
     return {
       search: {

@@ -72,9 +72,9 @@
 </template>
 
 <script>
-import { getCacheDictCodeList } from '@/api/dict'
-import { addDep, updateDep } from '@/api/dep'
-import { getEmpList } from '@/api/emp'
+import { getCacheDictCodeList } from '@/api/sm/dict'
+import { addDep, updateDep } from '@/api/sm/dep'
+import { getEmpList } from '@/api/sm/emp'
 export default {
   name: 'AddOrEditDep',
   data() {

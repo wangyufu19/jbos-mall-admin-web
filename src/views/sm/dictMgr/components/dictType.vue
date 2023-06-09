@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { getDictTypeList,deleteDictType } from '@/api/dict'
+import { getDictTypeList,deleteDictType } from '@/api/sm/dict'
 import AddOrUpdate from "./addOrUpdate";
 
 export default {

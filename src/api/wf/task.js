@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getMyWorkList(params) {
   return request({
-    url: '/admin/dashboard/getMyWorkList',
+    url: '/admin/workflow/task/getMyWorkList',
     method: 'get',
     params
   })
@@ -10,7 +10,7 @@ export function getMyWorkList(params) {
 
 export function getUserTaskStepList(params) {
     return request({
-      url: '/admin/dashboard/getUserTaskStepList',
+      url: '/admin/workflow/task/getUserTaskStepList',
       method: 'get',
       params
     })
