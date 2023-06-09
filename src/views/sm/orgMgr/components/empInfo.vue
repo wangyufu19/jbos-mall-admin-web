@@ -70,7 +70,7 @@
 </template>
 <script>
 import {exportExcel } from '@/utils/export'
-import {getToken} from "@/utils/auth";
+import {getToken} from "@/utils/global";
 import {Message } from 'element-ui'
 import Pagination from '@/components/Pagination'
 import {getEmpList, deleteEmp ,synchToCamunda, exportEmp} from '@/api/sm/emp'

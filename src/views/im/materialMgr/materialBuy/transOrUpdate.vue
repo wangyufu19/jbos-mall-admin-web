@@ -180,7 +180,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import EditableCell from './components/EditableCell'
-    import { getUserId } from '@/utils/auth'
+    import { getUserId } from '@/utils/global'
     import { getBizno,infoById,doTrans,doDrawback} from '@/api/im/materialBuy'
     import { getUserTaskStepList } from '@/api/wf/task'
     import { getCacheDictCodeList } from '@/api/sm/dict'

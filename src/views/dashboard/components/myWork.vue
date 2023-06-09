@@ -63,7 +63,7 @@
 
 <script>
   import Layout from '@/layout'
-  import { getUserId } from '@/utils/auth'
+  import { getUserId } from '@/utils/global'
   import Pagination from '@/components/Pagination'
   import { getCacheDictCodeList } from '@/api/sm/dict'
   import { getMyWorkList } from '@/api/wf/task'

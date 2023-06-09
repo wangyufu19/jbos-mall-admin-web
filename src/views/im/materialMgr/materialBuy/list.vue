@@ -88,7 +88,7 @@
 </template>
 
 <script>
-  import { getUserId } from '@/utils/auth'
+  import { getUserId } from '@/utils/global'
   import EditableCell from './components/EditableCell'
   import Pagination from '@/components/Pagination'
   import AddOrUpdate from './addOrUpdate'

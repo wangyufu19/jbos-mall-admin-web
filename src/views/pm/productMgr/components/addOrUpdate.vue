@@ -136,7 +136,7 @@
 </template>
 
 <script>
-  import { getToken } from "@/utils/auth";
+  import { getToken } from "@/utils/global";
   import { getNo,get,add,update,save } from '@/api/pm/product'
   import { deletePic } from '@/api/pm/pic'
   import { tree } from '@/api/pm/category'

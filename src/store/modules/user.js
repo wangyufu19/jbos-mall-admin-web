@@ -1,5 +1,5 @@
 import { login, logout, getInfo, getUserFunc } from '@/api/auth'
-import { getToken, setToken, removeToken,setUserId,removeUserId } from '@/utils/auth'
+import { getToken, setToken, removeToken,setUserId,removeUserId } from '@/utils/global'
 import { resetRouter } from '@/router'
 
 const TokenKey = 'mall_admin_web_token'
