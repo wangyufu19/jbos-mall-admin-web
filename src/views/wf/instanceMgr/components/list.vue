@@ -28,7 +28,7 @@
       fit
       highlight-current-row
       style="width: 100%"
-      @row-dblclick="onViewTask"
+      @row-dblclick="onProcessView"
     >
       <el-table-column
         prop="procInstId"
@@ -72,6 +72,7 @@
     <pagination v-show="total>0" :total="total" :page.sync="queryPage.page" :limit.sync="queryPage.limit" @pagination="onList" />
     <!--查看实例任务信息-->
     <task v-if="taskVisible" ref="processTask"  />
+    <ProcessViewer ref="processViewer"/>
   </el-card>
 </template>
 
@@ -80,10 +81,11 @@ import { getProcessInstanceList,suspendProcessInstance,activateProcessInstance} 
 import { getCacheDictCodeList } from '@/api/sm/dict'
 import Pagination from '@/components/Pagination'
 import Task from './task.vue'
+import ProcessViewer from '../../deployMgr/components/processViewer.vue'
 
 export default {
   name: 'List',
-  components: { Pagination,Task },
+  components: { Pagination,Task,ProcessViewer },
   data() {
     return {
       search: {
@@ -153,6 +155,12 @@ export default {
         this.$refs['processTask'].init(row.procInstId)
       })
     },
+    onProcessView(row){
+      this.$nextTick(() => {
+        this.$refs['processViewer'].init(row.procDefId,row.bizType,row.procInstId)
+      })
+    },
+
     onSuspend(row) {
       suspendProcessInstance({ processInstanceId: row.procInstId }).then(response => {
         this.$message({

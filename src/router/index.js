@@ -5,7 +5,7 @@ Vue.use(Router)
 
 
 const router = new Router({
-  mode: 'hash',
+  mode: 'history',
   scrollBehavior: () => ({ y: 0 }),
   isInitRoute: false, // 是否初始化路由
   routes: []

@@ -1,0 +1,94 @@
+
+<template>
+    <div class="containers">
+      <div id="canvas" ref="canvas"></div>
+    </div>
+  </template>
+   
+  <script>
+    import http from '@/utils/request'
+    import BpmnViewer from 'bpmn-js'
+    import MoveCanvasModule from 'diagram-js/lib/navigation/movecanvas'
+    let bpmnViewer = null
+    const webUrl = process.env.VUE_APP_BASE_API+"/workflow"
+    export default {
+      name: 'bpmnView',
+      props: ['getId','getProcInstId'],
+      data () {
+        return {
+          msg: 'Welcome to yjr Vue.js App',
+          bpmnModeler: null,
+
+        }
+      },
+      watch: {
+        getId(val) {
+            this.greet()
+        }
+     },
+      mounted() {
+        bpmnViewer = new BpmnViewer({
+          container: '#canvas',
+          width: '100%',
+          height: '100%',
+          additionalModules: [
+            MoveCanvasModule // 移动整个画布
+          ]
+        })
+        this.greet()
+      },
+      methods: {
+        createBpmnViewer :async function (bpmnXML) {
+          try {
+            await bpmnViewer.importXML(bpmnXML);
+          } catch (err) {
+            console.error('error loading BPMN 2.0 XML', err);
+          }
+          let canvas = bpmnViewer.get('canvas')
+          canvas.zoom('fit-viewport', 'auto')
+        },
+        greet: function () {
+            const that = this                
+            const processDefinitionId = this.getId
+            http.get(webUrl + '/engine-rest/process-definition/'+ processDefinitionId +'/xml')
+            .then((response)=>{
+                if(response.data.bpmn20Xml){
+                    that.createBpmnViewer(response.data.bpmn20Xml)
+                    //that.getAct();
+                }
+            })
+            .catch((response)=>{
+                console.log(response);
+            })
+        },
+        getAct: function () {
+            const that = this
+            const processInstanceId = this.getProcInstId
+            alert(processInstanceId)
+            let canvas = bpmnViewer.get('canvas')
+            http.get(webUrl + '/web/processInstance/getAct?processInstanceId=' + processInstanceId)
+            .then((response)=>{
+                if(response.data.code == 200){
+                let list = response.data.data;
+                for(var actId in list){
+                    canvas.addMarker(list[actId], 'highlight');
+                }
+                }
+            })
+            .catch((response)=>{
+                console.log(response);
+            })
+        },
+      }
+    }
+  </script>
+  <style>
+  .highlight .djs-visual > :nth-child(1) {
+    stroke: green !important;
+    fill: rgba(0, 80, 0, 0.4) !important;
+  }
+  .djs-container{
+      height: 80vh !important;
+    }
+  </style>
+  

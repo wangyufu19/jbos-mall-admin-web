@@ -30,6 +30,7 @@
       fit
       highlight-current-row
       style="width: 100%"
+      @row-dblclick="onProcessView"
     >
       <el-table-column
         prop="procKey"
@@ -58,14 +59,13 @@
       />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">
-          <el-button v-if="row.procState==='20'" type="warning" size="mini" @click="onSuspend(row)">暂停</el-button>
-          <el-button v-if="row.procState==='99'" type="success" size="mini"  @click="onActivate(row,$index)">激活</el-button>
+          <el-button type="danger" size="mini" @click="onUnDeploy(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <!--分页信息-->
     <pagination v-show="total>0" :total="total" :page.sync="queryPage.page" :limit.sync="queryPage.limit" @pagination="onList" />
-
+    <ProcessViewer ref="processViewer"/>
   </el-card>
 </template>
 
@@ -73,11 +73,11 @@
 import {getToken} from "@/utils/global";
 import { getProcessDeploymentList,deploy,unDeploy} from '@/api/wf/deployment'
 import Pagination from '@/components/Pagination'
-
+import ProcessViewer from './processViewer.vue'
 
 export default {
   name: 'List',
-  components: { Pagination},
+  components: { Pagination,ProcessViewer},
   data() {
     return {
       search: {
@@ -86,7 +86,7 @@ export default {
       },
       datas: [],
       upload:{
-        actionUrl:process.env.VUE_APP_BASE_API+'/workflow/deployment/deploy',
+        actionUrl:process.env.VUE_APP_BASE_API+'/admin/workflow/deployment/deploy',
         headers:{'accessToken':getToken()},
         data:{}
       },
@@ -95,8 +95,7 @@ export default {
       queryPage: {
         page: 1,
         limit: 20
-      },
-      taskVisible: false
+      }
     }
   },
   created() {
@@ -134,6 +133,7 @@ export default {
             message: '操作成功',
             type: 'success'
         })
+        this.onList()
       }else{
         Message({
           message: response.retMsg || 'Error',
@@ -149,24 +149,20 @@ export default {
         duration: 3 * 1000
       })
     },
-    onSuspend(row) {
-      suspendProcessInstance({ processInstanceId: row.procInstId }).then(response => {
+    onProcessView(row){
+      this.$nextTick(() => {
+        this.$refs['processViewer'].init(row.id,row.procName )
+      })
+    },
+    onUnDeploy(row) {
+      unDeploy({ id: row.id}).then(response => {
         this.$message({
           message: '操作成功',
           type: 'success'
         })
         this.onList()
       })
-    },
-    onActivate(row, index) {
-      activateProcessInstance({ processInstanceId: row.procInstId }).then(response => {
-        this.$message({
-          message: '操作成功',
-          type: 'success'
-        })
-        this.onList()
-      })
-    },
+    }
   }
 }
 </script>
