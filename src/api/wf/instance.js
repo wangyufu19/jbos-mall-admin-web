@@ -7,7 +7,13 @@ export function getProcessInstanceList(params) {
     params
   })
 }
-
+export function getProcessInstanceCurrentActivityId(params) {
+  return request({
+    url: '/admin/workflow/instance/getProcessInstanceCurrentActivityId',
+    method: 'get',
+    params
+  })
+}
 export function suspendProcessInstance(data) {
   return request({
     url: '/admin/workflow/instance/suspendProcessInstance',

@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { getProcessInstanceList,suspendProcessInstance,activateProcessInstance} from '@/api/wf/instance'
+import { getProcessInstanceList,suspendProcessInstance,activateProcessInstance,getProcessInstanceCurrentActivityId} from '@/api/wf/instance'
 import { getCacheDictCodeList } from '@/api/sm/dict'
 import Pagination from '@/components/Pagination'
 import Task from './task.vue'
@@ -100,7 +100,8 @@ export default {
         page: 1,
         limit: 20
       },
-      taskVisible: false
+      taskVisible: false,
+      currentActivityId:''
     }
   },
   created() {
@@ -156,8 +157,12 @@ export default {
       })
     },
     onProcessView(row){
-      this.$nextTick(() => {
-        this.$refs['processViewer'].init(row.procDefId,row.bizType,row.procInstId)
+      getProcessInstanceCurrentActivityId({processInstanceId: row.procInstId }).then(response => {
+        const res=response.data
+        this.currentActivityId = res.data.currentActivityId
+        this.$nextTick(() => {
+          this.$refs['processViewer'].init(row.procDefId,row.bizType,row.procInstId,this.currentActivityId)
+        })
       })
     },
 

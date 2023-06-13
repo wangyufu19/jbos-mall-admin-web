@@ -13,7 +13,7 @@
     const webUrl = process.env.VUE_APP_BASE_API+"/workflow"
     export default {
       name: 'bpmnView',
-      props: ['getId','getProcInstId'],
+      props: ['getId','getProcInstId','getCurrentActivityId'],
       data () {
         return {
           msg: 'Welcome to yjr Vue.js App',
@@ -45,6 +45,7 @@
             console.error('error loading BPMN 2.0 XML', err);
           }
           let canvas = bpmnViewer.get('canvas')
+          canvas.addMarker(this.getCurrentActivityId, 'highlight');
           canvas.zoom('fit-viewport', 'auto')
         },
         greet: function () {
@@ -54,31 +55,12 @@
             .then((response)=>{
                 if(response.data.bpmn20Xml){
                     that.createBpmnViewer(response.data.bpmn20Xml)
-                    //that.getAct();
                 }
             })
             .catch((response)=>{
                 console.log(response);
             })
-        },
-        getAct: function () {
-            const that = this
-            const processInstanceId = this.getProcInstId
-            alert(processInstanceId)
-            let canvas = bpmnViewer.get('canvas')
-            http.get(webUrl + '/web/processInstance/getAct?processInstanceId=' + processInstanceId)
-            .then((response)=>{
-                if(response.data.code == 200){
-                let list = response.data.data;
-                for(var actId in list){
-                    canvas.addMarker(list[actId], 'highlight');
-                }
-                }
-            })
-            .catch((response)=>{
-                console.log(response);
-            })
-        },
+        }
       }
     }
   </script>

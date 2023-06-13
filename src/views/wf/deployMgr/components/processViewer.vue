@@ -3,7 +3,7 @@
         :title="title" 
         width="80%"
         :visible.sync="dialogFormVisible">   
-        <viewer :getId="id" :getProcInstId="procInstId"/>
+        <viewer :getId="id" :getProcInstId="procInstId" :getCurrentActivityId="currentActivityId"/>
     </el-dialog>
 </template>
 <script>
@@ -17,14 +17,16 @@
                 datas: [],
                 id:'',
                 title:'',
-                procInstId:''
+                procInstId:'',
+                currentActivityId:''
             }
         },
         methods: {
-            init(id,procName,procInstId) {
+            init(id,procName,procInstId,currentActivityId) {
                 this.id=id
                 this.title='流程预览'+'-'+procName
                 this.procInstId=procInstId
+                this.currentActivityId=currentActivityId
                 this.dialogFormVisible = true
             }
         }
