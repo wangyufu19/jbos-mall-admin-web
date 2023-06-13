@@ -16,16 +16,16 @@
       props: ['getId','getProcInstId','getCurrentActivityId'],
       data () {
         return {
-          msg: 'Welcome to yjr Vue.js App',
-          bpmnModeler: null,
-
         }
       },
       watch: {
         getId(val) {
-            this.greet()
+            this.getProcessXML()
+        },
+        getProcInstId(val) {
+            this.getProcessXML()
         }
-     },
+      },
       mounted() {
         bpmnViewer = new BpmnViewer({
           container: '#canvas',
@@ -35,7 +35,7 @@
             MoveCanvasModule // 移动整个画布
           ]
         })
-        this.greet()
+        this.getProcessXML()
       },
       methods: {
         createBpmnViewer :async function (bpmnXML) {
@@ -45,10 +45,11 @@
             console.error('error loading BPMN 2.0 XML', err);
           }
           let canvas = bpmnViewer.get('canvas')
+        
           canvas.addMarker(this.getCurrentActivityId, 'highlight');
           canvas.zoom('fit-viewport', 'auto')
         },
-        greet: function () {
+        getProcessXML: function () {
             const that = this                
             const processDefinitionId = this.getId
             http.get(webUrl + '/engine-rest/process-definition/'+ processDefinitionId +'/xml')

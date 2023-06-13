@@ -123,21 +123,7 @@
           </el-table-column>
         </el-table>
       </el-card>
-      <el-card>
-        <div slot="header" class="clearfix">
-          <span>流程信息</span>
-        </div>
-        <el-row>
-          <el-steps>
-            <el-step 
-              v-for="item in taskItems"
-              :title="item.title"
-              :description="item.description"
-              :status="item.status">
-            </el-step>
-          </el-steps>
-        </el-row>
-      </el-card>
+      <step :getProcInstId="this.$route.params.procInstId"/>
       <el-card v-if="this.$route.params.workType==='waiting'">
         <div slot="header" class="clearfix">
           <span>审批信息</span>
@@ -180,15 +166,15 @@
 <script>
     import { mapGetters } from 'vuex'
     import EditableCell from './components/EditableCell'
+    import Step from '@/components/Workflow/Task/Step'
     import { getUserId } from '@/utils/global'
     import { getBizno,infoById,doTrans,doDrawback} from '@/api/im/materialBuy'
-    import { getUserTaskStepList } from '@/api/wf/task'
     import { getCacheDictCodeList } from '@/api/sm/dict'
 
     export default {
       name: "addOrUpdate",
       components: {
-        EditableCell
+        EditableCell,Step
       },
       computed: {
         ...mapGetters([
@@ -227,7 +213,6 @@
             gmoTime: [{ required: true, message: '总办会议必须填写', trigger: 'change' }],
             totalAmt: [{ required: true, message: '采购总金额必须填写', trigger: 'change' }]
           },
-          taskItems: [],
           datas: [],
           editModeEnabled: true,
           currentRow: ''
@@ -237,7 +222,6 @@
         if (this.formObj.bizId === undefined || this.formObj.bizId === '') {
           this.formObj.bizId=this.$route.params.bizId
         }     
-        this.getUserTaskStepList()
         this.getInfoById(this.formObj.bizId)
         this.initOpinion()
       },
@@ -263,14 +247,6 @@
           getBizno().then(response => {
             const res = response.data
             this.formObj.bizNo = res.data
-            this.loading = false
-          })
-        },
-        getUserTaskStepList(){
-          this.loading = true
-          getUserTaskStepList({procInstId: this.$route.params.procInstId}).then(response => {
-            const res = response.data
-            this.taskItems = res.data
             this.loading = false
           })
         },

@@ -71,7 +71,7 @@
     <!--分页信息-->
     <pagination v-show="total>0" :total="total" :page.sync="queryPage.page" :limit.sync="queryPage.limit" @pagination="onList" />
     <!--查看实例任务信息-->
-    <task v-if="taskVisible" ref="processTask"  />
+    <task v-if="taskVisible" ref="viewTask"  />
     <ProcessViewer ref="processViewer"/>
   </el-card>
 </template>
@@ -80,7 +80,7 @@
 import { getProcessInstanceList,suspendProcessInstance,activateProcessInstance,getProcessInstanceCurrentActivityId} from '@/api/wf/instance'
 import { getCacheDictCodeList } from '@/api/sm/dict'
 import Pagination from '@/components/Pagination'
-import Task from './task.vue'
+import Task from './viewTask.vue'
 import ProcessViewer from '../../deployMgr/components/processViewer.vue'
 
 export default {
@@ -153,7 +153,7 @@ export default {
     onViewTask(row){
       this.taskVisible = true
       this.$nextTick(() => {
-        this.$refs['processTask'].init(row.procInstId)
+        this.$refs['viewTask'].init(row.procInstId)
       })
     },
     onProcessView(row){

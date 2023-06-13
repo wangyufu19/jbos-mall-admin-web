@@ -30,7 +30,6 @@
       fit
       highlight-current-row
       style="width: 100%"
-      @row-dblclick="onProcessView"
     >
       <el-table-column
         prop="procKey"
@@ -59,6 +58,7 @@
       />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">
+          <el-button type="primary" size="mini" @click="onProcessView(row)">流程预览</el-button>
           <el-button type="danger" size="mini" @click="onUnDeploy(row)">删除</el-button>
         </template>
       </el-table-column>

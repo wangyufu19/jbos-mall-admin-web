@@ -7,7 +7,7 @@
     </el-dialog>
 </template>
 <script>
-    import Viewer from '@/components/camunda/Viewer'
+    import Viewer from '@/components/Workflow/Viewer'
     export default {
         name: 'processViewer',
         components: {Viewer},
