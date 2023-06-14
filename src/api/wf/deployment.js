@@ -22,3 +22,11 @@ export function unDeploy(data) {
     data
   })
 }
+
+export function getProcessDefinitionList(params) {
+  return request({
+    url: '/admin/workflow/deployment/getProcessDefinitionList',
+    method: 'get',
+    params
+  })
+}

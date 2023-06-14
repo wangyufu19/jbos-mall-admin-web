@@ -58,7 +58,8 @@
       />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" @click="onProcessView(row)">流程预览</el-button>
+          <el-button type="primary" size="mini" @click="onProcessView(row)">预览</el-button>
+          <el-button type="success" size="mini" @click="onProcessStart(row)">启动</el-button>
           <el-button type="danger" size="mini" @click="onUnDeploy(row)">删除</el-button>
         </template>
       </el-table-column>
@@ -66,6 +67,7 @@
     <!--分页信息-->
     <pagination v-show="total>0" :total="total" :page.sync="queryPage.page" :limit.sync="queryPage.limit" @pagination="onList" />
     <ProcessViewer ref="processViewer"/>
+    <ProcessStarter ref="processStarter"/>
   </el-card>
 </template>
 
@@ -74,10 +76,11 @@ import {getToken} from "@/utils/global";
 import { getProcessDeploymentList,deploy,unDeploy} from '@/api/wf/deployment'
 import Pagination from '@/components/Pagination'
 import ProcessViewer from './processViewer.vue'
+import ProcessStarter from './processStarter.vue'
 
 export default {
   name: 'List',
-  components: { Pagination,ProcessViewer},
+  components: { Pagination,ProcessViewer,ProcessStarter},
   data() {
     return {
       search: {
@@ -151,7 +154,12 @@ export default {
     },
     onProcessView(row){
       this.$nextTick(() => {
-        this.$refs['processViewer'].init(row.id,row.procName )
+        this.$refs['processViewer'].init(row.id,row.procName)
+      })
+    },
+    onProcessStart(row){
+      this.$nextTick(() => {
+        this.$refs['processStarter'].init(row.id,row.procKey,row.procName)
       })
     },
     onUnDeploy(row) {

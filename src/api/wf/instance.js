@@ -1,5 +1,13 @@
 import request from '@/utils/request'
 
+export function startProcessInstance(data) {
+  return request({
+    url: '/admin/workflow/instance/startProcessInstance',
+    method: 'post',
+    data
+  })
+}
+
 export function getProcessInstanceList(params) {
   return request({
     url: '/admin/workflow/instance/getProcessInstanceList',
