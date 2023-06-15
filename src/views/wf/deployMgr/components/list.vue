@@ -34,17 +34,17 @@
       <el-table-column
         prop="procKey"
         label="流程编码"
-        width="200"
+        width="160"
       />
       <el-table-column
         prop="procName"
         label="流程名称"
-        width="200"
+        width="120"
       />
       <el-table-column
         prop="version"
         label="版本"
-        width="120"
+        width="50"
       />
       <el-table-column
         prop="resource"

@@ -1,9 +1,7 @@
 
 <template>
-    <div class="containers">
-      <div id="canvas" ref="canvas"></div>
-    </div>
-  </template>
+  <div id="canvas" ref="canvas"></div>
+</template>
    
   <script>
     import http from '@/utils/request'
@@ -66,12 +64,12 @@
     }
   </script>
   <style>
-  .highlight .djs-visual > :nth-child(1) {
-    stroke: green !important;
-    fill: rgba(0, 80, 0, 0.4) !important;
-  }
-  .djs-container{
-      height: 80vh !important;
+    .highlight .djs-visual > :nth-child(1) {
+      stroke: green !important;
+      fill: rgba(0, 80, 0, 0.4) !important;
+    }
+    .djs-container{
+        height: 50vh !important;
     }
   </style>
   

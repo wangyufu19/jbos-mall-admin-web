@@ -24,38 +24,43 @@
         label="字典编码"
         width="200"
       >
-        <template slot-scope="scope">
-          <el-input v-if="scope.row.status" v-model="scope.row.dictId" />
-          <span v-else>{{ scope.row.dictId }}</span>
-        </template>
+      <editable-cell slot-scope="{row}"
+              :can-edit="true"
+              v-model="row.dictId">
+          <span slot="content">{{row.dictId}}</span>
+      </editable-cell>
       </el-table-column>
       <el-table-column
         prop="dictName"
         label="字典名称"
         width="200"
       >
-        <template slot-scope="scope">
-          <el-input v-if="scope.row.status" v-model="scope.row.dictName" />
-          <span v-else>{{ scope.row.dictName }}</span>
-        </template>
+        <editable-cell slot-scope="{row}"
+                :can-edit="true"
+                v-model="row.dictName">
+            <span slot="content">{{row.dictName}}</span>
+        </editable-cell>
       </el-table-column>
       <el-table-column
         prop="orderNo"
         label="排序"
       >
-        <template slot-scope="scope">
-          <el-input v-if="scope.row.status" v-model="scope.row.orderNo" />
-          <span v-else>{{ scope.row.orderNo }}</span>
-        </template>
+        <editable-cell slot-scope="{row}"
+              :can-edit="true"
+              v-model="row.orderNo">
+          <span slot="content">{{row.orderNo}}</span>
+        </editable-cell>
       </el-table-column>
     </el-table>
   </el-card>
 </template>
 
 <script>
+import EditableCell from '@/components/EditableCell'
 import { getDictCodeList, saveDictCode} from '@/api/sm/dict'
 export default {
   name: 'DictCode',
+  components: {EditableCell},
   props: ['typeId'],
   data() {
     return {

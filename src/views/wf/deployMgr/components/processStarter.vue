@@ -18,14 +18,14 @@
                     <el-form-item label="发起节点" prop="startActivityId">
                         <el-select
                             v-model="formObj.startActivityId"
-                            clearable
                             :loading="loading"
+                            @change="onStartActivityChanged" 
                             placeholder="请选择">
                             <el-option
                                 v-for="item in activityItems"
                                 :key="item.activityId"
                                 :label="item.activityName"
-                                :value="item.activityId"
+                                :value="{ value: item.activityId, label: item.activityName}"
                             />
                         </el-select>
                     </el-form-item>
@@ -36,10 +36,9 @@
                     <el-form-item label="业务类型" prop="bizType">
                         <el-select
                             v-model="formObj.bizType"
-                            clearable
                             :loading="loading"
                             @change="onBizTypeChanged" 
-                            placeholder="业务类型">
+                            placeholder="请选择">
                             <el-option
                                 v-for="item in bizTypeItems"
                                 :key="item.DICTID"
@@ -62,6 +61,14 @@
                     </el-form-item>
                     </el-col>
                 </el-row>
+                <el-row>
+                    <el-col span="24">
+                    <el-form-item label="业务路由" prop="routeUrl">
+                        <el-input v-model="formObj.routeUrl"/>
+                    </el-form-item>
+                    </el-col>
+                </el-row>
+
                 
                 
             </el-card>
@@ -96,18 +103,21 @@
                     userId: '',
                     userName: '',
                     startActivityId:'',
+                    startActivityName:'',
                     bizType:'',
                     bizNo:'',
-                    businessKey:''
+                    businessKey:'',
+                    routeUrl:''
                 },
                 activityItems:[],
                 bizTypeItems:[],
                 rules: {
-                    userId: [{ required: true, message: '申请人必须填写', trigger: 'change' }],
-                    startActivityId: [{ required: true, message: '启动节点必须填写', trigger: 'change' }],    
+                    userId: [{ required: true, message: '发起人必须填写', trigger: 'change' }],
+                    startActivityId: [{ required: true, message: '发启节点必须填写', trigger: 'change' }],    
                     bizType: [{ required: true, message: '业务类型必须填写', trigger: 'change' }],   
                     bizNo: [{ required: true, message: '业务编号必须填写', trigger: 'change' }],                     
                     businessKey: [{ required: true, message: '业务标题必须填写', trigger: 'change' }],
+                    routeUrl: [{ required: true, message: '业务路由必须填写', trigger: 'change' }]
                 },
                 loading: false,
             }
@@ -136,6 +146,10 @@
                     this.loading = false
                 })
             },
+            onStartActivityChanged(data){
+                this.formObj.startActivityId=data.value
+                this.formObj.startActivityName=data.label
+            },
             onBizTypeChanged(value){
                 this.getBizNo(value)
             },
@@ -161,7 +175,6 @@
                         const data={formObj:this.formObj}
                         startProcessInstance(data).then(response => {
                             this.dialogFormVisible = false
-                            this.$emit('refreshDataList')
                             this.$message({
                                 message: '操作成功',
                                 type: 'success'

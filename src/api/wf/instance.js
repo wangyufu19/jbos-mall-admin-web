@@ -15,6 +15,14 @@ export function getProcessInstanceList(params) {
     params
   })
 }
+export function getProcessInstanceVariableList(params) {
+  return request({
+    url: '/admin/workflow/instance/getProcessInstanceVariableList',
+    method: 'get',
+    params
+  })
+}
+
 export function getProcessInstanceCurrentActivityId(params) {
   return request({
     url: '/admin/workflow/instance/getProcessInstanceCurrentActivityId',
@@ -32,6 +40,13 @@ export function suspendProcessInstance(data) {
 export function activateProcessInstance(data) {
   return request({
     url: '/admin/workflow/instance/activateProcessInstance',
+    method: 'post',
+    data
+  })
+}
+export function deleteProcessInstance(data) {
+  return request({
+    url: '/admin/workflow/instance/deleteProcessInstance',
     method: 'post',
     data
   })

@@ -106,7 +106,7 @@
 </script>
 <style>
   .cell-content {
-    min-height: 40px;
+    min-height: 30px;
     padding-left: 5px;
     padding-top: 5px;
     border: 1px solid transparent;

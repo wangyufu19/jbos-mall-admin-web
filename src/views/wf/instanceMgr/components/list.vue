@@ -65,6 +65,7 @@
         <template slot-scope="{row,$index}">
           <el-button v-if="row.procState==='20'" type="warning" size="mini" @click="onSuspend(row)">暂停</el-button>
           <el-button v-if="row.procState==='99'" type="success" size="mini"  @click="onActivate(row,$index)">激活</el-button>
+          <el-button v-if="row.procState!=='80'" type="danger" size="mini" @click="onCancele(row)">作废</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -77,7 +78,14 @@
 </template>
 
 <script>
-import { getProcessInstanceList,suspendProcessInstance,activateProcessInstance,getProcessInstanceCurrentActivityId} from '@/api/wf/instance'
+import 
+{ 
+  getProcessInstanceList,
+  suspendProcessInstance,
+  activateProcessInstance,
+  getProcessInstanceCurrentActivityId,
+  deleteProcessInstance
+} from '@/api/wf/instance'
 import { getCacheDictCodeList } from '@/api/sm/dict'
 import Pagination from '@/components/Pagination'
 import Task from './viewTask.vue'
@@ -147,6 +155,8 @@ export default {
           return '已结束'
         }else if(row.procState==='99') {
           return '已暂停'
+        }else if(row.procState==='80') {
+          return '已作废'
         }
       }
     },
@@ -161,7 +171,7 @@ export default {
         const res=response.data
         this.currentActivityId = res.data.currentActivityId
         this.$nextTick(() => {
-          this.$refs['processViewer'].init(row.procDefId,row.bizType,row.procInstId,this.currentActivityId)
+          this.$refs['processViewer'].init(row.procDefId,row.bizType,row.procInstId,this.currentActivityId,row.procState)
         })
       })
     },
@@ -184,6 +194,15 @@ export default {
         this.onList()
       })
     },
+    onCancele(row, index){
+      deleteProcessInstance({ processInstanceId: row.procInstId }).then(response => {
+        this.$message({
+          message: '操作成功',
+          type: 'success'
+        })
+        this.onList()
+      })
+    }
   }
 }
 </script>
