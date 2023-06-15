@@ -33,16 +33,12 @@
                 </el-row>
                 <el-row>
                     <el-col span="12">
-                    <el-form-item label="业务编号" prop="bizNo">
-                        <el-input v-model="formObj.bizNo" :disabled="true"/>
-                    </el-form-item>
-                    </el-col>
-                    <el-col span="12">
                     <el-form-item label="业务类型" prop="bizType">
                         <el-select
                             v-model="formObj.bizType"
                             clearable
                             :loading="loading"
+                            @change="onBizTypeChanged" 
                             placeholder="业务类型">
                             <el-option
                                 v-for="item in bizTypeItems"
@@ -51,6 +47,11 @@
                                 :value="item.DICTID"
                             />
                         </el-select>
+                    </el-form-item>
+                    </el-col>
+                    <el-col span="12">
+                    <el-form-item label="业务编号" prop="bizNo">
+                        <el-input v-model="formObj.bizNo" :disabled="true"/>
                     </el-form-item>
                     </el-col>
                 </el-row>
@@ -95,8 +96,8 @@
                     userId: '',
                     userName: '',
                     startActivityId:'',
-                    bizNo:'',
                     bizType:'',
+                    bizNo:'',
                     businessKey:''
                 },
                 activityItems:[],
@@ -104,8 +105,8 @@
                 rules: {
                     userId: [{ required: true, message: '申请人必须填写', trigger: 'change' }],
                     startActivityId: [{ required: true, message: '启动节点必须填写', trigger: 'change' }],    
-                    bizNo: [{ required: true, message: '业务编号必须填写', trigger: 'change' }],    
-                    bizType: [{ required: true, message: '业务类型必须填写', trigger: 'change' }],                    
+                    bizType: [{ required: true, message: '业务类型必须填写', trigger: 'change' }],   
+                    bizNo: [{ required: true, message: '业务编号必须填写', trigger: 'change' }],                     
                     businessKey: [{ required: true, message: '业务标题必须填写', trigger: 'change' }],
                 },
                 loading: false,
@@ -125,7 +126,6 @@
                 })
                 this.dialogFormVisible = true
                 this.onLoadActivityItem(id)
-                this.getBizNo()
                 this.initBizType()
             },
             onLoadActivityItem(processDefinitionId){                
@@ -136,9 +136,12 @@
                     this.loading = false
                 })
             },
-            getBizNo(){
+            onBizTypeChanged(value){
+                this.getBizNo(value)
+            },
+            getBizNo(bizType){
                 this.loading = true
-                getBizNo({bizType:200}).then(response => {
+                getBizNo({bizType:bizType}).then(response => {
                     const res = response.data
                     this.formObj.bizNo = res.data.bizNo
                     this.loading = false
