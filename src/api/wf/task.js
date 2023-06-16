@@ -22,4 +22,11 @@ export function getUserTaskStepList(params) {
     })
 }
 
+export function completeUserTask(data) {
+  return request({
+    url: '/admin/workflow/task/completeUserTask',
+    method: 'post',
+    data
+  })
+}
 

@@ -48,17 +48,17 @@
       <el-table-column
         prop="startTime"
         label="开始时间"
-        width="160"
+        width="155"
       />
       <el-table-column
         prop="endTime"
         label="结束时间"
-        width="160"
+        width="155"
       />
       <el-table-column
         prop="procState"
         label="状态"
-        width="120"
+        width="70"
         :formatter="onFormatter"
       />
       <el-table-column label="操作" align="center">
@@ -89,7 +89,7 @@ import
 import { getCacheDictCodeList } from '@/api/sm/dict'
 import Pagination from '@/components/Pagination'
 import Task from './viewTask.vue'
-import ProcessViewer from '../../deployMgr/components/processViewer.vue'
+import ProcessViewer from './processViewer'
 
 export default {
   name: 'List',

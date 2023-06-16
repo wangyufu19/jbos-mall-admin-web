@@ -1,4 +1,5 @@
 <template>   
+    <div>
     <el-table
         v-loading="listLoading"
         :data="datas"
@@ -21,12 +22,12 @@
         <el-table-column
             prop="startTime"
             label="开始时间"
-            width="200"
+            width="160"
         />
         <el-table-column
             prop="endTime"
             label="结束时间"
-            width="200"
+            width="160"
         />
         <el-table-column
             prop="taskState"
@@ -37,36 +38,46 @@
         <el-table-column
             prop="opinion"
             label="审批意见"
-            width="120"
+            width="160"
             :formatter="onFormatter"
         />
-        
+        <el-table-column v-if="this.isUserTask==='true'" label="操作" align="center">
+            <template slot-scope="{row,$index}">
+            <el-button v-if="row.taskState==='20'" type="primary" size="mini" @click="onShowTrans(row)">流转</el-button>
+            <el-button v-if="row.taskState==='20'" type="primary" size="mini"  @click="onShowGrant(row,$index)">授权</el-button>
+            </template>
+      </el-table-column>
     </el-table>   
+    <trans v-if="transVisible" ref="trans"/>
+    </div>
 </template>
 
 <script>
     import { getProcessTaskDetailList } from '@/api/wf/task'
+    import trans from './trans.vue'
     export default {
         name: 'detail',
-        props: ['getProcInstId'],
+        props: ['getProcInstId','getTaskDefKey',"isUserTask"],
+        components: {trans},
         data() {
             return {
                 datas: [],
                 listLoading: false,
+                transVisible: false,
             }
         },
         watch: {
             getProcInstId(val) {
-                this.getProcessTaskDetailList(this.getProcInstId)
+                this.getProcessTaskDetailList(this.getProcInstId,this.getTaskDefKey)
             }
         },
         created() {    
-           this.getProcessTaskDetailList(this.getProcInstId)
+           this.getProcessTaskDetailList(this.getProcInstId,this.getTaskDefKey)
         },
         methods: {
-            getProcessTaskDetailList(procInstId){
+            getProcessTaskDetailList(procInstId,taskDefKey){
                 this.loading = true
-                getProcessTaskDetailList({procInstId: procInstId}).then(response => {
+                getProcessTaskDetailList({procInstId: procInstId,taskDefKey:taskDefKey}).then(response => {
                     const res = response.data
                     this.datas = res.data.list
                     this.listLoading = false
@@ -88,6 +99,12 @@
                         return '驳回'
                     }
                 }
+            },
+            onShowTrans(row){
+                this.transVisible = true
+                this.$nextTick(() => {
+                    this.$refs['trans'].init(row.procInstId,row.taskDefKey,row.assignee)
+                })
             },
         }
     }
