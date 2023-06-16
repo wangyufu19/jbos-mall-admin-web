@@ -143,7 +143,7 @@ export default {
         this.formObj.empNameS = query
         getEmpList(this.formObj).then(response => {
           const res = response.data
-          this.emps = res.data
+          this.emps = res.data.list
           this.loading = false
         })
       } else {

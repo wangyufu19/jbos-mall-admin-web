@@ -34,7 +34,11 @@
         prop="procInstId"
         label="实例ID"
         width="280"
-      />
+      >
+      <template slot-scope="{row,$index}">
+        <el-link  type="primary" @click="onProcessView(row)">{{row.procInstId}}</el-link>
+      </template>
+      </el-table-column>
       <el-table-column
         prop="bizNo"
         label="业务编号"
@@ -88,6 +92,8 @@ import { getCacheDictCodeList } from '@/api/sm/dict'
 import Pagination from '@/components/Pagination'
 import ProcessViewer from './processViewer'
 import TaskViwer from './processViewer/task.vue'
+
+
 export default {
   name: 'List',
   components: { Pagination,ProcessViewer,TaskViwer },

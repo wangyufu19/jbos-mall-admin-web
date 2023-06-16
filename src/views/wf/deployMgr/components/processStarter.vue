@@ -11,13 +11,31 @@
                 <el-row>
                     <el-col span="12">
                     <el-form-item label="发起人" prop="userId">
-                        <el-input v-model="formObj.userName" :disabled="true"/>
+                        <el-select
+                            v-model="formObj.userName"
+                            filterable
+                            clearable
+                            remote
+                            reserve-keyword
+                            placeholder="请输入"
+                            :remote-method="onSearchEmp"
+                            :loading="loading"
+                            @change="onStartUserIdChange"
+                            >
+                            <el-option
+                                v-for="item in emps"
+                                :key="item.badge"
+                                :label="item.depEmpName"
+                                :value="item.badge"
+                            />
+                        </el-select>
+
                     </el-form-item>
                     </el-col>
                     <el-col span="12">
                     <el-form-item label="发起节点" prop="startActivityId">
                         <el-select
-                            v-model="formObj.startActivityId"
+                            v-model="formObj.startActivityName"
                             :loading="loading"
                             @change="onStartActivityChanged" 
                             placeholder="请选择">
@@ -68,9 +86,6 @@
                     </el-form-item>
                     </el-col>
                 </el-row>
-
-                
-                
             </el-card>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -85,6 +100,8 @@
     import {getBizNo} from '@/api/comm/id'
     import {startProcessInstance} from '@/api/wf/instance'
     import {getProcessDefinitionList} from '@/api/wf/deployment'
+    import { getEmpList } from '@/api/sm/emp'
+
     export default {
         name: 'processStarter',
         components: {},
@@ -109,6 +126,7 @@
                     businessKey:'',
                     routeUrl:''
                 },
+                emps: [],
                 activityItems:[],
                 bizTypeItems:[],
                 rules: {
@@ -138,6 +156,22 @@
                 this.onLoadActivityItem(id)
                 this.initBizType()
             },
+            onSearchEmp(query) {
+                if (query !== '') {
+                    this.loading = true
+                    this.formObj.empNameS = query
+                    getEmpList(this.formObj).then(response => {
+                        const res = response.data
+                        this.emps = res.data.list
+                        this.loading = false
+                    })
+                } else {
+                    this.emps = []
+                }
+            },
+            onStartUserIdChange(value) {
+                this.formObj.userId = value
+            },
             onLoadActivityItem(processDefinitionId){                
                 this.loading = true
                 getProcessDefinitionList({processDefinitionId: processDefinitionId}).then(response => {
@@ -147,8 +181,9 @@
                 })
             },
             onStartActivityChanged(data){
-                this.formObj.startActivityId=data.value
-                this.formObj.startActivityName=data.label
+                const { value, label } = data;
+                this.formObj.startActivityId=value
+                this.formObj.startActivityName=label
             },
             onBizTypeChanged(value){
                 this.getBizNo(value)
