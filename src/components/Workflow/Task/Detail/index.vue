@@ -32,7 +32,7 @@
         <el-table-column
             prop="taskState"
             label="状态"
-            width="120"
+            width="80"
             :formatter="onFormatter"
         />
         <el-table-column
@@ -48,26 +48,25 @@
             </template>
       </el-table-column>
     </el-table>   
-    <trans v-if="transVisible" ref="trans"/>
     </div>
 </template>
 
 <script>
     import { getProcessTaskDetailList } from '@/api/wf/task'
-    import trans from './trans.vue'
     export default {
         name: 'detail',
         props: ['getProcInstId','getTaskDefKey',"isUserTask"],
-        components: {trans},
         data() {
             return {
                 datas: [],
-                listLoading: false,
-                transVisible: false,
+                listLoading: false
             }
         },
         watch: {
             getProcInstId(val) {
+                this.getProcessTaskDetailList(this.getProcInstId,this.getTaskDefKey)
+            },
+            getTaskDefKey(val){
                 this.getProcessTaskDetailList(this.getProcInstId,this.getTaskDefKey)
             }
         },
@@ -103,7 +102,7 @@
             onShowTrans(row){
                 this.transVisible = true
                 this.$nextTick(() => {
-                    this.$refs['trans'].init(row.procInstId,row.taskDefKey,row.assignee)
+                    this.$emit('onShowTrans',row.procInstId,row.taskDefKey,row.assignee);
                 })
             },
         }

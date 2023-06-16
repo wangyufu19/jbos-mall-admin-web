@@ -83,19 +83,9 @@
             },
             onTrans(){
                 if(this.variables.length>0){
-                    const data={userId:this.userId,processInstanceId:this.procInstId,variables:this.variables}
-                    completeUserTask(data).then(response => {
-                        this.dialogFormVisible = false
-                        this.$message({
-                            message: '操作成功',
-                            type: 'success'
-                        })
-                    })
-                }
-            },
-            onTrans(){
-                if(this.variables.length>0){
-                    const data={userId:this.assignee,processInstanceId:this.procInstId,variables:this.variables}
+                    const data={
+                        userId:this.assignee,processInstanceId:this.procInstId,taskDefKey:this.taskDefKey,variables:this.variables
+                    }
                     completeUserTask(data).then(response => {
                         this.dialogFormVisible = false
                         this.$message({

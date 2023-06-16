@@ -65,15 +65,14 @@
         <template slot-scope="{row,$index}">
           <el-button v-if="row.procState==='20'" type="warning" size="mini" @click="onSuspend(row)">暂停</el-button>
           <el-button v-if="row.procState==='99'" type="success" size="mini"  @click="onActivate(row,$index)">激活</el-button>
-          <el-button v-if="row.procState!=='80'" type="danger" size="mini" @click="onCancele(row)">作废</el-button>
+          <el-button v-if="row.procState==='20'" type="danger" size="mini" @click="onCancele(row)">作废</el-button>
         </template>
       </el-table-column>
     </el-table>
     <!--分页信息-->
     <pagination v-show="total>0" :total="total" :page.sync="queryPage.page" :limit.sync="queryPage.limit" @pagination="onList" />
-    <!--查看实例任务信息-->
-    <task v-if="taskVisible" ref="viewTask"  />
     <ProcessViewer ref="processViewer"/>
+    <TaskViwer ref="viewTask"/>
   </el-card>
 </template>
 
@@ -83,17 +82,15 @@ import
   getProcessInstanceList,
   suspendProcessInstance,
   activateProcessInstance,
-  getProcessInstanceCurrentActivityId,
   deleteProcessInstance
 } from '@/api/wf/instance'
 import { getCacheDictCodeList } from '@/api/sm/dict'
 import Pagination from '@/components/Pagination'
-import Task from './viewTask.vue'
 import ProcessViewer from './processViewer'
-
+import TaskViwer from './processViewer/task.vue'
 export default {
   name: 'List',
-  components: { Pagination,Task,ProcessViewer },
+  components: { Pagination,ProcessViewer,TaskViwer },
   data() {
     return {
       search: {
@@ -167,12 +164,8 @@ export default {
       })
     },
     onProcessView(row){
-      getProcessInstanceCurrentActivityId({processInstanceId: row.procInstId }).then(response => {
-        const res=response.data
-        this.currentActivityId = res.data.currentActivityId
-        this.$nextTick(() => {
-          this.$refs['processViewer'].init(row.procDefId,row.bizType,row.procInstId,this.currentActivityId,row.procState)
-        })
+      this.$nextTick(() => {
+        this.$refs['processViewer'].init(row.procDefId,row.bizType,row.procInstId,row.procState)
       })
     },
 

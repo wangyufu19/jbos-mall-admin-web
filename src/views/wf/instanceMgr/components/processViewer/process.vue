@@ -10,6 +10,14 @@
         data() {
             return {
             }
-        }
+        },
+        watch: {
+            getProcInstId(val) {
+
+            },
+            getCurrentActivityId(val){
+
+            }
+        },
     }
 </script>

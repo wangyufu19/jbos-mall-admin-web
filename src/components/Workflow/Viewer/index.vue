@@ -18,10 +18,13 @@
       },
       watch: {
         getId(val) {
-            this.getProcessXML()
+          this.getProcessXML()
         },
         getProcInstId(val) {
-            this.getProcessXML()
+          this.getProcessXML()
+        },
+        getCurrentActivityId(val){
+          this.getProcessXML()
         }
       },
       mounted() {

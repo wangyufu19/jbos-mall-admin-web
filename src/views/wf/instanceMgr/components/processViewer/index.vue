@@ -9,19 +9,23 @@
                     <process ref="process" v-if="activeName=='process'" :getId="this.id" :getProcInstId="this.procInstId" :getCurrentActivityId="this.currentActivityId"/>
                 </el-tab-pane>
                 <el-tab-pane label="用户任务" name="task">
-                    <detail :getProcInstId="this.procInstId" :getTaskDefKey="this.currentActivityId" :isUserTask="'true'"/>
+                    <detail :getProcInstId="this.procInstId" :getTaskDefKey="this.currentActivityId" :isUserTask="'true'" @onShowTrans="onShowTrans"/>
                 </el-tab-pane>
             </el-tabs>
         </el-card>
+        <trans v-if="transVisible" ref="trans"/>
     </el-dialog>
 </template>
 <script>
     import { mapGetters } from 'vuex'
+    import { getProcessInstanceCurrentActivityId} from '@/api/wf/instance'
+
     import process from './process.vue'
+    import trans from '@/components/Workflow/Task/Detail/trans.vue'
     import Detail from '@/components/Workflow/Task/Detail'
     export default {
         name: 'processViewer',
-        components: {process,Detail},
+        components: {process,Detail,trans},
         computed: {
             ...mapGetters([
             'user'
@@ -30,6 +34,7 @@
         data() {
             return {
                 dialogFormVisible: false,
+                transVisible: false,
                 activeName: 'process',
                 userId:'',
                 id:'',
@@ -42,6 +47,7 @@
         watch: {
             activeName(val) {
                 this.activeName = val
+                this.loadProcessInstanceCurrentActivityId()
             }
         },
         created() {
@@ -52,15 +58,25 @@
             }
         },
         methods: {
-            init(id,procName,procInstId,currentActivityId,procState) {
+            init(id,procName,procInstId,procState) {
                 this.activeName='process',
                 this.userId=this.user.username,
                 this.id=id
                 this.title='流程预览'+'-'+procName
                 this.procInstId=procInstId
-                this.currentActivityId=currentActivityId
                 this.procState=procState
                 this.dialogFormVisible = true
+                this.loadProcessInstanceCurrentActivityId()
+            },
+            loadProcessInstanceCurrentActivityId(){
+                getProcessInstanceCurrentActivityId({processInstanceId: this.procInstId }).then(response => {
+                    const res=response.data
+                    this.currentActivityId = res.data.currentActivityId
+                })
+            },
+            onShowTrans(procInstId,taskDefKey,assignee){
+                this.transVisible = true
+                this.$refs['trans'].init(procInstId,taskDefKey,assignee)
             }
         }
     }
