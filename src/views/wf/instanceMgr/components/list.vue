@@ -75,7 +75,7 @@
     </el-table>
     <!--分页信息-->
     <pagination v-show="total>0" :total="total" :page.sync="queryPage.page" :limit.sync="queryPage.limit" @pagination="onList" />
-    <ProcessViewer ref="processViewer"/>
+    <ProcessViewer ref="processViewer" @onRefresh="onList"/>
     <TaskViwer ref="viewTask"/>
   </el-card>
 </template>

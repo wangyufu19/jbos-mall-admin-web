@@ -8,6 +8,10 @@
         <div slot="header" class="clearfix">
         <span>流程变量</span>
         </div>
+        <div class="filter-container">
+          <el-button size="medium" type="primary" @click="onAddRow()">新增行</el-button>
+          <el-button size="medium" type="primary" @click="onDeleteRow()">删除行</el-button>
+        </div>
         <el-table
             v-loading="listLoading"
             :data="variables"
@@ -16,12 +20,20 @@
             fit
             highlight-current-row
             style="width: 100%"
+            :row-class-name="tableRowClassName"
+            @row-click="onRowClick"
             >
             <el-table-column
                 prop="DICTID"
                 label="变量名称"
                 width="140"
-            />
+            >
+                <editable-cell slot-scope="{row}"
+                        :can-edit="true"
+                        v-model="row.DICTID">
+                    <span slot="content">{{row.DICTID}}</span>
+                </editable-cell>
+            </el-table-column>
             <el-table-column
                 prop="variableValue"
                 label="变量值"
@@ -61,6 +73,7 @@
                 taskDefKey:'',
                 assignee:'',
                 variables: [],
+                currentRow: '',
                 loading:false
             }
         },
@@ -88,13 +101,47 @@
                     }
                     completeUserTask(data).then(response => {
                         this.dialogFormVisible = false
+                        this.$emit('onRefresh');
                         this.$message({
                             message: '操作成功',
                             type: 'success'
                         })
                     })
                 }
+            },
+            tableRowClassName({ row, rowIndex }) {
+                // 把每一行的索引放进row
+                row.index = rowIndex
+            },
+            onRowClick(row,column,event) {
+                this.currentRow = row.index
+            },
+            onAddRow() {
+                const row = {
+                    DICTID: '',
+                    variableValue: '',
+                    DICTNAME: ''
+                }
+                this.variables.push(row)
+            },
+            onDeleteRow() {
+                if (this.currentRow === undefined || this.currentRow === '') {
+                    this.$message({
+                    message: '请选择操作的数据',
+                    type: 'success'
+                    })
+                    return
+                }
+                this.variables.splice(this.currentRow, 1)
+                this.currentRow=this.currentRow-1
             }
         }
+            
     }
 </script>
+
+<style scoped>
+  .filter-container{
+    margin-bottom: 10px;
+  }
+</style>

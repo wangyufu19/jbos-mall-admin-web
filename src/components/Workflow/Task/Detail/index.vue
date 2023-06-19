@@ -48,21 +48,29 @@
             </template>
       </el-table-column>
     </el-table>   
+    <trans v-if="transVisible" ref="trans" @onRefresh="onRefresh"/>
     </div>
 </template>
 
 <script>
     import { getProcessTaskDetailList } from '@/api/wf/task'
+    import trans from './trans.vue'
+
     export default {
         name: 'detail',
-        props: ['getProcInstId','getTaskDefKey',"isUserTask"],
+        components: {trans},
+        props: ['activeName','getProcInstId','getTaskDefKey',"isUserTask"],
         data() {
             return {
                 datas: [],
-                listLoading: false
+                listLoading: false,
+                transVisible: false,
             }
         },
         watch: {
+            activeName(val){
+                this.getProcessTaskDetailList(this.getProcInstId,this.getTaskDefKey)
+            },
             getProcInstId(val) {
                 this.getProcessTaskDetailList(this.getProcInstId,this.getTaskDefKey)
             },
@@ -71,7 +79,7 @@
             }
         },
         created() {    
-           this.getProcessTaskDetailList(this.getProcInstId,this.getTaskDefKey)
+            this.getProcessTaskDetailList(this.getProcInstId,this.getTaskDefKey)
         },
         methods: {
             getProcessTaskDetailList(procInstId,taskDefKey){
@@ -102,9 +110,12 @@
             onShowTrans(row){
                 this.transVisible = true
                 this.$nextTick(() => {
-                    this.$emit('onShowTrans',row.procInstId,row.taskDefKey,row.assignee);
+                    this.$refs['trans'].init(row.procInstId,row.taskDefKey,row.assignee)
                 })
             },
+            onRefresh(){
+                this.getProcessTaskDetailList(this.getProcInstId,this.getTaskDefKey)
+            }
         }
     }
 </script>

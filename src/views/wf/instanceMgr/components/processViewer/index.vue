@@ -2,30 +2,29 @@
     <el-dialog 
         :title="title" 
         width="90%"
-        :visible.sync="dialogFormVisible">   
+        :visible.sync="dialogFormVisible"
+        :before-close="onRefresh">   
         <el-card>
             <el-tabs v-model="activeName"  @tab-click="handleClick">
                 <el-tab-pane  label="流程信息" name="process">
                     <process ref="process" v-if="activeName=='process'" :getId="this.id" :getProcInstId="this.procInstId" :getCurrentActivityId="this.currentActivityId"/>
                 </el-tab-pane>
                 <el-tab-pane label="用户任务" name="task">
-                    <detail :getProcInstId="this.procInstId" :getTaskDefKey="this.currentActivityId" :isUserTask="'true'" @onShowTrans="onShowTrans"/>
+                    <detail :activeName="this.activeName" :getProcInstId="this.procInstId" :getTaskDefKey="this.currentActivityId" :isUserTask="'true'" @onShowTrans="onShowTrans"/>
                 </el-tab-pane>
             </el-tabs>
         </el-card>
-        <trans v-if="transVisible" ref="trans"/>
     </el-dialog>
 </template>
 <script>
     import { mapGetters } from 'vuex'
     import { getProcessInstanceCurrentActivityId} from '@/api/wf/instance'
-
     import process from './process.vue'
-    import trans from '@/components/Workflow/Task/Detail/trans.vue'
     import Detail from '@/components/Workflow/Task/Detail'
+
     export default {
         name: 'processViewer',
-        components: {process,Detail,trans},
+        components: {process,Detail},
         computed: {
             ...mapGetters([
             'user'
@@ -34,7 +33,6 @@
         data() {
             return {
                 dialogFormVisible: false,
-                transVisible: false,
                 activeName: 'process',
                 userId:'',
                 id:'',
@@ -74,9 +72,9 @@
                     this.currentActivityId = res.data.currentActivityId
                 })
             },
-            onShowTrans(procInstId,taskDefKey,assignee){
-                this.transVisible = true
-                this.$refs['trans'].init(procInstId,taskDefKey,assignee)
+            onRefresh(){
+                this.dialogFormVisible = false
+                this.$emit('onRefresh');
             }
         }
     }
