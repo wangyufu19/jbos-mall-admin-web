@@ -30,3 +30,20 @@ export function completeUserTask(data) {
   })
 }
 
+export function assignee(data) {
+  return request({
+    url: '/admin/workflow/task/assignee',
+    method: 'post',
+    data
+  })
+}
+
+export function addAssignee(data) {
+  return request({
+    url: '/admin/workflow/task/addAssignee',
+    method: 'post',
+    data
+  })
+}
+
+

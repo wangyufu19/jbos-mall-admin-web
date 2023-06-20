@@ -11,7 +11,21 @@
             <el-form ref="formObj" :model="formObj" :rules="rules" label-width="100px" class="demo-ruleForm" >
                 <el-row>
                     <el-col span="24">
-                    <el-form-item label="任务名称" prop="activityName">
+                    <el-form-item label="实例Id" prop="processInstanceId">
+                        <el-input v-model="formObj.processInstanceId" :disabled="true"/>
+                    </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col span="24">
+                    <el-form-item label="活动Id" prop="activityId">
+                        <el-input v-model="formObj.activityId" :disabled="true"/>
+                    </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col span="24">
+                    <el-form-item label="活动名称" prop="activityName">
                         <el-input v-model="formObj.activityName" :disabled="true"/>
                     </el-form-item>
                     </el-col>
@@ -28,13 +42,13 @@
         </el-card>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取消</el-button>
-            <el-button type="primary" @click="onGrant()">确定 </el-button>
+            <el-button type="primary" @click="onAddAssignee()">确定 </el-button>
             </div>
     </el-dialog>
 </template>
 
 <script>
-    import { assignee } from '@/api/wf/task'
+    import { addAssignee } from '@/api/wf/task'
     export default {
         name: 'grant',
         data() {
@@ -44,39 +58,38 @@
                 formObj:{
                     userId:'',
                     processInstanceId:'',
-                    taskId:'',
                     activityId:'',
                     activityName:'',
                     assignee:''
                 },
                 rules: {
-                    activityName: [{ required: true, message: '任务名称必须填写', trigger: 'change' }],
+                    processInstanceId: [{ required: true, message: '实例Id必须填写', trigger: 'change' }],
+                    activityId: [{ required: true, message: '活动Id必须填写', trigger: 'change' }],
+                    activityName: [{ required: true, message: '活动名称必须填写', trigger: 'change' }],
                     assignee: [{ required: true, message: '领取人必须填写', trigger: 'change' }]
                 },
             }
         },
         methods: {
-            init(userId,procInstId,taskId,activityId,activityName) {
+            init(userId,processInstanceId,activityId,activityName) {
                 this.dialogFormVisible = true
-                this.title='授权任务'
+                this.title='加签'
                 this.formObj.userId=userId
-                this.formObj.processInstanceId=procInstId
-                this.formObj.taskId=taskId
+                this.formObj.processInstanceId=processInstanceId
                 this.formObj.activityId=activityId
                 this.formObj.activityName=activityName
                 this.formObj.assignee=''
             },
-            onGrant(){
+            onAddAssignee(){
                 this.$refs['formObj'].validate((valid) => {
                     if (valid) {
                         const data={}
                         data.userId=this.formObj.userId;
                         data.processInstanceId=this.formObj.processInstanceId
-                        data.taskId=this.formObj.taskId
                         data.activityId=this.formObj.activityId
                         data.activityName=this.formObj.activityName
                         data.assignee=this.formObj.assignee;
-                        assignee(data).then(response => {
+                        addAssignee(data).then(response => {
                             this.dialogFormVisible = false
                             this.$message({
                                 message: '操作成功',

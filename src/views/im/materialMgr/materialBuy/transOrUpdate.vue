@@ -186,8 +186,8 @@
           formObj: {
             processInstanceId: '',
             taskId: '',
-            taskDefKey: '',
-            taskName:'',
+            activityId: '',
+            activityName:'',
             userId: '',
             depId: '',
             bizId: '',
@@ -267,8 +267,8 @@
             this.loading = false
             this.formObj.processInstanceId=this.$route.params.procInstId
             this.formObj.taskId=this.$route.params.taskId
-            this.formObj.taskDefKey=this.$route.params.taskDefKey
-            this.formObj.taskName=this.$route.params.taskName
+            this.formObj.activityId=this.$route.params.activityId
+            this.formObj.activityName=this.$route.params.activityName
             this.formObj.userId=getUserId()
             this.formObj.depId=this.user.depId
           })

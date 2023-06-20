@@ -160,8 +160,8 @@
             bizId:row.bizId,
             procInstId:row.procInstId,
             taskId:row.taskId,
-            taskDefKey:row.taskDefKey,
-            taskName:row.taskName,
+            activityId:row.activityId,
+            activityName:row.activityName,
             taskState:row.taskState 
           } 
         })

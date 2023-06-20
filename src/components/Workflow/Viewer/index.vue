@@ -11,7 +11,7 @@
     const webUrl = process.env.VUE_APP_BASE_API+"/workflow"
     export default {
       name: 'bpmnView',
-      props: ['getId','getProcInstId','getCurrentActivityId'],
+      props: ['getId','getProcInstId','getCurrentActivityId','getCurrentActivityName','getMultiInstance'],
       data () {
         return {
         }

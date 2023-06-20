@@ -70,7 +70,7 @@
                 dialogFormVisible: false,
                 title:'',
                 procInstId:'',
-                taskDefKey:'',
+                activityId:'',
                 assignee:'',
                 variables: [],
                 currentRow: '',
@@ -78,11 +78,11 @@
             }
         },
         methods: {
-            init(procInstId,taskDefKey,assignee) {
+            init(procInstId,activityId,assignee) {
                 this.dialogFormVisible = true
                 this.title='流转任务'
                 this.procInstId=procInstId
-                this.taskDefKey=taskDefKey
+                this.activityId=activityId
                 this.assignee=assignee
                 this.onList()
             },
@@ -97,7 +97,7 @@
             onTrans(){
                 if(this.variables.length>0){
                     const data={
-                        userId:this.assignee,processInstanceId:this.procInstId,taskDefKey:this.taskDefKey,variables:this.variables
+                        userId:this.assignee,processInstanceId:this.procInstId,activityId:this.activityId,variables:this.variables
                     }
                     completeUserTask(data).then(response => {
                         this.dialogFormVisible = false

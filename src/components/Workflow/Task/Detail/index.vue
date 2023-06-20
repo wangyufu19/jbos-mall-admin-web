@@ -10,14 +10,14 @@
         style="width: 100%"
     >
         <el-table-column
-            prop="taskName"
+            prop="activityName"
             label="任务名称"
             width="120"
         />
         <el-table-column
             prop="assigneeName"
             label="任务用户"
-            width="200"
+            width="160"
         />
         <el-table-column
             prop="startTime"
@@ -48,43 +48,45 @@
             </template>
       </el-table-column>
     </el-table>   
-    <trans v-if="transVisible" ref="trans" @onRefresh="onRefresh"/>
+    <trans v-if="actionPageVisible" ref="trans" @onRefresh="onRefresh"/>
+    <grant v-if="actionPageVisible" ref="grant" @onRefresh="onRefresh"/>
     </div>
 </template>
 
 <script>
     import { getProcessTaskDetailList } from '@/api/wf/task'
     import trans from './trans.vue'
+    import grant from './grant.vue'
 
     export default {
         name: 'detail',
-        components: {trans},
-        props: ['activeName','getProcInstId','getTaskDefKey',"isUserTask"],
+        components: {trans,grant},
+        props: ['activeName','getProcInstId','getActivityId',"isUserTask"],
         data() {
             return {
                 datas: [],
                 listLoading: false,
-                transVisible: false,
+                actionPageVisible: false,
             }
         },
         watch: {
             activeName(val){
-                this.getProcessTaskDetailList(this.getProcInstId,this.getTaskDefKey)
+                this.getProcessTaskDetailList(this.getProcInstId,this.getActivityId)
             },
             getProcInstId(val) {
-                this.getProcessTaskDetailList(this.getProcInstId,this.getTaskDefKey)
+                this.getProcessTaskDetailList(this.getProcInstId,this.getActivityId)
             },
-            getTaskDefKey(val){
-                this.getProcessTaskDetailList(this.getProcInstId,this.getTaskDefKey)
+            getActivityId(val){
+                this.getProcessTaskDetailList(this.getProcInstId,this.getActivityId)
             }
         },
         created() {    
-            this.getProcessTaskDetailList(this.getProcInstId,this.getTaskDefKey)
+            this.getProcessTaskDetailList(this.getProcInstId,this.getActivityId)
         },
         methods: {
-            getProcessTaskDetailList(procInstId,taskDefKey){
+            getProcessTaskDetailList(procInstId,activityId){
                 this.loading = true
-                getProcessTaskDetailList({procInstId: procInstId,taskDefKey:taskDefKey}).then(response => {
+                getProcessTaskDetailList({procInstId: procInstId,activityId:activityId}).then(response => {
                     const res = response.data
                     this.datas = res.data.list
                     this.listLoading = false
@@ -108,13 +110,19 @@
                 }
             },
             onShowTrans(row){
-                this.transVisible = true
+                this.actionPageVisible = true
                 this.$nextTick(() => {
-                    this.$refs['trans'].init(row.procInstId,row.taskDefKey,row.assignee)
+                    this.$refs['trans'].init(row.procInstId,row.activityId,row.assignee)
+                })
+            },
+            onShowGrant(row){
+                this.actionPageVisible = true
+                this.$nextTick(() => {
+                    this.$refs['grant'].init(row.assignee,row.procInstId,row.taskId,row.activityId,row.activityName)
                 })
             },
             onRefresh(){
-                this.getProcessTaskDetailList(this.getProcInstId,this.getTaskDefKey)
+                this.getProcessTaskDetailList(this.getProcInstId,this.getActivityId)
             }
         }
     }
