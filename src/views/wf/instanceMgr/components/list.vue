@@ -36,7 +36,8 @@
         width="280"
       >
       <template slot-scope="{row,$index}">
-        <el-link  type="primary" @click="onProcessView(row)">{{row.procInstId}}</el-link>
+        <el-link v-if="row.procState!=='80'" type="primary" @click="onProcessView(row)">{{row.procInstId}}</el-link>
+        <div v-else="row.procState==='80'">{{row.procInstId}}</div>
       </template>
       </el-table-column>
       <el-table-column

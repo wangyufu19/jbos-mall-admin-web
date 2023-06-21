@@ -85,10 +85,6 @@
                 this.loadProcessInstanceCurrentActivityId()
             },
             loadProcessInstanceCurrentActivityId(){
-                //流程实例已作废不加载当前活动实例数据
-                if(this.procState==='80'){
-                    return;
-                }
                 getProcessInstanceCurrentActivityId({processDefinitionId:this.procDefId,processInstanceId: this.procInstId }).then(response => {
                     const res=response.data
                     this.currentActivityId = res.data.currentActivityId
