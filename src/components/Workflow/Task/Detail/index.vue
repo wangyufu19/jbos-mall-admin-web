@@ -17,7 +17,7 @@
         <el-table-column
             prop="assigneeName"
             label="任务用户"
-            width="160"
+            width="120"
         />
         <el-table-column
             prop="startTime"
@@ -45,6 +45,7 @@
             <template slot-scope="{row,$index}">
             <el-button v-if="row.taskState==='20'" type="primary" size="mini" @click="onShowTrans(row)">流转</el-button>
             <el-button v-if="row.taskState==='20'" type="primary" size="mini"  @click="onShowGrant(row,$index)">授权</el-button>
+            <el-button v-if="multiInstance==='true'&&datas.length>1&&row.taskState==='20'" type="primary" size="mini"  @click="onDelAssignee(row,$index)">减签</el-button>
             </template>
       </el-table-column>
     </el-table>   
@@ -54,19 +55,26 @@
 </template>
 
 <script>
-    import { getProcessTaskDetailList } from '@/api/wf/task'
+    import { mapGetters } from 'vuex'
+    import { getProcessTaskDetailList,reduceAssignee } from '@/api/wf/task'
     import trans from './trans.vue'
     import grant from './grant.vue'
 
     export default {
         name: 'detail',
         components: {trans,grant},
-        props: ['activeName','getProcInstId','getActivityId',"isUserTask"],
+        props: ['activeName','getProcInstId','getActivityId','getMultiInstance','isUserTask'],
+        computed: {
+            ...mapGetters([
+            'user'
+            ])
+        },
         data() {
             return {
                 datas: [],
                 listLoading: false,
                 actionPageVisible: false,
+                multiInstance:'false'
             }
         },
         watch: {
@@ -78,10 +86,14 @@
             },
             getActivityId(val){
                 this.getProcessTaskDetailList(this.getProcInstId,this.getActivityId)
+            },
+            getMultiInstance(val){
+                this.multiInstance=this.getMultiInstance
             }
         },
         created() {    
             this.getProcessTaskDetailList(this.getProcInstId,this.getActivityId)
+          
         },
         methods: {
             getProcessTaskDetailList(procInstId,activityId){
@@ -123,6 +135,21 @@
             },
             onRefresh(){
                 this.getProcessTaskDetailList(this.getProcInstId,this.getActivityId)
+            },
+            onDelAssignee(row){
+                const data={
+                    userId:this.user.username,
+                    processInstanceId: row.procInstId,
+                    activityId:row.activityId,
+                    assignee:row.assignee
+                }
+                reduceAssignee(data).then(response => {
+                    this.$message({
+                    message: '操作成功',
+                    type: 'success'
+                    })
+                    this.getProcessTaskDetailList(this.getProcInstId,this.getActivityId)
+                })
             }
         }
     }

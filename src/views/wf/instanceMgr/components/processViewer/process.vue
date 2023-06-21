@@ -1,26 +1,32 @@
 <template>
     <div>
         <div v-if="this.getMultiInstance==='true'" class="filter-container">
-            <el-button size="medium" type="primary" @click="onAddAssingee">加签</el-button>
-            <el-button size="medium" type="primary" :loading="downloadLoading" @click="onExport">减签</el-button>
+            <el-button size="medium" type="primary" @click="onAddAssignee">加签</el-button>
         </div>
         <viewer 
-            :getId="this.getId" 
+            :getProcDefId="this.getProcDefId" 
             :getProcInstId="this.getProcInstId" 
             :getCurrentActivityId="this.getCurrentActivityId"
             :getCurrentActivityName="this.getCurrentActivityName"
             :getMultiInstance="this.getMultiInstance"/>
-        <addAssingee v-if="actionPageVisible" ref="addAssingee"/>
+        <addAssignee v-if="actionPageVisible" ref="addAssignee"/>
     </div>
 </template>
 <script>
     import { mapGetters } from 'vuex'
     import Viewer from '@/components/Workflow/Viewer'
-    import AddAssingee from './addAssignee.vue'
+    import AddAssignee from './addAssignee.vue'
     export default {
         name: 'process',
-        props: ['getId','getProcInstId','getCurrentActivityId','getCurrentActivityName','getMultiInstance'],
-        components: {Viewer,AddAssingee},
+        props: [
+            'getProcDefId',
+            'getProcInstId',
+            'getCurrentActivityId',
+            'getCurrentActivityName',
+            'getMultiInstance',
+            'getElementVariable'
+        ],
+        components: {Viewer,AddAssignee},
         computed: {
             ...mapGetters([
             'user'
@@ -43,20 +49,24 @@
             },
             getMultiInstance(val){
 
+            },
+            getElementVariable(val){
+
             }            
         },
         methods: {
-            onAddAssingee(row){
+            onAddAssignee(){
                 this.actionPageVisible = true
                 this.$nextTick(() => {
-                    this.$refs['addAssingee'].init(
+                    this.$refs['addAssignee'].init(
                         this.user.username,
                         this.getProcInstId,
                         this.getCurrentActivityId,
                         this.getCurrentActivityName,
-                        this.getMultiInstance)
+                        this.getMultiInstance,
+                        this.getElementVariable)
                 })
-            },
+            }
         }
     }
 </script>

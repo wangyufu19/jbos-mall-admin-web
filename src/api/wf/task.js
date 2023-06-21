@@ -46,4 +46,14 @@ export function addAssignee(data) {
   })
 }
 
+export function reduceAssignee(data) {
+  return request({
+    url: '/admin/workflow/task/reduceAssignee',
+    method: 'post',
+    data
+  })
+}
+
+
+
 

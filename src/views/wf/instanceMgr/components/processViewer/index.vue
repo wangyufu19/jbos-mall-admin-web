@@ -1,7 +1,7 @@
 <template>
     <el-dialog 
         :title="title" 
-        width="85%"
+        width="90%"
         :visible.sync="dialogFormVisible"
         :before-close="onRefresh">   
         <el-card>
@@ -10,14 +10,20 @@
                     <process 
                         ref="process" 
                         v-if="activeName=='process'" 
-                        :getId="this.id" 
+                        :getProcDefId="this.procDefId" 
                         :getProcInstId="this.procInstId" 
                         :getCurrentActivityId="this.currentActivityId"
                         :getCurrentActivityName="this.currentActivityName"
-                        :getMultiInstance="this.multiInstance"/>
+                        :getMultiInstance="this.multiInstance"
+                        :getElementVariable="this.elementVariable"/>
                 </el-tab-pane>
                 <el-tab-pane label="用户任务" name="task">
-                    <detail :activeName="this.activeName" :getProcInstId="this.procInstId" :getActivityId="this.currentActivityId" :isUserTask="'true'"/>
+                    <detail 
+                        :activeName="this.activeName" 
+                        :getProcInstId="this.procInstId" 
+                        :getActivityId="this.currentActivityId" 
+                        :getMultiInstance="this.multiInstance"
+                        :isUserTask="'true'"/>
                 </el-tab-pane>
             </el-tabs>
         </el-card>
@@ -42,12 +48,13 @@
                 dialogFormVisible: false,
                 activeName: 'process',
                 userId:'',
-                id:'',
                 title:'',
+                procDefId:'',
                 procInstId:'',
                 currentActivityId:'',
                 currentActivityName:'',
                 multiInstance:'false',
+                elementVariable:'',
                 procState:''
             }
         },
@@ -65,23 +72,29 @@
             }
         },
         methods: {
-            init(id,procName,procInstId,procState) {
+            init(procDefId,procName,procInstId,procState) {
                 this.dialogFormVisible = true
                 this.activeName='process',
                 this.userId=this.user.username,
-                this.id=id
                 this.title='流程预览'+'-'+procName
+                this.procDefId=procDefId
                 this.procInstId=procInstId
                 this.procState=procState
                 this.multiInstance='false'
+                this.elementVariable=''
                 this.loadProcessInstanceCurrentActivityId()
             },
             loadProcessInstanceCurrentActivityId(){
-                getProcessInstanceCurrentActivityId({processInstanceId: this.procInstId }).then(response => {
+                //流程实例已作废不加载当前活动实例数据
+                if(this.procState==='80'){
+                    return;
+                }
+                getProcessInstanceCurrentActivityId({processDefinitionId:this.procDefId,processInstanceId: this.procInstId }).then(response => {
                     const res=response.data
                     this.currentActivityId = res.data.currentActivityId
                     this.currentActivityName = res.data.currentActivityName
                     this.multiInstance = res.data.multiInstance
+                    this.elementVariable = res.data.elementVariable
                 })
             },
             onRefresh(){

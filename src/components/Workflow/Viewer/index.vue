@@ -11,13 +11,13 @@
     const webUrl = process.env.VUE_APP_BASE_API+"/workflow"
     export default {
       name: 'bpmnView',
-      props: ['getId','getProcInstId','getCurrentActivityId','getCurrentActivityName','getMultiInstance'],
+      props: ['getProcDefId','getProcInstId','getCurrentActivityId','getCurrentActivityName','getMultiInstance'],
       data () {
         return {
         }
       },
       watch: {
-        getId(val) {
+        getProcDefId(val) {
           this.getProcessXML()
         },
         getProcInstId(val) {
@@ -52,7 +52,7 @@
         },
         getProcessXML: function () {
             const that = this                
-            const processDefinitionId = this.getId
+            const processDefinitionId = this.getProcDefId
             http.get(webUrl + '/engine-rest/process-definition/'+ processDefinitionId +'/xml')
             .then((response)=>{
                 if(response.data.bpmn20Xml){
