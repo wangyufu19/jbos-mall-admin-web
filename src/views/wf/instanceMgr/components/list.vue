@@ -77,7 +77,6 @@
     <!--分页信息-->
     <pagination v-show="total>0" :total="total" :page.sync="queryPage.page" :limit.sync="queryPage.limit" @pagination="onList" />
     <ProcessViewer ref="processViewer" @onRefresh="onList"/>
-    <TaskViwer ref="viewTask"/>
   </el-card>
 </template>
 
@@ -92,12 +91,10 @@ import
 import { getCacheDictCodeList } from '@/api/sm/dict'
 import Pagination from '@/components/Pagination'
 import ProcessViewer from './processViewer'
-import TaskViwer from './processViewer/task.vue'
-
 
 export default {
   name: 'List',
-  components: { Pagination,ProcessViewer,TaskViwer },
+  components: { Pagination,ProcessViewer },
   data() {
     return {
       search: {
@@ -164,12 +161,7 @@ export default {
         }
       }
     },
-    onViewTask(row){
-      this.taskVisible = true
-      this.$nextTick(() => {
-        this.$refs['viewTask'].init(row.procInstId)
-      })
-    },
+
     onProcessView(row){
       this.$nextTick(() => {
         this.$refs['processViewer'].init(row.procDefId,row.bizType,row.procInstId,row.procState)
