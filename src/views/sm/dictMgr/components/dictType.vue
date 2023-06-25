@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { getDictTypeList,deleteDictType } from '@/api/sm/dict'
+import { getDictTypeList,deleteDictType,refresh } from '@/api/sm/dict'
 import AddOrUpdate from "./addOrUpdate";
 
 export default {
@@ -99,6 +99,14 @@ export default {
       const formObj = Object()
       this.$nextTick(() => {
         this.$refs['addOrUpdate'].init(formObj, 'create')
+      })
+    },
+    onRefreshCache(){
+      refresh({}).then(response => {
+        this.$message({
+          message: '操作成功',
+          type: 'success'
+        })
       })
     },
     onShowUpdate(row) {

@@ -7,7 +7,6 @@ export function getCacheDictCodeList(params) {
     params
   })
 }
-
 export function getDictTypeList(params) {
   return request({
     url: '/admin/dict/getDictTypeList',
@@ -32,6 +31,13 @@ export function updateDictType(data) {
 export function deleteDictType(data) {
   return request({
     url: '/admin/dict/deleteDictType',
+    method: 'post',
+    data
+  })
+}
+export function refresh(data) {
+  return request({
+    url: '/admin/dict/refresh',
     method: 'post',
     data
   })
