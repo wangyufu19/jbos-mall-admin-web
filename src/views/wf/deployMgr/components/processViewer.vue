@@ -7,7 +7,7 @@
             <div slot="header" class="clearfix">
             <span>流程信息</span>
             </div>
-            <viewer :getId="id" :getProcInstId="procInstId" :getCurrentActivityId="currentActivityId"/>
+            <viewer :getProcDefId="id" :getProcInstId="procInstId" :getCurrentActivityId="currentActivityId"/>
         </el-card>
     </el-dialog>
 </template>
