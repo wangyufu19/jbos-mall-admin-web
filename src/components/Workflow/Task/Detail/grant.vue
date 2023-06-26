@@ -19,7 +19,7 @@
                 <el-row>
                     <el-col span="24">
                     <el-form-item label="领取人" prop="assignee">
-                        <el-input v-model="formObj.assignee"/>
+                        <UserSelected @setAssignee="setAssignee"/>
                     </el-form-item>
                     </el-col>
                 </el-row>
@@ -35,8 +35,10 @@
 
 <script>
     import { assignee } from '@/api/wf/task'
+    import UserSelected from '@/components/UserSelected'
     export default {
         name: 'grant',
+        components: {UserSelected},
         data() {
             return {
                 title:'',
@@ -66,6 +68,9 @@
                 this.formObj.activityName=activityName
                 this.formObj.assignee=''
             },
+            setAssignee(assignee){
+                this.formObj.assignee=assignee
+            },
             onGrant(){
                 this.$refs['formObj'].validate((valid) => {
                     if (valid) {
@@ -76,6 +81,7 @@
                         data.activityId=this.formObj.activityId
                         data.activityName=this.formObj.activityName
                         data.assignee=this.formObj.assignee;
+
                         assignee(data).then(response => {
                             this.dialogFormVisible = false
                             this.$message({

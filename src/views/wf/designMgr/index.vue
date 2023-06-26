@@ -2,12 +2,7 @@
   <div class="app-container">
     <el-card>
       <div slot="header" class="clearfix">
-      <div class="filter-container">
-        <el-button size="mini" type="primary" @click="onAddAssignee">打开</el-button>
-        <el-button size="mini" type="primary" @click="saveXML">保存</el-button>
-        <el-button size="mini" type="primary" @click="onAddAssignee">另存为</el-button>
-        <el-button size="mini" type="primary" @click="onAddAssignee">发布</el-button>
-      </div>
+        <toolbar :bpmnModeler="bpmnModeler" @createNewDiagram="createNewDiagram" @updateXml="updateXml" :xml="xml"/>
       </div>
     
       <div class="bpmn-container" v-show="radioValue === 'Diagram'">
@@ -64,10 +59,11 @@ import '@/assets/icon/Icon.less'
 
 import { xmlStr } from '@/components/diagram/xmlData.js'
 import { mapMutations } from 'vuex'
+import toolbar from './components/toolbar.vue'
 
 export default {
   name: 'procDefMgr',
-  components: { codemirror },
+  components: { toolbar,codemirror },
   data() {
     return {
       activeName: 'designer',
@@ -76,6 +72,18 @@ export default {
       xml: '',
       elementSelector: [],
       openPanel: true,
+      cmOptions: {
+        autoCloseTags: true,
+        dragDrop: true,
+        allowDropFileTypes: ['text/plain'],
+        lineWrapping: true,
+        lineNumbers: true,
+        mode: {
+          name: 'application/xml',
+          htmlMode: false
+        },
+        tabSize: 2
+      }
     }
   },
   computed: {
@@ -116,12 +124,12 @@ export default {
           camunda: camundaModdleDescriptor
         }
       })
-      this.createNewDiagram()
+      this.createNewDiagram(this.xml)
       this.initEvent()
     },
-    async createNewDiagram () {
+    async createNewDiagram (xml) {
       try {
-        await this.bpmnModeler.importXML(this.xml || xmlStr)
+        await this.bpmnModeler.importXML(xml || xmlStr)
         this.bpmnModeler.get('canvas').zoom('fit-viewport', 'auto')
         this.saveXML()
       } catch (err) {
@@ -134,10 +142,19 @@ export default {
         this.elementSelector = e.newSelection
       })
     },
+    updateXml (xml) {
+      this.xml = xml
+      this.createNewDiagram(this.xml)
+    },
     async saveXML () {
       const res = await this.bpmnModeler.saveXML({ format: true })
       this.xml = res.xml.toString()
     },
+    mirrorCodeChange (instance, changeObj) {
+      this.xml = instance.getValue()
+      this.createNewDiagram(this.xml)
+    }
+   
   }
 }
 </script>

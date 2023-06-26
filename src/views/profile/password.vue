@@ -1,41 +1,43 @@
 <template>
-  <el-card>
-  <el-form ref="pwdForm" :model="pwdForm" :rules="pwdRules">
-    <el-form-item prop="username" label="用户名称">
-      <el-input
-        ref="username"
-        v-model="pwdForm.username"
-        placeholder="用户名称"
-        name="username"
-        type="text"
-        disabled="true"
-      />
-    </el-form-item>
-    <el-form-item prop="password" label="密码">
-      <el-input
-        :key="passwordType"
-        ref="password"
-        v-model="pwdForm.password"
-        :type="passwordType"
-        placeholder="密码"
-        name="password"
-      />
-    </el-form-item>
-    <el-form-item prop="confirmPassword" label="确认密码">
-      <el-input
-        :key="passwordType"
-        ref="confirmPassword"
-        v-model="pwdForm.confirmPassword"
-        :type="passwordType"
-        placeholder="确认密码"
-        name="confirmPassword"
-      />
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="save">保存</el-button>
-    </el-form-item>
-  </el-form>
-  </el-card>
+  <div class="app-container">
+    <el-card>
+    <el-form ref="pwdForm" :model="pwdForm" :rules="pwdRules">
+      <el-form-item prop="username" label="用户名称">
+        <el-input
+          ref="username"
+          v-model="pwdForm.username"
+          placeholder="用户名称"
+          name="username"
+          type="text"
+          disabled="true"
+        />
+      </el-form-item>
+      <el-form-item prop="password" label="密码">
+        <el-input
+          :key="passwordType"
+          ref="password"
+          v-model="pwdForm.password"
+          :type="passwordType"
+          placeholder="密码"
+          name="password"
+        />
+      </el-form-item>
+      <el-form-item prop="confirmPassword" label="确认密码">
+        <el-input
+          :key="passwordType"
+          ref="confirmPassword"
+          v-model="pwdForm.confirmPassword"
+          :type="passwordType"
+          placeholder="确认密码"
+          name="confirmPassword"
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="save">保存</el-button>
+      </el-form-item>
+    </el-form>
+    </el-card>
+  </div>
 </template>
 
 <script>
