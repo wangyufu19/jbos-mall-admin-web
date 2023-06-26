@@ -36,7 +36,7 @@
         width="100"
       />
       <el-table-column
-        prop="taskName"
+        prop="activityName"
         label="任务名称"
         width="100"
       />
