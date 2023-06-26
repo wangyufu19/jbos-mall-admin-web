@@ -28,7 +28,6 @@
       fit
       highlight-current-row
       style="width: 100%"
-      @row-dblclick="onProcessView"
     >
       <el-table-column
         prop="procInstId"
