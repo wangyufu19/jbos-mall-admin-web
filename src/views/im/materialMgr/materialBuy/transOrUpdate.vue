@@ -253,6 +253,7 @@
         getInfoById(id){
           this.loading = true
           const params ={
+            action:'trans',
             id: id,
             userId: getUserId(),
             processInstanceId:this.$route.params.procInstId,
