@@ -36,19 +36,9 @@
         width="100"
       />
       <el-table-column
-        prop="activityName"
-        label="任务名称"
-        width="100"
-      />
-      <el-table-column
         prop="startTime"
         label="时间"
-        width="180"
-      />
-      <el-table-column
-        prop="taskState"
-        label="状态"
-        width="100"
+        width="152"
       />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">
