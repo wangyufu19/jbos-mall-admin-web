@@ -72,6 +72,7 @@
 </template>
 
 <script>
+import { Message } from 'element-ui'
 import {getToken} from "@/utils/global";
 import { getProcessDeploymentList,deploy,unDeploy} from '@/api/wf/deployment'
 import Pagination from '@/components/Pagination'

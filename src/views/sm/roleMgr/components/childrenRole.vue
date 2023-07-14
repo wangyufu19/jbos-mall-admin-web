@@ -19,12 +19,12 @@
         <el-table-column
           prop="roleCode"
           label="角色编码"
-          width="300"
+          width="240"
         />
         <el-table-column
           prop="roleName"
           label="角色名称"
-          width="300"
+          width="240"
         />
         <el-table-column label="操作" align="center" >
           <template slot-scope="{row,$index}">

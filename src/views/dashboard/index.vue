@@ -19,16 +19,16 @@
     <el-col :span="10" :xs="24">
     <el-card>
       <div slot="header" class="clearfix">
-        <span>访问统计信息</span>
+        <span>访问统计</span>
       </div>
-      <el-tabs v-model="echartType"  @tab-click="handleClick">
-        <el-tab-pane  label="饼状图" name="pie">
+      <el-tabs v-model="statisticTag"  @tab-click="handleClick">
+        <el-tab-pane label="区域分布" name="city">
+          <el-radio v-model="echartType" label="pie">饼状图</el-radio>
+          <el-radio v-model="echartType" label="bar">柱状图</el-radio>
           <pie-chart v-if="echartType=='pie'"/>
-        </el-tab-pane>
-        <el-tab-pane  label="柱状图" name="bar">
           <bar-chart v-if="echartType=='bar'"/>
         </el-tab-pane>
-      </el-tabs>
+        </el-tabs>
     </el-card>
 </el-col>
     </el-row>
@@ -48,6 +48,7 @@ export default {
   data() {
     return {
       activeName: 'waiting',
+      statisticTag: 'city',
       echartType: 'pie'
     }
   },

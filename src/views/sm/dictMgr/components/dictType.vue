@@ -28,7 +28,7 @@
       <el-table-column
         prop="typeId"
         label="类型编码"
-        width="180"
+        width="185"
       />
       <el-table-column
         prop="typeName"

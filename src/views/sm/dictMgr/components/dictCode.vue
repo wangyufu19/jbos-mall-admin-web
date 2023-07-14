@@ -22,7 +22,7 @@
       <el-table-column
         prop="dictId"
         label="字典编码"
-        width="200"
+        width="150"
       >
       <editable-cell slot-scope="{row}"
               :can-edit="true"
@@ -33,7 +33,7 @@
       <el-table-column
         prop="dictName"
         label="字典名称"
-        width="200"
+        width="180"
       >
         <editable-cell slot-scope="{row}"
                 :can-edit="true"

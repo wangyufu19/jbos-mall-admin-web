@@ -46,14 +46,14 @@
           </el-form-item>
         </el-col>
         <el-col span="12">
-          <el-form-item label="采购总金额" prop="totalAmt">
+          <el-form-item label="总金额" prop="totalAmt">
             <el-input v-model="formObj.totalAmt"/>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col span="24">
-          <el-form-item label="采购用途" prop="purpose">
+          <el-form-item label="用途" prop="purpose">
             <el-input type="textarea" rows="5" v-model="formObj.purpose"/>
           </el-form-item>
         </el-col>
@@ -174,7 +174,7 @@
             applyDepId: [{ required: true, message: '申请部门必须填写', trigger: 'change' }],
             applyTime: [{ required: true, message: '申请日期必须填写', trigger: 'change' }],
             gmoTime: [{ required: true, message: '总办会议必须填写', trigger: 'change' }],
-            totalAmt: [{ required: true, message: '采购总金额必须填写', trigger: 'change' }]
+            totalAmt: [{ required: true, message: '总金额必须填写', trigger: 'change' }]
           },
           datas: [],
           editModeEnabled: true,

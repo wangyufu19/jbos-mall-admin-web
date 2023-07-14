@@ -27,9 +27,7 @@
       <el-button size="medium" type="primary" @click="onSearch">查询</el-button>
       <el-button size="medium" type="primary" @click="onReset">重置</el-button>
     </div>
-    <div class="filter-container">
-      <el-button size="medium" style="margin-left: 10px;" type="primary" @click="onShowAdd">发起流程</el-button>
-    </div>
+
     <el-table
       v-loading="listLoading"
       :data="datas"
@@ -37,6 +35,7 @@
       fit
       highlight-current-row
       style="width: 100%"
+      @row-click="onClick"
     >
       <el-table-column
         prop="bizNo"
@@ -78,8 +77,6 @@
       />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">
-          <el-button v-if="row.bizState==='10'" type="primary" size="mini" @click="onShowUpdate(row)"> 编辑</el-button>
-          <el-button v-if="row.bizState==='10'" size="mini" type="danger" @click="onDeleteOne(row,$index)"> 删除 </el-button>
           <el-button size="mini" type="view" @click="onShowView(row,$index)"> 查看 </el-button>
         </template>
       </el-table-column>
@@ -173,28 +170,8 @@
           }
         }
       },
-      onShowAdd() {
-        this.addOrUpdateVisible = true
-        const formObj = Object()
-        this.$nextTick(() => {
-          this.$refs['addOrUpdate'].init(formObj, 'create')
-        })
-      },
-      onShowUpdate(row) {
-        const formObj = Object.assign({}, row)
-        this.addOrUpdateVisible = true
-        this.$nextTick(() => {
-          this.$refs['addOrUpdate'].init(formObj, 'update')
-        })
-      },
-      onDeleteOne(row, index) {
-        deleteOne({ id: row.id, bizNo: row.bizNo }).then(response => {
-          this.$message({
-            message: '操作成功',
-            type: 'success'
-          })
-          this.datas.splice(index, 1)
-        })
+      onClick(row){
+        this.$emit('selectMaterialBuy',row)
       },
       onShowView(row){
         const formObj = Object.assign({}, row)

@@ -8,7 +8,7 @@
     import BpmnViewer from 'bpmn-js'
     import MoveCanvasModule from 'diagram-js/lib/navigation/movecanvas'
     let bpmnViewer = null
-    const webUrl = process.env.VUE_APP_BASE_API+"/workflow"
+    const webUrl = process.env.VUE_APP_BASE_API+"/admin"
     export default {
       name: 'bpmnView',
       props: ['getProcDefId','getProcInstId','getCurrentActivityId','getCurrentActivityName','getMultiInstance'],
