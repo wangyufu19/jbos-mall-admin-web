@@ -1,9 +1,9 @@
 import request from "@/utils/request";
 
 
-export function getBizno(params) {
+export function getBizNo(params) {
   return request({
-    url: '/admin/material/buy/bizno',
+    url: '/admin/material/buy/getBizNo',
     method: 'get',
     params
   })

@@ -52,7 +52,7 @@
         <div slot="header" class="clearfix">
           <span>物品信息</span>
         </div>
-        <div class="filter-container">
+        <div v-if="dialogStatus === 'create'" class="filter-container">
           <el-button size="medium" type="primary" @click="onAddRow()">新增行</el-button>
           <el-button size="medium" type="primary" @click="onDeleteRow()">删除行</el-button>
         </div>
@@ -135,7 +135,7 @@
     import { mapGetters } from 'vuex'
     import EditableCell from '@/components/EditableCell'
     import SelectMaterialBuy from '../../materialMgr/materialBuy/selectMaterialBuy.vue'
-    import { getBizno,add,infoById,update,startTrans } from '@/api/im/materialBuy'
+    import { getBizNo,add,infoById,update,startTrans } from '@/api/im/materialInStore'
 
     export default {
       name: "addOrUpdate",
@@ -205,7 +205,7 @@
               this.$refs['formObj'].clearValidate()
             })
             this.datas=[]
-            this.getBizno()
+            this.getBizNo()
           } else {
             this.dialogStatus = dialogStatus
             this.dialogFormVisible = true
@@ -236,9 +236,9 @@
             return item
           })
         },
-        getBizno(){
+        getBizNo(){
           this.loading = true
-          getBizno().then(response => {
+          getBizNo().then(response => {
             const res = response.data
             this.formObj.bizNo = res.data
             this.loading = false
@@ -248,8 +248,8 @@
           this.loading = true
           infoById({id: id}).then(response => {
             const res = response.data
-            this.formObj = res.data.materialBuyDto.materialBuy
-            this.datas = res.data.materialBuyDto.materialList
+            this.formObj = res.data.materialInStoreDto.materialInStore
+            this.datas = res.data.materialInStoreDto.materialList
             this.loading = false
           })
         },

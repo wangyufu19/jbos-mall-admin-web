@@ -136,7 +136,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import EditableCell from './components/EditableCell'
-    import { getBizno,add,infoById,update,startTrans } from '@/api/im/materialBuy'
+    import { getBizNo,add,infoById,update,startTrans } from '@/api/im/materialBuy'
 
     export default {
       name: "addOrUpdate",
@@ -203,7 +203,7 @@
               this.$refs['formObj'].clearValidate()
             })
             this.datas=[]
-            this.getBizno()
+            this.getBizNo()
           } else {
             this.dialogStatus = dialogStatus
             this.dialogFormVisible = true
@@ -226,9 +226,9 @@
             return item
           })
         },
-        getBizno(){
+        getBizNo(){
           this.loading = true
-          getBizno().then(response => {
+          getBizNo().then(response => {
             const res = response.data
             this.formObj.bizNo = res.data
             this.loading = false

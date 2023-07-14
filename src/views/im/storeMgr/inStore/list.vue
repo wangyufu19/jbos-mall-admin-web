@@ -41,7 +41,7 @@
         <el-table-column
           prop="bizNo"
           label="业务编号"
-          width="200"
+          width="240"
         >
         </el-table-column>
         <el-table-column
@@ -91,7 +91,7 @@
     import AddOrUpdate from './addOrUpdate.vue'
     import { getUserId } from '@/utils/global'
     import { getCacheDictCodeList } from '@/api/sm/dict'
-    import { list } from '@/api/im/materialInStore'
+    import { list,deleteOne } from '@/api/im/materialInStore'
 
     export default {
       name: "materialInStoreList",
@@ -171,6 +171,29 @@
             this.$refs['addOrUpdate'].init(formObj, 'create')
           })
         },
+        onShowUpdate(row) {
+          const formObj = Object.assign({}, row)
+          this.addOrUpdateVisible = true
+          this.$nextTick(() => {
+            this.$refs['addOrUpdate'].init(formObj, 'update')
+          })
+        },
+        onDeleteOne(row, index) {
+          deleteOne({ id: row.id, bizNo: row.bizNo }).then(response => {
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            })
+            this.datas.splice(index, 1)
+          })
+        },
+        onShowView(row){
+          const formObj = Object.assign({}, row)
+          this.addOrUpdateVisible = true
+          this.$nextTick(() => {
+            this.$refs['addOrUpdate'].init(formObj, 'view')
+          })
+        }
       }
     }
   </script>

@@ -36,6 +36,11 @@
         width="100"
       />
       <el-table-column
+        prop="activityName"
+        label="任务名称"
+        width="100"
+      />
+      <el-table-column
         prop="startTime"
         label="时间"
         width="152"

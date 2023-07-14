@@ -1,9 +1,9 @@
 import request from "@/utils/request";
 
 
-export function getBizno(params) {
+export function getBizNo(params) {
     return request({
-      url: '/admin/material/inStore/bizNo',
+      url: '/admin/material/inStore/getBizNo',
       method: 'get',
       params
     })
@@ -20,6 +20,20 @@ export function getBizno(params) {
       url: '/admin/material/inStore/infoById',
       method: 'get',
       params
+    })
+  }
+  export function add(data) {
+    return request({
+      url: '/admin/material/inStore/add',
+      method: 'post',
+      data
+    })
+  }
+  export function update(data) {
+    return request({
+      url: '/admin/material/inStore/update',
+      method: 'post',
+      data
     })
   }
   export function deleteOne(data) {
