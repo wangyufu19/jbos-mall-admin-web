@@ -4,6 +4,7 @@
       ref="tree"
       :data="items"
       show-checkbox
+      check-strictly
       node-key="id"
       :props="defaultProps"
       :filter-node-method="filterNode"
