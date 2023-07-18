@@ -62,12 +62,12 @@
         <el-table-column
           prop="totalAmt"
           label="总金额"
-          width="100"
+          width="80"
         />
         <el-table-column
           prop="bizState"
           label="状态"
-          width="100"
+          width="80"
           :formatter="onFormatter"
         />
         <el-table-column label="操作" align="center">
