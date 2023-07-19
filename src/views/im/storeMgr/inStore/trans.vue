@@ -41,7 +41,7 @@
         </el-col>
       </el-row>
       </el-card>
-      <MaterialList :action="'trans'" :datas="datas" @setTotalAmt="onSetTotalAmt"/>
+      <MaterialList :editModeEnabled="false" :datas="datas" @setTotalAmt="onSetTotalAmt"/>
       <step :getProcInstId="this.$route.params.procInstId"/>
       <el-card v-if="this.$route.params.workType==='waiting'">
         <div slot="header" class="clearfix">

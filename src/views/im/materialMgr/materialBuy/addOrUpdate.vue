@@ -59,8 +59,8 @@
         </el-col>
       </el-row>
       </el-card>
-      <MaterialList :action="dialogStatus" :datas="datas" @setTotalAmt="onSetTotalAmt"/>
-      <step :getProcInstId="this.formObj.instId"/>
+      <MaterialList :editModeEnabled="editModeEnabled" :datas="datas" @setTotalAmt="onSetTotalAmt"/>
+      <step v-if="this.formObj.instId!=null" :getProcInstId="this.formObj.instId"/>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取消</el-button>
@@ -116,14 +116,18 @@
             totalAmt: [{ required: true, message: '总金额必须填写', trigger: 'change' }]
           },
           datas: [],
-          editModeEnabled: true,
-          currentRow: ''
+          editModeEnabled: true
         }
       },
       methods: {
         init(formObj, dialogStatus) {
           this.dialogStatus = dialogStatus
           this.dialogFormVisible = true
+          if (dialogStatus === 'view') {
+              this.editModeEnabled=false
+          }else{
+            this.editModeEnabled=true
+          }
           if (dialogStatus === 'create') {
             this.formObj = {
               id: undefined,
@@ -147,6 +151,7 @@
           } else {
             this.getInfoById(formObj.id)
           }
+
         },
         getBizNo(){
           this.loading = true

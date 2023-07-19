@@ -3,7 +3,7 @@
         <div slot="header" class="clearfix">
             <span>物品信息</span>
         </div>
-        <div v-if="this.action === 'create' || this.action === 'update'" class="filter-container">
+        <div v-if="editModeEnabled === true" class="filter-container">
             <el-button size="medium" type="primary" @click="onAddRow()">新增行</el-button>
             <el-button size="medium" type="primary" @click="onDeleteRow()">删除行</el-button>
         </div>
@@ -66,7 +66,7 @@
         <el-dialog
       width="35%"
       title="选择物品"
-      :visible.sync="selectMaterialTreeVisible"
+      :visible.sync="materialTreeVisible"
       append-to-body>
       <SelectMaterialTree @selectMaterial="onSelectMaterial"/>
     </el-dialog>
@@ -83,7 +83,7 @@
             SelectMaterialTree
         },
         props: [
-            'action',
+            'editModeEnabled',
             'datas'
         ],
         components: {
@@ -91,28 +91,23 @@
             SelectMaterialTree
         },
         watch: {
-            action(val) {
-                if(this.action === 'view'){
-                    this.editModeEnabled=false
-                }else{
-                    this.editModeEnabled=true
-                }
+            editModeEnabled(val) {
+
             },
         },
         data() {
             return {
-                selectMaterialTreeVisible: false,
-                editModeEnabled: true,
+                materialTreeVisible: false,
                 currentRow:'',
                 currentRowIndex: ''
             }
         },
         methods: {
             onSelectMaterialTree(row){
-                if(this.action === 'view'){
-                    this.selectMaterialTreeVisible=false
+                if(this.editModeEnabled){
+                    this.materialTreeVisible=true
                 }else{
-                    this.selectMaterialTreeVisible=true
+                    this.materialTreeVisible=false
                 }
                 this.currentRow = row
                 row.status=1
@@ -120,7 +115,7 @@
             onSelectMaterial(id,name){
                 this.currentRow.materialId=id
                 this.currentRow.materialName=name
-                this.selectMaterialTreeVisible=false
+                this.materialTreeVisible=false
             },
             tableRowClassName({ row, rowIndex }) {
                 // 把每一行的索引放进row
