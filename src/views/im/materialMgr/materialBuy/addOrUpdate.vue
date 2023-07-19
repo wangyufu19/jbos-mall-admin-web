@@ -59,71 +59,8 @@
         </el-col>
       </el-row>
       </el-card>
-      <el-card>
-        <div slot="header" class="clearfix">
-          <span>物品信息</span>
-        </div>
-        <div class="filter-container">
-          <el-button size="medium" type="primary" @click="onAddRow()">新增行</el-button>
-          <el-button size="medium" type="primary" @click="onDeleteRow()">删除行</el-button>
-        </div>
-        <el-table
-          v-loading="listLoading"
-          :data="datas"
-          border
-          stripe
-          fit
-          highlight-current-row
-          style="width: 100%"
-          :row-class-name="tableRowClassName"
-          @row-click="onRowClick"
-        >
-          <el-table-column
-            prop="materialName"
-            label="物品名称"
-            width="120"
-          >
-            <editable-cell slot-scope="{row}"
-                           :can-edit="editModeEnabled"
-                           v-model="row.materialName">
-              <span slot="content">{{row.materialName}}</span>
-            </editable-cell>
-
-          </el-table-column>
-          <el-table-column
-            prop="amount"
-            label="数量"
-            width="120"
-          >
-            <editable-cell slot-scope="{row}"
-                           :can-edit="editModeEnabled"
-                           v-model="row.amount"
-                           @input="e => onAmountChange(row,$index,e)"
-            >
-              <span slot="content">{{row.amount}}</span>
-            </editable-cell>
-          </el-table-column>
-          <el-table-column
-            prop="price"
-            label="单价"
-            width="120"
-          >
-            <editable-cell slot-scope="{row,$index}"
-                           :can-edit="editModeEnabled"
-                           v-model="row.price"
-                           @input="e => onPriceChange(row,$index,e)"
-            >
-              <span slot="content">{{row.price}}</span>
-            </editable-cell>
-          </el-table-column>
-          <el-table-column
-            prop="sumAmt"
-            label="小计"
-          >
-
-          </el-table-column>
-        </el-table>
-      </el-card>
+      <MaterialList :action="dialogStatus" :datas="datas" @setTotalAmt="onSetTotalAmt"/>
+      <step :getProcInstId="this.formObj.instId"/>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取消</el-button>
@@ -135,13 +72,15 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import EditableCell from './components/EditableCell'
+    import MaterialList from '../../components/materialList.vue'
+    import Step from '@/components/Workflow/Task/Step'
     import { getBizNo,add,infoById,update,startTrans } from '@/api/im/materialBuy'
 
     export default {
       name: "addOrUpdate",
       components: {
-        EditableCell
+        MaterialList,
+        Step
       },
       computed: {
         ...mapGetters([
@@ -183,11 +122,12 @@
       },
       methods: {
         init(formObj, dialogStatus) {
+          this.dialogStatus = dialogStatus
+          this.dialogFormVisible = true
           if (dialogStatus === 'create') {
-            this.dialogStatus = dialogStatus
-            this.dialogFormVisible = true
             this.formObj = {
               id: undefined,
+              instId:'',
               bizNo: '',
               applyUserId: this.user.username,
               applyUserName: this.user.nickName,
@@ -205,26 +145,8 @@
             this.datas=[]
             this.getBizNo()
           } else {
-            this.dialogStatus = dialogStatus
-            this.dialogFormVisible = true
             this.getInfoById(formObj.id)
           }
-        },
-        tableRowClassName({ row, rowIndex }) {
-          // 把每一行的索引放进row
-          row.index = rowIndex
-        },
-        onRowClick(row,column,event) {
-          this.currentRow = row.index
-          row.status=1
-        },
-        onResetRowStatus(){
-          this.datas.map(item => {
-            if (item.status) {
-              item.status = 0
-            }
-            return item
-          })
         },
         getBizNo(){
           this.loading = true
@@ -243,40 +165,8 @@
             this.loading = false
           })
         },
-        onAddRow() {
-          this.onResetRowStatus()
-          const row = {
-            materialName: '',
-            amount: '',
-            price: '',
-            status: 1
-          }
-          this.datas.push(row)
-        },
-        onDeleteRow() {
-          if (this.currentRow === undefined || this.currentRow === '') {
-            this.$message({
-              message: '请选择操作的数据',
-              type: 'success'
-            })
-            return
-          }
-          this.datas.splice(this.currentRow, 1)
-          this.currentRow=this.currentRow-1
-        },
-        onAmountChange(row,index,value){
-          if(row.amount && row.price){
-            row.sumAmt = row.amount*row.price
-          }else{
-            row.sumAmt=0
-          }
-        },
-        onPriceChange(row,index,value){
-          if(row.amount && row.price){
-            row.sumAmt = row.amount*row.price
-          }else{
-            row.sumAmt=0
-          }
+        onSetTotalAmt(totalAmt){
+          this.formObj.totalAmt=totalAmt
         },
         onAdd() {
           this.$refs['formObj'].validate((valid) => {
