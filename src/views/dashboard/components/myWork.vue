@@ -131,25 +131,24 @@
         if(this.getWorkType==='processed'){
           title='我的已办-'+row.bizType
         }
-
+        const bizId=row.bizId
         const myWorkRoute = [
           {
             path: '/user', component: Layout, redirect: '/myWork',
             children: [
               {
-                path: 'myWork',
+                path: bizId,
                 component: loadView(row.routeUrl),
-                name: 'myWork',
+                name: bizId,
                 meta: { title: title, icon: 'user', noCache: true }
               }
             ]
           }
         ]
-
         this.$router.addRoutes(myWorkRoute)
 
         this.$router.push({ 
-          name: 'myWork',
+          name: bizId,
           params: { 
             workType:this.getWorkType,
             bizId:row.bizId,
