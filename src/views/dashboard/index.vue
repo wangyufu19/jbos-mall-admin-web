@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
-    <el-row :gutter="20">
-      <el-col :span="14" :xs="24">
+    <el-row>
+    <el-col>
     <el-card>
       <div slot="header" class="clearfix">
         <span>我的工作</span>
@@ -16,7 +16,9 @@
       </el-tabs>
     </el-card>
     </el-col>
-    <el-col :span="10" :xs="24">
+    </el-row>
+    <el-row>
+    <el-col>
     <el-card>
       <div slot="header" class="clearfix">
         <span>访问统计</span>
@@ -30,7 +32,7 @@
         </el-tab-pane>
         </el-tabs>
     </el-card>
-</el-col>
+    </el-col>
     </el-row>
   </div>
 </template>

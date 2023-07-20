@@ -47,7 +47,7 @@
         </el-col>
         <el-col span="12">
           <el-form-item label="总金额" prop="totalAmt">
-            <el-input v-model="formObj.totalAmt"/>
+            <el-input v-model="formObj.totalAmt" :disabled="true"/>
           </el-form-item>
         </el-col>
       </el-row>

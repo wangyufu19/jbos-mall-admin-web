@@ -35,25 +35,8 @@
       </el-row>
       <el-row>
         <el-col span="12">
-          <el-form-item  label="总办日期" prop="gmoTime">
-            <el-date-picker
-              v-model="formObj.gmoTime"
-              type="date"
-              value-format="yyyy-MM-dd"
-              placeholder="选择日期">
-            </el-date-picker>
-          </el-form-item>
-        </el-col>
-        <el-col span="12">
           <el-form-item label="总金额" prop="totalAmt">
             <el-input v-model="formObj.totalAmt" :disabled="true"/>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col span="24">
-          <el-form-item label="用途" prop="purpose">
-            <el-input type="textarea" rows="5" v-model="formObj.purpose"/>
           </el-form-item>
         </el-col>
       </el-row>
@@ -92,7 +75,7 @@
       </el-card>
       <el-card>
         <el-button v-if="this.$route.params.workType==='waiting'" type="primary" @click="onDoTrans()">流转</el-button>
-        <el-button v-if="this.$route.params.workType==='processed'&&this.formObj.isDrawback==='true'" type="primary" @click="onDoDrawback()">撤回</el-button>
+        <el-button v-if="this.$route.params.workType==='processed'&&this.formObj.isDrawback===true" type="primary" @click="onDoDrawback()">撤回</el-button>
         
       </el-card>
     </el-form>
@@ -104,13 +87,14 @@
     import MaterialList from '../../components/materialList.vue'
     import Step from '@/components/Workflow/Task/Step'
     import { getUserId } from '@/utils/global'
-    import { getBizno,infoById,doTrans,doDrawback} from '@/api/im/materialBuy'
+    import { infoById,doTrans,doDrawback} from '@/api/im/materialOutStore'
     import { getCacheDictCodeList } from '@/api/sm/dict'
 
     export default {
       name: "addOrUpdate",
       components: {
-        MaterialList,Step
+        MaterialList,
+        Step
       },
       computed: {
         ...mapGetters([
@@ -131,9 +115,7 @@
             applyUserId: '',
             applyDepId: '',
             applyTime: '',
-            gmoTime: '',
             totalAmt: '',
-            purpose: '',
             bizState:'10',
             isDrawback:''
           },        
@@ -146,10 +128,11 @@
             applyUserId: [{ required: true, message: '申请人必须填写', trigger: 'change' }],
             applyDepId: [{ required: true, message: '申请部门必须填写', trigger: 'change' }],
             applyTime: [{ required: true, message: '申请日期必须填写', trigger: 'change' }],
-            gmoTime: [{ required: true, message: '总办会议必须填写', trigger: 'change' }],
             totalAmt: [{ required: true, message: '总金额必须填写', trigger: 'change' }]
           },
-          datas: []
+          datas: [],
+          editModeEnabled: true,
+          currentRow: ''
         }
       },
       created() {  
@@ -179,10 +162,9 @@
           }
           infoById(params).then(response => {
             const res = response.data
-            this.formObj = res.data.materialBuyDto.materialBuy
-            this.datas = res.data.materialBuyDto.materialList
+            this.formObj = res.data.materialOutStoreDto.materialOutStore
+            this.datas = res.data.materialOutStoreDto.materialList
             this.formObj.isDrawback = res.data.isDrawback
-        
             this.loading = false
             this.formObj.processInstanceId=this.$route.params.procInstId
             this.formObj.taskId=this.$route.params.taskId
@@ -207,7 +189,7 @@
           this.$refs['formObj'].validate((valid) => {
             if (valid) {
               this.formObj.opinion=this.opinion
-              this.formObj.opinionDesc=this.opinionDesc
+              this.formObj.opinionDesc=this.opinionDescP
               const data={formObj:this.formObj,materials:this.datas}
               doTrans(data).then(response => {
                 this.$message({

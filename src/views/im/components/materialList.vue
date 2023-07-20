@@ -4,8 +4,8 @@
             <span>物品信息</span>
         </div>
         <div v-if="editModeEnabled === true" class="filter-container">
-            <el-button size="medium" type="primary" @click="onAddRow()">新增行</el-button>
-            <el-button size="medium" type="primary" @click="onDeleteRow()">删除行</el-button>
+            <el-button size="mini" type="primary" @click="onAddRow()">新增行</el-button>
+            <el-button size="mini" type="primary" @click="onDeleteRow()">删除行</el-button>
         </div>
         <el-table
             v-loading="listLoading"

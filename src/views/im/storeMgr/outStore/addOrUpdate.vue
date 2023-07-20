@@ -11,11 +11,6 @@
             <el-input v-model="formObj.bizNo" :disabled="true"/>
           </el-form-item>
         </el-col>
-        <el-col span="12">
-          <el-form-item  label="采购流程" prop="buyBizNo">
-              <el-input v-model="formObj.buyBizNo" v-on:click.native="onSelectBuyFlow"/>
-          </el-form-item>
-        </el-col>
       </el-row>
       <el-row>
         <el-col span="12">
@@ -55,13 +50,7 @@
       <el-button v-if="this.formObj.bizState==='10'&&dialogStatus !== 'view'" type="primary" @click="dialogStatus==='create'?onAdd():onUpdate()">确定 </el-button>
       <el-button v-if="this.formObj.bizState==='10'&&dialogStatus !== 'view'" type="primary" @click="onStartTrans()">流转</el-button>
     </div>
-    <el-dialog
-      width="85%"
-      title="选择物品采购流程"
-      :visible.sync="selectMaterialBuyVisible"
-      append-to-body>
-      <SelectMaterialBuy @selectMaterialBuy="onSelectMaterialBuy"/>
-    </el-dialog>
+   
   </el-dialog>
   
 </template>
@@ -71,7 +60,7 @@
     import SelectMaterialBuy from '../../materialMgr/materialBuy/selectMaterialBuy.vue'
     import MaterialList from '../../components/materialList.vue'
     import Step from '@/components/Workflow/Task/Step'
-    import { getBizNo,add,infoById,update,startTrans } from '@/api/im/materialInStore'
+    import { getBizNo,add,infoById,update,startTrans } from '@/api/im/materialOutStore'
 
     export default {
       name: "addOrUpdate",
@@ -89,16 +78,13 @@
         return {
           dialogFormVisible: false,
           dialogStatus: '',
-          selectMaterialBuyVisible: false,
           textMap: {
-            create: '物品入库-发起流程',
-            update: '物品入库-修改流程',
-            view: '物品入库-查看流程'
+            create: '物品领取-发起流程',
+            update: '物品领取-修改流程',
+            view: '物品领取-查看流程'
           },
           formObj: {
             bizNo: '',
-            buyBizId:'',
-            buyBizNo:'',
             applyUserId: '',
             applyDepId: '',
             applyTime: '',
@@ -120,7 +106,6 @@
       },
       methods: {
         init(formObj, dialogStatus) {
-          this.selectMaterialBuyVisible=false
           this.dialogStatus = dialogStatus
           this.dialogFormVisible = true
           if (dialogStatus === 'view') {
@@ -137,7 +122,6 @@
               applyDepId:this.user.depId,
               applyDepName:this.user.depName,
               applyTime:  new Date (),
-              gmoTime: '',
               totalAmt: '',
               purpose: '',
               bizState:'10'
@@ -159,20 +143,12 @@
             this.loading = false
           })
         },
-        onSelectBuyFlow(){
-          this.selectMaterialBuyVisible=true
-        },
-        onSelectMaterialBuy(row){
-          this.formObj.buyBizId=row.id
-          this.formObj.buyBizNo=row.bizNo
-          this.selectMaterialBuyVisible=false
-        },
         getInfoById(id){
           this.loading = true
           infoById({id: id}).then(response => {
             const res = response.data
-            this.formObj = res.data.materialInStoreDto.materialInStore
-            this.datas = res.data.materialInStoreDto.materialList
+            this.formObj = res.data.materialOutStoreDto.materialOutStore
+            this.datas = res.data.materialOutStoreDto.materialList
             this.loading = false
           })
         },

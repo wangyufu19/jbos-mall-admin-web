@@ -3,7 +3,7 @@
   "version": "4.2.1",
   "description": "A vue admin template with Element UI & axios & iconfont & permission control & lint",
   "author": "Pan <panfree23@gmail.com>",
-  "private":"true",
+  "private": "true",
   "license": "MIT",
   "scripts": {
     "dev": "vue-cli-service serve",
@@ -16,8 +16,8 @@
     "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.yml"
   },
   "dependencies": {
-    "bpmn-js": "^7.4.0",
-    "bpmn-js-properties-panel": "^0.37.3",
+    "bpmn-js": "^7.5.0",
+    "bpmn-js-properties-panel": "^0.43.1",
     "camunda-bpmn-moddle": "^4.4.0",
     "codemirror": "^5.58.2",
     "core-js": "^2.6.12",
