@@ -58,7 +58,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import SelectMaterialBuy from '../../materialMgr/materialBuy/selectMaterialBuy.vue'
-    import MaterialList from '../../components/materialList.vue'
+    import MaterialList from './components/materialList.vue'
     import Step from '@/components/Workflow/Task/Step'
     import { getBizNo,add,infoById,update,startTrans } from '@/api/im/materialOutStore'
 
@@ -97,8 +97,7 @@
             bizNo: [{ required: true, message: '业务编号必须填写', trigger: 'change' }],
             applyUserId: [{ required: true, message: '申请人必须填写', trigger: 'change' }],
             applyDepId: [{ required: true, message: '申请部门必须填写', trigger: 'change' }],
-            applyTime: [{ required: true, message: '申请日期必须填写', trigger: 'change' }],
-            totalAmt: [{ required: true, message: '总金额必须填写', type:'number',trigger: 'change' }]
+            applyTime: [{ required: true, message: '申请日期必须填写', trigger: 'change' }]
           },
           datas: [],
           editModeEnabled: true
@@ -208,4 +207,11 @@
   .filter-container{
     margin-bottom: 10px;
   }
+  /deep/ .el-dialog__title {
+      color: #303133;
+  }
+  /deep/ .el-dialog__header {
+    border-bottom: 1px solid #e3e8ee;
+  }
+
 </style>

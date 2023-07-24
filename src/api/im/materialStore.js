@@ -16,3 +16,11 @@ export function list(params) {
         params
     })
 }
+
+export function getInfoByMaterialId(params) {
+    return request({
+        url: '/admin/material/store/getInfoByMaterialId',
+        method: 'get',
+        params
+    })
+}
