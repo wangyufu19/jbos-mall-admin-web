@@ -121,8 +121,8 @@
           </el-col>
         </el-row>
       </el-card>
-      <FeeItem :editModeEnabled="editModeEnabled" :datas="feeReimburseItem" @setTotalAmt="onSetTotalAmt"/>
-      <InvoiceItem :editModeEnabled="editModeEnabled" :datas="invoiceItem"/>
+      <FeeItem :editModeEnabled="editModeEnabled" :datas="feeReimburseItems" @setTotalAmt="onSetTotalAmt"/>
+      <InvoiceItem :editModeEnabled="editModeEnabled" :datas="invoiceItems"/>
       <step v-if="this.formObj.instId!=null" :getProcInstId="this.formObj.instId"/>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -176,6 +176,10 @@
             tradeType:'',
             totalAmt: '',
             bizDesc: '',
+            acctName:'',
+            acctNo:'',
+            bankName:'',
+            tradeType:'',
             bizState:'10'
           },
           loading: false,
@@ -186,8 +190,8 @@
             applyTime: [{ required: true, message: '申请日期必须填写', trigger: 'change' }],
             totalAmt: [{ required: true, message: '总金额必须填写', trigger: 'change' }]
           },
-          feeReimburseItem: [],
-          invoiceItem: [],
+          feeReimburseItems: [],
+          invoiceItems: [],
           feeTypeItems: [],
           feeTmpltItems:[],
           tradeTypeItems:[],
@@ -219,8 +223,8 @@
             this.$nextTick(() => {
               this.$refs['formObj'].clearValidate()
             })
-            this.feeReimburseItem=[]
-            this.invoiceItem=[]
+            this.feeReimburseItems=[]
+            this.invoiceItems=[]
             this.getBizNo()
           } else {
             this.getInfoById(formObj.id)
@@ -256,7 +260,12 @@
           infoById({id: id}).then(response => {
             const res = response.data
             this.formObj = res.data.feeReimburseDto.feeReimburse
-            this.feeReimburseItem = res.data.feeReimburseDto.feeReimburseItem
+            this.formObj.acctName = res.data.feeReimburseDto.payee.acctName
+            this.formObj.acctNo = res.data.feeReimburseDto.payee.acctNo
+            this.formObj.bankName = res.data.feeReimburseDto.payee.bankName
+            this.formObj.tradeType = res.data.feeReimburseDto.payee.tradeType
+            this.feeReimburseItems = res.data.feeReimburseDto.feeReimburseItems
+            this.invoiceItems = res.data.feeReimburseDto.invoiceItems
             this.loading = false
           })
         },
@@ -266,7 +275,12 @@
         onAdd() {
           this.$refs['formObj'].validate((valid) => {
             if (valid) {
-              const data={action:this.dialogStatus,formObj:this.formObj,feeReimburseItem:this.feeReimburseItem}
+              const data={
+                action:this.dialogStatus,
+                formObj:this.formObj,
+                feeReimburseItems:this.feeReimburseItems,
+                invoiceItems:this.invoiceItems
+              }
               add(data).then(response => {
                 this.dialogFormVisible = false
                 this.$emit('refreshDataList')
@@ -281,7 +295,12 @@
         onUpdate() {
           this.$refs['formObj'].validate((valid) => {
             if (valid) {
-              const data={action:this.dialogStatus,formObj:this.formObj,feeReimburseItem:this.feeReimburseItem}
+              const data={
+                action:this.dialogStatus,
+                formObj:this.formObj,
+                feeReimburseItem:this.feeReimburseItems,
+                invoiceItems:this.invoiceItems
+              }
               update(data).then(response => {
                 this.dialogFormVisible = false
                 this.$emit('refreshDataList')
@@ -296,7 +315,12 @@
         onStartTrans(){
           this.$refs['formObj'].validate((valid) => {
             if (valid) {
-              const data={action:this.dialogStatus,formObj:this.formObj,feeReimburseItem:this.datas}
+              const data={
+                action:this.dialogStatus,
+                formObj:this.formObj,
+                feeReimburseItems:this.feeReimburseItems,
+                invoiceItems:this.invoiceItems
+              }
               startTrans(data).then(response => {
                 this.dialogFormVisible = false
                 this.$emit('refreshDataList')

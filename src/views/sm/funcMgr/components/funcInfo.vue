@@ -18,7 +18,7 @@
       <el-table-column
         prop="funcCode"
         label="功能编码"
-        width="150"
+        width="200"
       />
       <el-table-column
         prop="funcName"

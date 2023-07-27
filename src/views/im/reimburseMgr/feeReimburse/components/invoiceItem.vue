@@ -19,68 +19,60 @@
             @row-click="onRowClick"
         >
             <el-table-column
-            prop="feeName"
-            label="费用名称"
+            prop="invoiceCode"
+            label="发票编码"
             width="120"
             >
             <editable-cell slot-scope="{row}"
                             :can-edit="editModeEnabled"
-                            v-model="row.feeName"
-                            v-on:click.native="onSelectMaterialTree(row)">
-                <span slot="content">{{row.feeName}}</span>
+                            v-model="row.invoiceCode">
+                <span slot="content">{{row.invoiceCode}}</span>
             </editable-cell>
 
             </el-table-column>
+
+            <el-table-column
+            prop="invoiceNo"
+            label="发票代码"
+            width="120"
+            >
+            <editable-cell slot-scope="{row}"
+                            :can-edit="editModeEnabled"
+                            v-model="row.invoiceNo"
+            >
+                <span slot="content">{{row.invoiceNo}}</span>
+            </editable-cell>
+            </el-table-column>
+
             <el-table-column
             prop="amount"
             label="金额"
-            width="120"
             >
             <editable-cell slot-scope="{row}"
                             :can-edit="editModeEnabled"
                             v-model="row.amount"
+                            editable-component="el-input-number"
             >
                 <span slot="content">{{row.amount}}</span>
             </editable-cell>
             </el-table-column>
-            <el-table-column
-            prop="feeDesc"
-            label="备注"
-            >
-            <editable-cell slot-scope="{row}"
-                            :can-edit="editModeEnabled"
-                            v-model="row.feeDesc"
-            >
-                <span slot="content">{{row.feeDesc}}</span>
-            </editable-cell>
-            </el-table-column>
+           
         </el-table>
-        <el-dialog
-      width="35%"
-      title="选择物品"
-      :visible.sync="materialTreeVisible"
-      append-to-body>
-      <SelectMaterialTree @selectMaterial="onSelectMaterial"/>
-    </el-dialog>
+
     </el-card>
     
 </template>
 <script>
     import EditableCell from '@/components/EditableCell'
-    import SelectMaterialTree from '../../../basicData/materialInfo/selectMaterialTree.vue'
  
     export default {
-        name: "materialList",
-        components: {
-            SelectMaterialTree
-        },
+        name: "invoiceItems",
         props: [
             'editModeEnabled',
             'datas'
         ],
         components: {
-            EditableCell,
-            SelectMaterialTree
+            EditableCell
         },
         watch: {
             editModeEnabled(val) {
@@ -90,26 +82,11 @@
         data() {
             return {
                 loading: false,
-                materialTreeVisible: false,
                 currentRow:'',
                 currentRowIndex: ''
             }
         },
         methods: {
-            onSelectMaterialTree(row){
-                if(this.editModeEnabled){
-                    this.materialTreeVisible=true
-                }else{
-                    this.materialTreeVisible=false
-                }
-                this.currentRow = row
-                row.status=1
-            },
-            onSelectMaterial(id,name){
-                this.currentRow.feeId=id
-                this.currentRow.feeName=name
-                this.materialTreeVisible=false
-            },
             tableRowClassName({ row, rowIndex }) {
                 // 把每一行的索引放进row
                 row.index = rowIndex
@@ -129,9 +106,9 @@
             onAddRow() {
                 this.onResetRowStatus()
                 const row = {
-                    feeName: '',
-                    amount: '',
-                    price: '',
+                    invoiceCode: '',
+                    invoiceNo: '',
+                    amount: '',           
                     status: 1
                 }
                 this.datas.push(row)

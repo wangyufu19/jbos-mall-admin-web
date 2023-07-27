@@ -34,11 +34,12 @@
             <el-table-column
             prop="amount"
             label="金额"
-            width="120"
+            width="200"
             >
             <editable-cell slot-scope="{row}"
                             :can-edit="editModeEnabled"
                             v-model="row.amount"
+                            editable-component="el-input-number"
                             @input="e => onAmountChange(row,$index,e)"
             >
                 <span slot="content">{{row.amount}}</span>
@@ -150,7 +151,7 @@
                 if(this.datas!=undefined){
                     let totalAmt=0.00
                     for(let i=0;i<this.datas.length;i++){
-                        totalAmt+=this.datas[i].amount
+                        totalAmt+=parseFloat(this.datas[i].amount)
                     }
                     this.$emit('setTotalAmt',totalAmt)
                 }
