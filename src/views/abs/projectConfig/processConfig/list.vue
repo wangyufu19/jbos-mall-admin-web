@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <div slot="header" class="clearfix">
-      <span>项目列表</span>
+      <span>项目流程配置列表</span>
     </div>
     <div class="filter-container">
       <el-select
@@ -22,7 +22,8 @@
       <el-button size="medium" type="primary" @click="onReset">重置</el-button>
     </div>
     <div class="filter-container">
-      <el-button size="medium" style="margin-left: 10px;" type="primary" @click="onShowAdd">发行登记</el-button>
+      <el-button size="medium" style="margin-left: 10px;" type="primary" @click="onShowAdd">配置</el-button>
+ 
     </div>
     <el-table
       v-loading="listLoading"
@@ -44,8 +45,13 @@
         width="120"
       />
       <el-table-column
-        prop="publicAmt"
-        label="发行金额"
+        prop="projectAmt"
+        label="项目金额"
+        width="120"
+      />
+      <el-table-column
+        prop="projectMaxAmt"
+        label="最高限额"
         width="120"
       />
       <el-table-column
@@ -56,11 +62,6 @@
       <el-table-column
         prop="assetType"
         label="资产类型"
-        width="120"
-      />
-      <el-table-column
-        prop="tradeMarket"
-        label="交易场所"
         width="120"
       />
       <el-table-column

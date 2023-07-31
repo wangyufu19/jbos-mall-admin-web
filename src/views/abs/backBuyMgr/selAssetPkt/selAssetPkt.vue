@@ -8,25 +8,11 @@
         :label-position="right" 
         class="demo-ruleForm">
       <el-card>
-      <el-tabs v-model="activeName"  @tab-click="handleClick">
-        <el-tab-pane  label="基本信息" name="baseInfo">
         <el-row>
-          <el-col span="12">
-            <el-form-item label="项目编号" prop="projectNo">
-              <el-input v-model="formObj.projectNo"/>
-            </el-form-item>
-          </el-col>
           <el-col span="12">
             <el-form-item  label="项目名称" prop="projectName">
-                <el-input v-model="formObj.projectName"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col span="12">
-            <el-form-item label="项目类型" prop="projectType">
               <el-select
-                v-model="formObj.projectType"
+                v-model="formObj.projectName"
                 clearable
                 :loading="loading"
                 placeholder="请选择">
@@ -39,10 +25,12 @@
               </el-select>
             </el-form-item>
           </el-col>
+          </el-row>
+          <el-row>
           <el-col span="12">
-            <el-form-item label="资产类型" prop="assetType">
+            <el-form-item  label="回购类型" prop="backBuyType">
               <el-select
-                v-model="formObj.assetType"
+                v-model="formObj.backBuyType"
                 clearable
                 :loading="loading"
                 placeholder="请选择">
@@ -55,42 +43,26 @@
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
+          </el-row>
+          <el-row>
           <el-col span="12">
-            <el-form-item label="项目金额" prop="projectAmt">
-              <el-input-number v-model="formObj.projectAmt" controls-position="right" :precision="2"/>
+            <el-form-item label="回购文件" prop="backBuyFile">
+              <el-upload      
+                style="margin-top: 5px;margin-left: 10px;" 
+                :action="upload.actionUrl"
+                :headers="upload.headers"
+                :show-file-list="false"
+                :data="upload.data"
+                :before-upload="onBeforeUpoad"
+                :on-success="onUploadSuccess"
+                :on-error="onUploadError">
+                <el-button size="mini" type="primary">导入</el-button>
+              </el-upload>
             </el-form-item>
           </el-col>
-          <el-col span="12">
-            <el-form-item label="最高限额" prop="projectMaxAmt">
-              <el-input-number v-model="formObj.projectMaxAmt" controls-position="right" :precision="2"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col span="12">
-            <el-form-item label="立项日期" prop="applyTime">
-              <el-date-picker
-                :disabled="true"
-                v-model="formObj.applyTime"
-                type="date"
-                value-format="yyyy-MM-dd"
-                placeholder="选择日期"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        </el-tab-pane>
-        <el-tab-pane  label="准入模型" name="entryModule">
-           <EntryItem :editModeEnabled="editModeEnabled" :datas="entryItems"/>
-        </el-tab-pane>
-        <el-tab-pane  label="资产品种" name="assetType">
-           <AssetItem :editModeEnabled="editModeEnabled" :datas="assetItems"/>
-        </el-tab-pane>
-        <el-tab-pane  label="项目组人员" name="projectTeam">
-          <TeamItem :editModeEnabled="editModeEnabled" :datas="teamItems"/>
-        </el-tab-pane>
-      </el-tabs>
+          </el-row>
+         
+        
       </el-card>
       </el-form>
       
@@ -106,16 +78,12 @@
   
   <script>
       import { mapGetters } from 'vuex'
-      import EntryItem from './components/entryItem'
-      import AssetItem from './components/assetItem'
-      import TeamItem from './components/teamItem'
+      import {getToken} from "@/utils/global";
 
       export default {
-        name: "addOrUpdate",
+        name: "selAssetPkt",
         components: {
-          EntryItem,
-          AssetItem,
-          TeamItem
+        
         },
         computed: {
           ...mapGetters([
@@ -124,66 +92,36 @@
         },
         data() {
           return {
-            activeName: 'baseInfo',
+            activeName: 'buy',
             dialogFormVisible: false,
             dialogStatus: '',
             textMap: {
-              create: '项目立项-登记',
-              update: '项目立项-修改',
-              view: '项目立项-查看'
+              create: '回购管理-选定资产包'
             },
             formObj: {
-              projectNo: '',
-              projectName:'',
-              projectType:'',
-              assetType: '',
-              projectAmt: 0.00,
-              projectMaxAmt: 0.00,
-              applyTime: '',
-              purpose: '',
-              bizState:'10'
+              yearNo: '',
+              holidayName:'',
+              startDate: '',
+              endDate: ''
+            },
+            upload:{
+              actionUrl:process.env.VUE_APP_BASE_API+'/admin/io/upload',
+              headers:{'accessToken':getToken()},
+              data:{}
             },
             loading: false,
             rules: {
-              projectNo: [{ required: true, message: '项目编号必须填写', trigger: 'change' }],
               projectName: [{ required: true, message: '项目名称必须填写', trigger: 'change' }],
-              projectType: [{ required: true, message: '项目类型必须填写', trigger: 'change' }],
-              assetType: [{ required: true, message: '资产类型必须填写', trigger: 'change' }],
-              projectAmt: [
-                { required: true, message: '项目金额必须填写',trigger: 'change' },
-                { type:'number',message: '项目金额必须数值',trigger: 'change' },
-              ],
-              projectMaxAmt: [
-                { required: true, message: '最高限额必须填写', trigger: 'change' },
-                { type:'number',message: '最高限额必须数值',trigger: 'change' },
-              ],
-              innerPrincipalAcctNo: [{ required: true, message: '内部账本金清算账号必须填写', trigger: 'change' }],
-              innerInterestAcctNo: [{ required: true, message: '内部账利息清算账号必须填写', trigger: 'change' }],
-              outerPrincipalAcctNo: [{ required: true, message: '外部账本金收款账号必须填写', trigger: 'change' }],
-              outerInterestAcctNo: [{ required: true, message: '外部账利息收款账号必须填写', trigger: 'change' }]
+              backBuyType: [{ required: true, message: '回购类型必须填写', trigger: 'change' }],
+              startDate: [{ required: true, message: '开始日期必须填写', trigger: 'change' }],
+              endDate: [{ required: true, message: '截止日期必须填写', trigger: 'change' }]
             },
-            entryItems:[],
-            assetItems:[],
-            teamItems:[],
+            buyProcessItems:[],
+            backBuyProcessItems:[],
             editModeEnabled: true
           }
         },
-        watch: {
-          activeName(val) {
-            this.activeName = val
-          }
-        },
-        created() {
-          // init the default selected tab
-          const tab = this.$route.query.tab
-          if (tab) {
-            this.activeName = tab
-          }
-        },
         methods: {
-          handleClick(tab, event) {
-            console.log(tab, event)
-          },
           init(formObj, dialogStatus) {
             this.dialogStatus = dialogStatus
             this.dialogFormVisible = true

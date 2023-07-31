@@ -1,28 +1,28 @@
 <template>
   <el-card>
     <div slot="header" class="clearfix">
-      <span>项目列表</span>
+      <span>节假日配置列表</span>
     </div>
     <div class="filter-container">
       <el-select
         v-model="search.yearS"
         clearable
         :loading="loading"
-        placeholder="项目年度">
+        placeholder="所属年度">
         <el-option
-            v-for="item in feeTypeItems"
+            v-for="item in yearItems"
             :key="item.DICTID"
             :label="item.DICTNAME"
             :value="item.DICTID"
         />
       </el-select>
-      <el-input v-model="search.projectNameS" placeholder="项目名称" class="filter-item" style="width: 200px;" />
+      <el-input v-model="search.holidayNameS" placeholder="假日名称" class="filter-item" style="width: 200px;" />
 
       <el-button size="medium" type="primary" @click="onSearch">查询</el-button>
       <el-button size="medium" type="primary" @click="onReset">重置</el-button>
     </div>
     <div class="filter-container">
-      <el-button size="medium" style="margin-left: 10px;" type="primary" @click="onShowAdd">发行登记</el-button>
+      <el-button size="medium" style="margin-left: 10px;" type="primary" @click="onShowAdd">新建</el-button>
     </div>
     <el-table
       v-loading="listLoading"
@@ -34,43 +34,28 @@
       style="width: 100%"
     >
       <el-table-column
-        prop="projectNo"
-        label="项目编号"
-        width="160"
-      />
-      <el-table-column
-        prop="projectName"
-        label="项目名称"
+        prop="yearNo"
+        label="所属年度"
         width="120"
       />
       <el-table-column
-        prop="publicAmt"
-        label="发行金额"
+        prop="holidayName"
+        label="假日名称"
+        width="200"
+      />
+      <el-table-column
+        prop="startDate"
+        label="开始日期"
         width="120"
       />
       <el-table-column
-        prop="projectType"
-        label="项目类型"
-        width="120"
-      />
-      <el-table-column
-        prop="assetType"
-        label="资产类型"
-        width="120"
-      />
-      <el-table-column
-        prop="tradeMarket"
-        label="交易场所"
-        width="120"
-      />
-      <el-table-column
-        prop="status"
-        label="项目状态"
+        prop="endDate"
+        label="截止日期"
         width="120"
       />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">
-          <el-button size="mini" type="view" @click="onShowView(row,$index)"> 查看资产 </el-button>
+          <el-button size="mini" type="view" @click="onShowView(row,$index)"> 查看 </el-button>
         </template>
       </el-table-column>
     </el-table>

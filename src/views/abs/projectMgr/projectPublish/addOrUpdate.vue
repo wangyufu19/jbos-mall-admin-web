@@ -109,7 +109,16 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col span="24">
+          <el-col span="12">
+            <el-form-item label="法定到期日" prop="lawEndDate">
+              <el-date-picker
+                v-model="formObj.lawEndDate"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="选择日期"/>
+            </el-form-item>
+          </el-col>
+          <el-col span="12">
             <el-form-item label="是否循环购买" prop="isRecycleBuy">
               <el-select
                 v-model="formObj.isRecycleBuy"
@@ -218,7 +227,7 @@
            <CostItem :editModeEnabled="editModeEnabled" :datas="costItems"/>
         </el-tab-pane>
         <el-tab-pane  label="重要事件" name="eventInfo">
-           <EvemtItem :editModeEnabled="editModeEnabled" :datas="eventItems"/>
+           <EvemtItem :editModeEnabled="editModeEnabled" :payItems="payItems" :eventItems="eventItems"/>
         </el-tab-pane>
       </el-tabs>
       </el-card>
@@ -293,7 +302,9 @@
               packetDate: [{ required: true, message: '封包日期必须填写', trigger: 'change' }],
               irtStartDate: [{ required: true, message: '利息起算日必须填写', trigger: 'change' }],
               publicDate: [{ required: true, message: '发行日期必须填写', trigger: 'change' }],
-              endDate: [{ required: true, message: '结束必须填写', trigger: 'change' }],
+              endDate: [{ required: true, message: '结束日期必须填写', trigger: 'change' }],
+              lawEndDate: [{ required: true, message: '法定到期日必须填写', trigger: 'change' }],
+              
               innerPrincipalAcctNo: [{ required: true, message: '内部账本金清算账号必须填写', trigger: 'change' }],
               innerInterestAcctNo: [{ required: true, message: '内部账利息清算账号必须填写', trigger: 'change' }],
               outerPrincipalAcctNo: [{ required: true, message: '外部账本金收款账号必须填写', trigger: 'change' }],
@@ -301,6 +312,7 @@
             },
             layerItems:[],
             costItems:[],
+            payItems:[],
             eventItems:[],
             editModeEnabled: true
           }
