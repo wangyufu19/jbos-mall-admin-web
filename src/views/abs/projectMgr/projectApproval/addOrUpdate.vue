@@ -1,10 +1,10 @@
 <template>
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="80%" :append-to-body="true">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="90%" :append-to-body="true">
       <el-form 
         ref="formObj" 
         :model="formObj" 
         :rules="rules" 
-        label-width="120px" 
+        label-width="160px" 
         :label-position="right" 
         class="demo-ruleForm">
       <el-card>
@@ -70,16 +70,129 @@
         </el-row>
         <el-row>
           <el-col span="12">
-            <el-form-item label="立项日期" prop="applyTime">
+            <el-form-item label="封包日期" prop="packetDate">
               <el-date-picker
-                :disabled="true"
-                v-model="formObj.applyTime"
+                v-model="formObj.packetDate"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="选择日期"/>
+            </el-form-item>
+          </el-col>
+          <el-col span="12">
+            <el-form-item label="利息起算日" prop="irtStartDate">
+              <el-date-picker
+                v-model="formObj.irtStartDate"
                 type="date"
                 value-format="yyyy-MM-dd"
                 placeholder="选择日期"/>
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row>
+          <el-col span="12">
+            <el-form-item label="发行日期" prop="publicDate">
+              <el-date-picker
+                v-model="formObj.publicDate"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="选择日期"/>
+            </el-form-item>
+          </el-col>
+          <el-col span="12">
+            <el-form-item label="结束日期" prop="endDate">
+              <el-date-picker
+                v-model="formObj.endDate"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="选择日期"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col span="12">
+            <el-form-item label="法定到期日" prop="lawEndDate">
+              <el-date-picker
+                v-model="formObj.lawEndDate"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="选择日期"/>
+            </el-form-item>
+          </el-col>
+          <el-col span="12">
+            <el-form-item label="登记日期" prop="approvalDate">
+              <el-date-picker
+                :disabled="true"
+                v-model="formObj.approvalDate"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="选择日期"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col span="12">
+            <el-form-item label="是否循环购买" prop="isRecycleBuy">
+              <el-select
+                v-model="formObj.isRecycleBuy"
+                clearable
+                :loading="loading"
+                placeholder="请选择">
+                <el-option
+                    v-for="item in datas"
+                    :key="item.DICTID"
+                    :label="item.DICTNAME"
+                    :value="item.DICTID"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col span="12">
+            <el-form-item label="循环购买开始日期" prop="buySdate">
+              <el-date-picker
+                v-model="formObj.buySdate"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="选择日期"/>
+            </el-form-item>
+          </el-col>
+          <el-col span="12">
+            <el-form-item label="循环购买截止日期" prop="buyEdate">
+              <el-date-picker
+                v-model="formObj.buyEdate"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="选择日期"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        </el-tab-pane>
+        <el-tab-pane  label="账户信息" name="acctInfo">
+          <el-row>
+            <el-col span="12">
+              <el-form-item label="内部账本金清算账号" prop="innerPrincipalAcctNo">
+                <el-input v-model="formObj.innerPrincipalAcctNo"/>
+              </el-form-item>
+            </el-col>
+            <el-col span="12">
+              <el-form-item  label="内部账利息清算账号" prop="innerInterestAcctNo">
+                  <el-input v-model="formObj.innerInterestAcctNo"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col span="12">
+              <el-form-item label="外部账本金收款账号" prop="outerPrincipalAcctNo">
+                <el-input v-model="formObj.outerPrincipalAcctNo"/>
+              </el-form-item>
+            </el-col>
+            <el-col span="12">
+              <el-form-item  label="外部账利息收款账号" prop="outerInterestAcctNo">
+                  <el-input v-model="formObj.outerInterestAcctNo"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-tab-pane>
         <el-tab-pane  label="准入模型" name="entryModule">
            <EntryItem :editModeEnabled="editModeEnabled" :datas="entryItems"/>
@@ -157,6 +270,12 @@
                 { required: true, message: '最高限额必须填写', trigger: 'change' },
                 { type:'number',message: '最高限额必须数值',trigger: 'change' },
               ],
+              packetDate: [{ required: true, message: '封包日期必须填写', trigger: 'change' }],
+              irtStartDate: [{ required: true, message: '利息起算日必须填写', trigger: 'change' }],
+              publicDate: [{ required: true, message: '发行日期必须填写', trigger: 'change' }],
+              endDate: [{ required: true, message: '结束日期必须填写', trigger: 'change' }],
+              lawEndDate: [{ required: true, message: '法定到期日必须填写', trigger: 'change' }],
+              
               innerPrincipalAcctNo: [{ required: true, message: '内部账本金清算账号必须填写', trigger: 'change' }],
               innerInterestAcctNo: [{ required: true, message: '内部账利息清算账号必须填写', trigger: 'change' }],
               outerPrincipalAcctNo: [{ required: true, message: '外部账本金收款账号必须填写', trigger: 'change' }],

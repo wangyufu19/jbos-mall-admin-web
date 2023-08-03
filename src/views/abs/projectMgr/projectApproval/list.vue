@@ -69,6 +69,11 @@
         label="项目状态"
         width="120"
       />
+      <el-table-column
+        prop="approvalDate"
+        label="登记日期"
+        width="120"
+      />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">
           <el-button size="mini" type="view" @click="onShowView(row,$index)"> 查看资产 </el-button>

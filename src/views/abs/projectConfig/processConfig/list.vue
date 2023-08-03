@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <div slot="header" class="clearfix">
-      <span>项目流程配置列表</span>
+      <span>流程配置列表</span>
     </div>
     <div class="filter-container">
       <el-select

@@ -111,9 +111,9 @@
             dialogFormVisible: false,
             dialogStatus: '',
             textMap: {
-              create: '项目流程配置-配置',
-              update: '项目流程配置-修改',
-              view: '项目流程配置-查看'
+              create: '流程配置-配置',
+              update: '流程配置-修改',
+              view: '流程配置-查看'
             },
             formObj: {
               projectNo: '',
