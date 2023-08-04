@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="80%" :append-to-body="true">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="60%" :append-to-body="true">
       <el-form 
         ref="formObj" 
         :model="formObj" 
@@ -10,9 +10,9 @@
       <el-card>
         <el-row>
           <el-col span="12">
-            <el-form-item  label="项目名称" prop="projectName">
+            <el-form-item  label="项目名称" prop="projectNo">
               <el-select
-                v-model="formObj.projectName"
+                v-model="formObj.projectNo"
                 clearable
                 :loading="loading"
                 placeholder="请选择">
@@ -25,67 +25,29 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col span="12">
-            <el-form-item  label="流程类型" prop="processType">
-              <el-select
-                v-model="formObj.processType"
-                clearable
-                :loading="loading"
-                placeholder="请选择">
-                <el-option
-                    v-for="item in datas"
-                    :key="item.DICTID"
-                    :label="item.DICTNAME"
-                    :value="item.DICTID"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          </el-row>
-          <el-row>
-          <el-col span="12">
-            <el-form-item label="任务名称" prop="taskName">
-              <el-input v-model="formObj.taskName"/>
-            </el-form-item>
-          </el-col>
-          <el-col span="12">
-            <el-form-item  label="任务人员" prop="taskOperator">
-                <el-input v-model="formObj.taskOrg"/>
-            </el-form-item>
-          </el-col>
-          </el-row>
-          <el-row>
-          <el-col span="24">
-            <el-form-item  label="推送类型" prop="pushType">
-              <el-select
-                v-model="formObj.pushType"
-                clearable
-                :loading="loading"
-                placeholder="请选择">
-                <el-option
-                    v-for="item in datas"
-                    :key="item.DICTID"
-                    :label="item.DICTNAME"
-                    :value="item.DICTID"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          </el-row>
-          <el-row>
-          <el-col span="24">
-            <el-form-item label="推送机构" prop="pushOrg">
-              <el-input v-model="formObj.pushOrg"/>
-            </el-form-item>
-          </el-col>
-          </el-row>
+        </el-row>
+        <el-row>
+        <el-col span="24">
+          <el-form-item  label="" prop="assetType">
+          <el-upload
+            class="upload-demo"
+            drag
+            action="https://jsonplaceholder.typicode.com/posts/"
+            multiple>
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            <div class="el-upload__tip" slot="tip">只能上传xls/xlsx文件</div>
+          </el-upload>
+        </el-form-item>
+        </el-col>
+        </el-row>
       </el-card>
       </el-form>
       
   
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button v-if="this.formObj.bizState==='10'&&dialogStatus !== 'view'" type="primary" @click="dialogStatus==='create'?onAdd():onUpdate()">确定 </el-button>
+        <el-button type="primary" @click="dialogStatus==='packet'?onAdd():onUpdate()">确定 </el-button>
       </div>
 
     </el-dialog>
@@ -95,7 +57,7 @@
       import { mapGetters } from 'vuex'
   
       export default {
-        name: "addOrUpdate",
+        name: "packet",
         components: {
         
         },
@@ -106,35 +68,21 @@
         },
         data() {
           return {
-            activeName: 'buy',
             dialogFormVisible: false,
             dialogStatus: '',
             textMap: {
-              create: '流程配置-配置',
-              update: '流程配置-修改',
-              view: '流程配置-查看'
+              packet: '资产包管理-封包',
+              view: '资产包管理-查看'
             },
             formObj: {
               projectNo: '',
-              projectName:'',
-              projectType:'',
-              assetType: '',
-              projectAmt: 0.00,
-              projectMaxAmt: 0.00,
-              applyTime: '',
-              purpose: '',
-              bizState:'10'
+              projectName: '',
             },
             loading: false,
             rules: {
-              projectName: [{ required: true, message: '项目名称必须填写', trigger: 'change' }],
-              processType: [{ required: true, message: '流程类型必须填写', trigger: 'change' }],
-              taskName: [{ required: true, message: '任务名称必须填写', trigger: 'change' }],
-              taskOperator: [{ required: true, message: '任务人员必须填写', trigger: 'change' }]
-            },
-            buyProcessItems:[],
-            backBuyProcessItems:[],
-            editModeEnabled: true
+              projectNo: [{ required: true, message: '项目名称必须填写', trigger: 'change' }],
+
+            }
           }
         },
         methods: {
@@ -142,31 +90,17 @@
             this.dialogStatus = dialogStatus
             this.dialogFormVisible = true
 
-            if (dialogStatus === 'create') {
+            if (dialogStatus === 'packet') {
               this.formObj = {
                 id: undefined,
                 projectNo: '',
-                projectName: '',
-                projectType: '',
-                assetType: '',
-                projectAmt: 0.00,
-                projectMaxAmt: 0.00,
-                applyTime:  new Date (),
-                purpose: '',
-                bizState:'10'
+                projectName: ''
               }
               this.$nextTick(() => {
                 this.$refs['formObj'].clearValidate()
               })
 
-            } else {
-              this.getInfoById(formObj.id)
-            }
-          },
-
-          getInfoById(id){
-            this.loading = true
-           
+            } 
           },
 
           onAdd() {

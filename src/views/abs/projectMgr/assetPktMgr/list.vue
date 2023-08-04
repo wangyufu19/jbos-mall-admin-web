@@ -1,18 +1,17 @@
 <template>
   <el-card>
     <div slot="header" class="clearfix">
-      <span>流程配置</span>
+      <span>资产包列表</span>
     </div>
     <div class="filter-container">
-
-      <el-input v-model="search.projectNameS" placeholder="项目名称" class="filter-item" style="width: 200px;" />
+      <el-input v-model="search.projectNoS" placeholder="项目名称" class="filter-item" style="width: 200px;" />
 
       <el-button size="medium" type="primary" @click="onSearch">查询</el-button>
       <el-button size="medium" type="primary" @click="onReset">重置</el-button>
     </div>
     <div class="filter-container">
-      <el-button size="medium" style="margin-left: 10px;" type="primary" @click="onShowAdd">配置</el-button>
- 
+      <el-button size="medium" style="margin-left: 10px;" type="primary" @click="onPacket">封包</el-button>
+      <el-button size="medium" style="margin-left: 10px;" type="primary" @click="onUnPacket">解包</el-button>
     </div>
     <el-table
       v-loading="listLoading"
@@ -26,64 +25,48 @@
       <el-table-column
         prop="projectNo"
         label="项目编号"
-        width="120"
+        width="160"
       />
       <el-table-column
         prop="projectName"
         label="项目名称"
-        width="160"
+        width="120"
       />
       <el-table-column
-        prop="processType"
-        label="流程类型"
-        width="100"
+        prop="totalAmt"
+        label="封包金额"
+        width="120"
       />
       <el-table-column
-        prop="taskName"
-        label="任务名称"
-        width="100"
-      />
-      <el-table-column
-        prop="taskOperator"
-        label="任务人员"
-        width="100"
-      />
-      <el-table-column
-        prop="pushType"
-        label="推送类型"
-        width="100"
-      />
-      <el-table-column
-        prop="pushOrg"
-        label="推送机构"
+        prop="packetDate"
+        label="封包日期"
         width="200"
       />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">
-          <el-button size="mini" type="view" @click="onShowView(row,$index)"> 查看 </el-button>
+          <el-button size="mini" type="view" @click="onShowView(row,$index)"> 查看资产 </el-button>
         </template>
       </el-table-column>
     </el-table>
     <!--分页信息-->
     <pagination v-show="total>0" :total="total" :page.sync="queryPage.page" :limit.sync="queryPage.limit" @pagination="onList" />
-    <!--新增或编辑-->
-    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="onList" />
+    <Packet v-if="packetVisible" ref="packet" @refreshDataList="onList" />
   </el-card>
 </template>
 
 <script>
-
-import { getProjectPacketList,packet,unPacket} from '@/api/abs/assetPoolMgr'
+import { Message } from 'element-ui'
+import {getToken} from "@/utils/global";
 import Pagination from '@/components/Pagination'
-import AddOrUpdate from './addOrUpdate'
+import Packet from './packet.vue'
 
 export default {
   name: 'List',
-  components: { Pagination,AddOrUpdate},
+  components: { Pagination,Packet},
   data() {
     return {
       search: {
-        projectNameS: ''
+        projectNoS: ''
       },
       datas: [],
       listLoading: false,
@@ -92,7 +75,7 @@ export default {
         page: 1,
         limit: 20
       },
-      addOrUpdateVisible: false
+      packetVisible: false
     }
   },
   created() {
@@ -101,7 +84,7 @@ export default {
   methods: {
     onSearch() {
       this.queryPage.page = 1
-      this.queryPage.projectNameS = this.search.projectNameS
+      this.queryPage.projectNoS = this.search.projectNoS
       this.onList()
     },
     onReset() {
@@ -119,34 +102,11 @@ export default {
       //   this.listLoading = false
       // })
     },
-    onShowAdd() {
-      this.addOrUpdateVisible = true
-      const formObj = Object()
-      this.$nextTick(() => {
-        this.$refs['addOrUpdate'].init(formObj, 'create')
-      })
-    },
-    onShowUpdate(row) {
+    onPacket(row){
       const formObj = Object.assign({}, row)
-      this.addOrUpdateVisible = true
+      this.packetVisible = true
       this.$nextTick(() => {
-        this.$refs['addOrUpdate'].init(formObj, 'update')
-      })
-    },
-    onDeleteOne(row, index) {
-      deleteOne({ id: row.id, bizNo: row.bizNo }).then(response => {
-        this.$message({
-          message: '操作成功',
-          type: 'success'
-        })
-        this.datas.splice(index, 1)
-      })
-    },
-    onShowView(row){
-      const formObj = Object.assign({}, row)
-      this.addOrUpdateVisible = true
-      this.$nextTick(() => {
-        this.$refs['addOrUpdate'].init(formObj, 'view')
+        this.$refs['packet'].init(formObj, 'packet')
       })
     }
   }

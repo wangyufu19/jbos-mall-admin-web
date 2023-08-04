@@ -40,9 +40,9 @@
             </el-form-item>
           </el-col>
           <el-col span="12">
-            <el-form-item label="资产类型" prop="assetType">
+            <el-form-item label="基础资产" prop="basicAsset">
               <el-select
-                v-model="formObj.assetType"
+                v-model="formObj.basicAsset"
                 clearable
                 :loading="loading"
                 placeholder="请选择">
@@ -90,9 +90,9 @@
         </el-row>
         <el-row>
           <el-col span="12">
-            <el-form-item label="发行日期" prop="publicDate">
+            <el-form-item label="发行日期" prop="issueDate">
               <el-date-picker
-                v-model="formObj.publicDate"
+                v-model="formObj.issueDate"
                 type="date"
                 value-format="yyyy-MM-dd"
                 placeholder="选择日期"/>
@@ -249,7 +249,7 @@
               projectNo: '',
               projectName:'',
               projectType:'',
-              assetType: '',
+              basicAsset: '',
               projectAmt: 0.00,
               projectMaxAmt: 0.00,
               applyTime: '',
@@ -261,7 +261,7 @@
               projectNo: [{ required: true, message: '项目编号必须填写', trigger: 'change' }],
               projectName: [{ required: true, message: '项目名称必须填写', trigger: 'change' }],
               projectType: [{ required: true, message: '项目类型必须填写', trigger: 'change' }],
-              assetType: [{ required: true, message: '资产类型必须填写', trigger: 'change' }],
+              basicAsset: [{ required: true, message: '基础资产必须填写', trigger: 'change' }],
               projectAmt: [
                 { required: true, message: '项目金额必须填写',trigger: 'change' },
                 { type:'number',message: '项目金额必须数值',trigger: 'change' },

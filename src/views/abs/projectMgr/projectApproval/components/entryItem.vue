@@ -17,7 +17,7 @@
             @row-click="onRowClick"
         >
             <el-table-column
-            prop="entryStats"
+            prop="entrySte"
             label="状态"
             width="100"
             >

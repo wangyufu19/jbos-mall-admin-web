@@ -29,27 +29,27 @@
             </el-table-column>
 
             <el-table-column
-            prop="teamOrg"
+            prop="orgId"
             label="所属机构"
             width="200"
             >
             <editable-cell slot-scope="{row}"
                             :can-edit="editModeEnabled"
-                            v-model="row.teamOrg">
-                <span slot="content">{{row.teamOrg}}</span>
+                            v-model="row.orgId">
+                <span slot="content">{{row.orgId}}</span>
             </editable-cell>
             </el-table-column>
 
             <el-table-column
-            prop="teamName"
+            prop="empName"
             label="人员名称"
             width="200"
             >
             <editable-cell slot-scope="{row}"
                             :can-edit="editModeEnabled"
-                            v-model="row.teamName"
+                            v-model="row.empName"
             >
-                <span slot="content">{{row.teamName}}</span>
+                <span slot="content">{{row.empName}}</span>
             </editable-cell>
             </el-table-column>
 

@@ -22,7 +22,7 @@
       <el-button size="medium" type="primary" @click="onReset">重置</el-button>
     </div>
     <div class="filter-container">
-      <el-button size="medium" style="margin-left: 10px;" type="primary" @click="onShowAdd">新建</el-button>
+      <el-button size="medium" style="margin-left: 10px;" type="primary" @click="onShowAdd">配置</el-button>
     </div>
     <el-table
       v-loading="listLoading"

@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="80%" :append-to-body="true">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="60%" :append-to-body="true">
       <el-form 
         ref="formObj" 
         :model="formObj" 
@@ -26,9 +26,16 @@
             </el-form-item>
           </el-col>
           <el-col span="12">
-            <el-form-item  label="流程类型" prop="processType">
+            <el-form-item  label="项目金额" prop="projectAmt">
+              <el-input v-model="formObj.projectAmt" :disabled="true"/>
+            </el-form-item>
+          </el-col>
+          </el-row>
+          <el-row>
+          <el-col span="12">
+            <el-form-item label="业务品种" prop="loanType">
               <el-select
-                v-model="formObj.processType"
+                v-model="formObj.loanType"
                 clearable
                 :loading="loading"
                 placeholder="请选择">
@@ -42,43 +49,8 @@
             </el-form-item>
           </el-col>
           </el-row>
-          <el-row>
-          <el-col span="12">
-            <el-form-item label="任务名称" prop="taskName">
-              <el-input v-model="formObj.taskName"/>
-            </el-form-item>
-          </el-col>
-          <el-col span="12">
-            <el-form-item  label="任务人员" prop="taskOperator">
-                <el-input v-model="formObj.taskOrg"/>
-            </el-form-item>
-          </el-col>
-          </el-row>
-          <el-row>
-          <el-col span="24">
-            <el-form-item  label="推送类型" prop="pushType">
-              <el-select
-                v-model="formObj.pushType"
-                clearable
-                :loading="loading"
-                placeholder="请选择">
-                <el-option
-                    v-for="item in datas"
-                    :key="item.DICTID"
-                    :label="item.DICTNAME"
-                    :value="item.DICTID"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          </el-row>
-          <el-row>
-          <el-col span="24">
-            <el-form-item label="推送机构" prop="pushOrg">
-              <el-input v-model="formObj.pushOrg"/>
-            </el-form-item>
-          </el-col>
-          </el-row>
+         
+        
       </el-card>
       </el-form>
       
@@ -95,7 +67,7 @@
       import { mapGetters } from 'vuex'
   
       export default {
-        name: "addOrUpdate",
+        name: "analysis",
         components: {
         
         },
@@ -110,27 +82,20 @@
             dialogFormVisible: false,
             dialogStatus: '',
             textMap: {
-              create: '流程配置-配置',
-              update: '流程配置-修改',
-              view: '流程配置-查看'
+              analysis: '资产池分析-项目分析'
             },
             formObj: {
-              projectNo: '',
-              projectName:'',
-              projectType:'',
-              assetType: '',
-              projectAmt: 0.00,
-              projectMaxAmt: 0.00,
-              applyTime: '',
-              purpose: '',
-              bizState:'10'
+              projectName: '',
+              projectAmt:'',
+              loanType: '',
+              endDate: ''
             },
             loading: false,
             rules: {
               projectName: [{ required: true, message: '项目名称必须填写', trigger: 'change' }],
-              processType: [{ required: true, message: '流程类型必须填写', trigger: 'change' }],
-              taskName: [{ required: true, message: '任务名称必须填写', trigger: 'change' }],
-              taskOperator: [{ required: true, message: '任务人员必须填写', trigger: 'change' }]
+              projectAmt: [{ required: true, message: '项目金额必须填写', trigger: 'change' }],
+              loanType: [{ required: true, message: '业务品种必须填写', trigger: 'change' }],
+              endDate: [{ required: true, message: '截止日期必须填写', trigger: 'change' }]
             },
             buyProcessItems:[],
             backBuyProcessItems:[],
@@ -142,7 +107,7 @@
             this.dialogStatus = dialogStatus
             this.dialogFormVisible = true
 
-            if (dialogStatus === 'create') {
+            if (dialogStatus === 'analysis') {
               this.formObj = {
                 id: undefined,
                 projectNo: '',

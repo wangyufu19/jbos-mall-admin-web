@@ -1,17 +1,17 @@
 <template>
   <el-card>
     <div slot="header" class="clearfix">
-      <span>资产池列表</span>
+      <span>基础资产池</span>
     </div>
     <div class="filter-container">
-      <el-input v-model="search.projectNoS" placeholder="项目名称" class="filter-item" style="width: 200px;" />
+      <el-input v-model="search.acctNoS" placeholder="贷款账号" class="filter-item" style="width: 200px;" />
 
       <el-button size="medium" type="primary" @click="onSearch">查询</el-button>
       <el-button size="medium" type="primary" @click="onReset">重置</el-button>
     </div>
     <div class="filter-container">
-      <el-button size="medium" style="margin-left: 10px;" type="primary" @click="onPacket">封包</el-button>
-      <el-button size="medium" style="margin-left: 10px;" type="primary" @click="onUnPacket">解包</el-button>
+      <el-button size="medium" style="margin-left: 10px;" type="primary" @click="onInPool">入池</el-button>
+      <el-button size="medium" style="margin-left: 10px;" type="primary" @click="onOutPool">出池</el-button>
     </div>
     <el-table
       v-loading="listLoading"
@@ -23,47 +23,90 @@
       style="width: 100%"
     >
       <el-table-column
-        prop="projectNo"
-        label="项目编号"
+        prop="acctNo"
+        label="贷款账号"
         width="160"
       />
       <el-table-column
-        prop="projectName"
-        label="项目名称"
+        prop="customName"
+        label="客户名称"
         width="120"
       />
       <el-table-column
-        prop="totalAmt"
-        label="封包金额"
-        width="120"
+        prop="sex"
+        label="性别"
+        width="60"
       />
       <el-table-column
-        prop="packetDate"
-        label="封包日期"
+        prop="certId"
+        label="身份证号码"
         width="200"
+      />
+      <el-table-column
+        prop="monthIncome"
+        label="月收入"
+        width="80"
+      />
+      <el-table-column
+        prop="grantLimit"
+        label="授信额度"
+        width="100"
+      />
+      <el-table-column
+        prop="surplusLimit"
+        label="剩余额度"
+        width="100"
+      />
+      <el-table-column
+        prop="loanSurplusAmt"
+        label="贷款余额"
+        width="100"
+      />
+      <el-table-column
+        prop="loanSdate"
+        label="贷款放款日"
+        width="100"
+      />
+      <el-table-column
+        prop="loanEdate"
+        label="贷款到期日"
+        width="100"
+      />
+      <el-table-column
+        prop="creditRate"
+        label="信用评级"
+        width="80"
+      />
+      <el-table-column
+        prop="fiveClassify"
+        label="五级分类"
+        width="80"
+      />
+      <el-table-column
+        prop="loanType"
+        label="业务品种"
+        width="80"
       />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">
-          <el-button size="mini" type="view" @click="onShowView(row,$index)"> 查看资产 </el-button>
+          <el-button size="mini" type="view" @click="onShowView(row,$index)"> 查看 </el-button>
         </template>
       </el-table-column>
     </el-table>
     <!--分页信息-->
     <pagination v-show="total>0" :total="total" :page.sync="queryPage.page" :limit.sync="queryPage.limit" @pagination="onList" />
-
+    <InPool v-if="inPoolVisible" ref="inPool" @refreshDataList="onList" />
   </el-card>
 </template>
 
 <script>
-import { Message } from 'element-ui'
-import {getToken} from "@/utils/global";
-import { getProjectPacketList,packet,unPacket} from '@/api/abs/assetPoolMgr'
+import request from '@/utils/request'
 import Pagination from '@/components/Pagination'
-
+import InPool from './inPool.vue'
 
 export default {
   name: 'List',
-  components: { Pagination},
+  components: { Pagination,InPool},
   data() {
     return {
       search: {
@@ -75,7 +118,8 @@ export default {
       queryPage: {
         page: 1,
         limit: 20
-      }
+      },
+      inPoolVisible: false
     }
   },
   created() {
@@ -93,20 +137,24 @@ export default {
       }
     },
     onList() {
-      // this.listLoading = true
-      // this.queryPage.isPage = 'true'
-      // getProjectPacketList(this.queryPage).then(response => {
-      //   const res=response.data
-      //   this.datas = res.data.list
-      //   this.total = res.data.total
-      //   this.listLoading = false
-      // })
+      this.listLoading = true
+      this.queryPage.isPage = 'true'
+      request({
+        url: '/admin/basicAsset/getBasicAssetList',
+        method: 'get',
+        params: this.queryPage 
+      }).then(response => {
+        const res=response.data
+        this.datas = res.data.list
+        this.total = res.data.total
+        this.listLoading = false
+      })
     },
-    onShowView(row){
+    onInPool(row){
       const formObj = Object.assign({}, row)
-      this.addOrUpdateVisible = true
+      this.inPoolVisible = true
       this.$nextTick(() => {
-        this.$refs['addOrUpdate'].init(formObj, 'view')
+        this.$refs['inPool'].init(formObj, 'inPool')
       })
     }
   }

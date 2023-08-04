@@ -11,7 +11,7 @@
                 <el-tab-pane  label="资金划付" name="assetAllocInfo">
                     <AssetAllocInfo/>
                 </el-tab-pane>
-                <el-tab-pane  label="持续购买" name="assetBuyInfo">
+                <el-tab-pane  label="购买清单" name="assetBuyInfo">
                     <AssetBuyInfo/>
                 </el-tab-pane>
             </el-tabs>
