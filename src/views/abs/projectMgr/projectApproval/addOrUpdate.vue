@@ -31,7 +31,7 @@
                 :loading="loading"
                 placeholder="请选择">
                 <el-option
-                    v-for="item in datas"
+                    v-for="item in proejctTypeItems"
                     :key="item.DICTID"
                     :label="item.DICTNAME"
                     :value="item.DICTID"
@@ -47,7 +47,7 @@
                 :loading="loading"
                 placeholder="请选择">
                 <el-option
-                    v-for="item in datas"
+                    v-for="item in basicAssetItems"
                     :key="item.DICTID"
                     :label="item.DICTNAME"
                     :value="item.DICTID"
@@ -118,18 +118,6 @@
                 placeholder="选择日期"/>
             </el-form-item>
           </el-col>
-          <el-col span="12">
-            <el-form-item label="登记日期" prop="approvalDate">
-              <el-date-picker
-                :disabled="true"
-                v-model="formObj.approvalDate"
-                type="date"
-                value-format="yyyy-MM-dd"
-                placeholder="选择日期"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
           <el-col span="12">
             <el-form-item label="是否循环购买" prop="isRecycleBuy">
               <el-select
@@ -219,6 +207,7 @@
   
   <script>
       import { mapGetters } from 'vuex'
+      import { getCacheDictCodeList } from '@/api/sm/dict'
       import EntryItem from './components/entryItem'
       import AssetItem from './components/assetItem'
       import TeamItem from './components/teamItem'
@@ -272,7 +261,7 @@
               ],
               packetDate: [{ required: true, message: '封包日期必须填写', trigger: 'change' }],
               irtStartDate: [{ required: true, message: '利息起算日必须填写', trigger: 'change' }],
-              publicDate: [{ required: true, message: '发行日期必须填写', trigger: 'change' }],
+              issueDate: [{ required: true, message: '发行日期必须填写', trigger: 'change' }],
               endDate: [{ required: true, message: '结束日期必须填写', trigger: 'change' }],
               lawEndDate: [{ required: true, message: '法定到期日必须填写', trigger: 'change' }],
               
@@ -281,6 +270,8 @@
               outerPrincipalAcctNo: [{ required: true, message: '外部账本金收款账号必须填写', trigger: 'change' }],
               outerInterestAcctNo: [{ required: true, message: '外部账利息收款账号必须填写', trigger: 'change' }]
             },
+            proejctTypeItems:[],
+            basicAssetItems:[],
             entryItems:[],
             assetItems:[],
             teamItems:[],
@@ -323,12 +314,24 @@
               this.$nextTick(() => {
                 this.$refs['formObj'].clearValidate()
               })
-
             } else {
               this.getInfoById(formObj.id)
             }
+            this.initBusinessDict('ABS_PROJECTTYPE')
+            this.initBusinessDict('ABS_ASSETTYPE')
           },
-
+          initBusinessDict(typeId){
+            this.loading = true
+            getCacheDictCodeList({typeId: typeId}).then(response => {
+              const res = response.data
+              if(typeId==='ABS_PROJECTTYPE'){
+                this.proejctTypeItems = res.data
+              }else if(typeId==='ABS_ASSETTYPE'){
+                this.basicAssetItems = res.data
+              }
+              this.loading = false
+            })
+          },
           getInfoById(id){
             this.loading = true
            

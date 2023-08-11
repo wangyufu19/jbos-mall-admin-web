@@ -11,7 +11,7 @@
     </div>
     <div class="filter-container">
       <el-button size="medium" style="margin-left: 10px;" type="primary" @click="onInPool">入池</el-button>
-      <el-button size="medium" style="margin-left: 10px;" type="primary" @click="onOutPool">出池</el-button>
+
     </div>
     <el-table
       v-loading="listLoading"
@@ -73,6 +73,21 @@
         width="100"
       />
       <el-table-column
+        prop="loanRate"
+        label="贷款利率"
+        width="100"
+      />
+      <el-table-column
+        prop="refundType"
+        label="还款方式"
+        width="100"
+      />
+      <el-table-column
+        prop="payIrtType"
+        label="付息方式"
+        width="100"
+      />
+      <el-table-column
         prop="creditRate"
         label="信用评级"
         width="80"
@@ -87,8 +102,9 @@
         label="业务品种"
         width="80"
       />
-      <el-table-column label="操作" align="center">
+      <el-table-column label="操作" align="center" width="160" fixed="right">
         <template slot-scope="{row,$index}">
+          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="onOutPool(row,$index)"> 出池 </el-button>
           <el-button size="mini" type="view" @click="onShowView(row,$index)"> 查看 </el-button>
         </template>
       </el-table-column>
@@ -110,7 +126,7 @@ export default {
   data() {
     return {
       search: {
-        projectNoS: ''
+        acctNoS: ''
       },
       datas: [],
       listLoading: false,
@@ -128,12 +144,12 @@ export default {
   methods: {
     onSearch() {
       this.queryPage.page = 1
-      this.queryPage.projectNoS = this.search.projectNoS
+      this.queryPage.acctNoS = this.search.acctNoS
       this.onList()
     },
     onReset() {
       this.search = {
-        projectNoS: ''
+        acctNoS: ''
       }
     },
     onList() {
@@ -156,7 +172,20 @@ export default {
       this.$nextTick(() => {
         this.$refs['inPool'].init(formObj, 'inPool')
       })
-    }
+    },
+    onOutPool(row, index) {
+      request({
+        url: '/admin/basicAsset/outPool',
+        method: 'post',
+        data: { id: row.id, acctNo: row.acctNo }
+      }).then(response => {
+        this.$message({
+          message: '操作成功',
+          type: 'success'
+        })
+        this.datas.splice(index, 1)
+      })
+    },
   }
 }
 </script>

@@ -51,11 +51,12 @@
 
 <script>
 import { getDictTypeList,deleteDictType,refresh } from '@/api/sm/dict'
+import Pagination from '@/components/Pagination'
 import AddOrUpdate from "./addOrUpdate";
 
 export default {
   name: 'DictType',
-  components: {AddOrUpdate },
+  components: {Pagination,AddOrUpdate },
   data() {
     return {
       search: {
@@ -67,7 +68,7 @@ export default {
       total: 0,
       queryPage: {
         page: 1,
-        limit: 20
+        limit: 10
       },
       addOrUpdateVisible: false
     }
@@ -76,23 +77,28 @@ export default {
     this.getDictTypeList()
   },
   methods: {
-    getDictTypeList() {
-      this.listLoading = true
-      getDictTypeList(this.search).then(response => {
-        const res=response.data
-        this.datas = res.data
-        this.listLoading = false
-      })
-    },
     onSearch() {
+        this.queryPage.page = 1
+        this.queryPage.typeIdS = this.search.typeIdS
+        this.queryPage.typeNameS = this.search.typeNameS
         this.getDictTypeList()
-      },
+    },
     onReset() {
       this.search = {
-        bizNoS: '',
-        bizTypeS: ''
+        typeIdS: '',
+        typeNameS: ''
       }
       this.onSearch()
+    },
+    getDictTypeList() {
+      this.listLoading = true
+      this.queryPage.isPage = 'true'
+      getDictTypeList(this.queryPage).then(response => {
+        const res=response.data
+        this.datas = res.data.list
+        this.total = res.data.total
+        this.listLoading = false
+      })
     },
     onShowAdd() {
       this.addOrUpdateVisible = true

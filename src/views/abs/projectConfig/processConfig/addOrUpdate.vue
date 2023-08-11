@@ -33,7 +33,7 @@
                 :loading="loading"
                 placeholder="请选择">
                 <el-option
-                    v-for="item in datas"
+                    v-for="item in processTypeItems"
                     :key="item.DICTID"
                     :label="item.DICTNAME"
                     :value="item.DICTID"
@@ -93,7 +93,8 @@
   
   <script>
       import { mapGetters } from 'vuex'
-  
+      import { getCacheDictCodeList } from '@/api/sm/dict'
+
       export default {
         name: "addOrUpdate",
         components: {
@@ -132,6 +133,7 @@
               taskName: [{ required: true, message: '任务名称必须填写', trigger: 'change' }],
               taskOperator: [{ required: true, message: '任务人员必须填写', trigger: 'change' }]
             },
+            processTypeItems:[],
             buyProcessItems:[],
             backBuyProcessItems:[],
             editModeEnabled: true
@@ -162,8 +164,18 @@
             } else {
               this.getInfoById(formObj.id)
             }
+            this.initBusinessDict('ABS_FLOWTYPE')
           },
-
+          initBusinessDict(typeId){
+            this.loading = true
+            getCacheDictCodeList({typeId: typeId}).then(response => {
+              const res = response.data
+              if(typeId==='ABS_FLOWTYPE'){
+                this.processTypeItems = res.data
+              }
+              this.loading = false
+            })
+          },
           getInfoById(id){
             this.loading = true
            

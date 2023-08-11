@@ -59,7 +59,7 @@
                 :loading="loading"
                 placeholder="请选择">
                 <el-option
-                    v-for="item in datas"
+                    v-for="item in tradeMarketItems"
                     :key="item.DICTID"
                     :label="item.DICTNAME"
                     :value="item.DICTID"
@@ -232,6 +232,7 @@
   
   <script>
       import { mapGetters } from 'vuex'
+      import { getCacheDictCodeList } from '@/api/sm/dict'
       import LayerItem from './components/layerItem'
       import CostItem from './components/costItem'
       import EvemtItem from './components/eventItem'
@@ -264,6 +265,7 @@
               assetType: '',
               projectAmt: 0.00,
               projectMaxAmt: 0.00,
+              tradeMarket:'',
               packetDate:'',
               irtStartDate:'',
               publicDate: '',
@@ -286,12 +288,14 @@
                 { required: true, message: '最高限额必须填写', trigger: 'change' },
                 { type:'number',message: '最高限额必须数值',trigger: 'change' },
               ],
+              tradeMarket:[{ required: true, message: '交易场所必须填写', trigger: 'change' }],
               packetDate: [{ required: true, message: '封包日期必须填写', trigger: 'change' }],
               irtStartDate: [{ required: true, message: '利息起算日必须填写', trigger: 'change' }],
               publicDate: [{ required: true, message: '发行日期必须填写', trigger: 'change' }],
               endDate: [{ required: true, message: '结束日期必须填写', trigger: 'change' }],
               lawEndDate: [{ required: true, message: '法定到期日必须填写', trigger: 'change' }]
             },
+            tradeMarketItems:[],
             layerItems:[],
             costItems:[],
             payItems:[],
@@ -339,8 +343,18 @@
             } else {
               this.getInfoById(formObj.id)
             }
+            this.initBusinessDict('ABS_TRADEMARKET')
           },
-
+          initBusinessDict(typeId){
+            this.loading = true
+            getCacheDictCodeList({typeId: typeId}).then(response => {
+              const res = response.data
+              if(typeId==='ABS_TRADEMARKET'){
+                this.tradeMarketItems = res.data
+              }
+              this.loading = false
+            })
+          },
           getInfoById(id){
             this.loading = true
            

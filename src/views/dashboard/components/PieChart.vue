@@ -59,6 +59,7 @@ export default {
 
         toolbox: {
           show: true,
+          right: '20px', 
           feature: {
             mark: {show: true},
             dataView: {
