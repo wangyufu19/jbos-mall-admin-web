@@ -51,7 +51,11 @@
                 :loading="loading"
                 placeholder="请选择">
                 <el-option
+<<<<<<< HEAD
                     v-for="item in assetTypeItems"
+=======
+                    v-for="item in basicAssetItems"
+>>>>>>> 85f6bf0a9be30cb7cfb6813da92564270126cc9c
                     :key="item.DICTID"
                     :label="item.DICTNAME"
                     :value="item.DICTID"
@@ -123,7 +127,11 @@
             </el-form-item>
           </el-col>
           <el-col span="12">
+<<<<<<< HEAD
             <el-form-item label="是否循环购买" prop="projectInfo.isRecycleBuy">
+=======
+            <el-form-item label="是否循环购买" prop="isRecycleBuy">
+>>>>>>> 85f6bf0a9be30cb7cfb6813da92564270126cc9c
               <el-select
                 v-model="formObj.projectInfo.isRecycleBuy"
                 clearable
@@ -349,7 +357,10 @@
             }
             this.initBusinessDict('ABS_PROJECTTYPE')
             this.initBusinessDict('ABS_ASSETTYPE')
+<<<<<<< HEAD
             this.initBusinessDict('JBOS_YEANO')
+=======
+>>>>>>> 85f6bf0a9be30cb7cfb6813da92564270126cc9c
           },
           initBusinessDict(typeId){
             this.loading = true
@@ -358,9 +369,13 @@
               if(typeId==='ABS_PROJECTTYPE'){
                 this.proejctTypeItems = res.data
               }else if(typeId==='ABS_ASSETTYPE'){
+<<<<<<< HEAD
                 this.assetTypeItems = res.data
               }else if(typeId==='JBOS_YEANO'){
                 this.yesNoItems = res.data
+=======
+                this.basicAssetItems = res.data
+>>>>>>> 85f6bf0a9be30cb7cfb6813da92564270126cc9c
               }
               this.loading = false
             })
