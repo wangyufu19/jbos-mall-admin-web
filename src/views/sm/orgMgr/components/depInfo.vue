@@ -38,14 +38,15 @@
       />
       <el-table-column
         prop="depChargeName"
-        label="部门负责人"
+        label="负责人"
         width="100"
       />
       <el-table-column
         prop="depDirectorName"
-        label="部门分管领导"
+        label="分管领导"
+        width="100"
       />
-      <el-table-column label="操作" align="center" width="180">
+      <el-table-column label="操作" align="center" width="180" fixed="right">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="onShowUpdate(row)"> 编辑</el-button>
           <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="onDeleteOne(row,$index)"> 删除 </el-button>

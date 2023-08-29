@@ -21,11 +21,26 @@
             label="资产品种"
             width="120"
             >
-            <editable-cell slot-scope="{row}"
-                            :can-edit="editModeEnabled"
-                            v-model="row.assetType">
-                <span slot="content">{{row.assetType}}</span>
-            </editable-cell>
+            <editable-cell 
+         slot-scope="{row}" 
+         editable-component="el-select"
+         :can-edit="editModeEnabled"
+         close-event="change"
+         v-model="row.assetType">
+         
+          <el-tag size="medium" 
+                  slot="content">
+                  {{row.assetType}}
+      
+          </el-tag>
+
+          <template slot="edit-component-slot">
+
+            <el-option v-for="item in assetTypeItems " :key="item.DICTID" :label="item.DICTNAME" :value="item.DICTID">
+			</el-option>
+
+          </template>
+        </editable-cell>
 
             </el-table-column>
             <el-table-column
@@ -39,6 +54,18 @@
                             editable-component="el-input-number"
             >
                 <span slot="content">{{row.amount}}</span>
+            </editable-cell>
+            </el-table-column>
+            <el-table-column
+            prop="assetArea"
+            label="资产区域"
+            width="650"
+            >
+            <editable-cell slot-scope="{row}"
+                            :can-edit="editModeEnabled"
+                            v-model="row.assetArea"
+            >
+                <span slot="content">{{row.assetArea}}</span>
             </editable-cell>
             </el-table-column>
             <el-table-column
@@ -57,6 +84,7 @@
 </template>
 <script>
     import EditableCell from '@/components/EditableCell'
+    import { getCacheDictCodeList } from '@/api/sm/dict'
 
  
     export default {
@@ -78,11 +106,25 @@
                 listLoading: false,
                 loading: false,
                 currentRow:'',
-                currentRowIndex: ''
+                currentRowIndex: '',
+                assetTypeItems: [],
             }
         },
+        created() {
+            this.initBusinessDict('ABS_ASSETTYPE')
+
+        },
         methods: {
-          
+            initBusinessDict(typeId){
+                this.loading = true
+                getCacheDictCodeList({typeId: typeId}).then(response => {
+                    const res = response.data
+                    if(typeId==='ABS_ASSETTYPE'){
+                        this.assetTypeItems = res.data
+                    }
+                    this.loading = false
+                })
+            },
             tableRowClassName({ row, rowIndex }) {
                 // 把每一行的索引放进row
                 row.index = rowIndex
@@ -104,6 +146,7 @@
                 const row = {
                     assetType: '',
                     assetScale: '',
+                    assetArea:'',
                     orderNo: '',
                     status: 1
                 }

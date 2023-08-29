@@ -37,7 +37,7 @@
       <el-table-column
         prop="empName"
         label="姓名"
-        width="100"
+        width="160"
       />
       <el-table-column
         prop="orgName"
@@ -54,11 +54,11 @@
         label="职务"
         width="100"
       />
-      <el-table-column label="操作" align="center">
+      <el-table-column label="操作" align="center" width="300" fixed="right">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="onShowUpdate(row)"> 编辑</el-button>
           <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="onDeleteOne(row,$index)"> 删除 </el-button>
-          <el-button size="mini"  @click="onSynchToCamunda(row,$index)"> 同步到CAMUNDA </el-button>
+          <el-button size="mini"  @click="onSynchToCamunda(row,$index)"> 同步CAMUNDA </el-button>
         </template>
       </el-table-column>
     </el-table>
