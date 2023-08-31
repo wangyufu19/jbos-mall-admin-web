@@ -24,7 +24,7 @@
       <el-table-column
         prop="depName"
         label="部门名称"
-        width="100"
+        width="200"
       />
       <el-table-column
         prop="parentDepName"

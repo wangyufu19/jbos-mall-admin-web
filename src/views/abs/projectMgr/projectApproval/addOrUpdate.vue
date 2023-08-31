@@ -51,11 +51,7 @@
                 :loading="loading"
                 placeholder="请选择">
                 <el-option
-<<<<<<< HEAD
                     v-for="item in assetTypeItems"
-=======
-                    v-for="item in basicAssetItems"
->>>>>>> 85f6bf0a9be30cb7cfb6813da92564270126cc9c
                     :key="item.DICTID"
                     :label="item.DICTNAME"
                     :value="item.DICTID"
@@ -353,7 +349,7 @@
               this.getInfoById(rowObj.id)
             }
             this.initBusinessDict('ABS_PROJECTTYPE')
-            this.initBusinessDict('ABS_ASSETTYPE')
+            this.initBusinessDict('ABS_BASIC_ASSET')
             this.initBusinessDict('JBOS_YEANO')
           },
           initBusinessDict(typeId){
@@ -362,7 +358,7 @@
               const res = response.data
               if(typeId==='ABS_PROJECTTYPE'){
                 this.proejctTypeItems = res.data
-              }else if(typeId==='ABS_ASSETTYPE'){
+              }else if(typeId==='ABS_BASIC_ASSET'){
                 this.assetTypeItems = res.data
               }else if(typeId==='JBOS_YEANO'){
                 this.yesNoItems = res.data

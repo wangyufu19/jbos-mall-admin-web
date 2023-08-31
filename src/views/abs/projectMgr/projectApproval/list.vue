@@ -54,12 +54,14 @@
         width="120"
         :formatter="onFormatter"
       >
+      <!-- 
       <template slot-scope="scope">
 			<el-select v-model="scope.row.projectType"  placeholder="请选择" filterable allow-create>
 				<el-option v-for="item in projectTypeItems " :key="item.DICTID" :label="item.DICTNAME" :value="item.DICTID">
 				</el-option>
 			</el-select>
-		  </template>
+		  </template> 
+      -->
 
       </el-table-column>
       <el-table-column

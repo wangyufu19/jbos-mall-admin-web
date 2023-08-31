@@ -69,6 +69,7 @@
   </div>
 </template>
 <script>
+import request from '@/utils/request'
 import {exportExcel } from '@/utils/export'
 import {getToken} from "@/utils/global";
 import {Message } from 'element-ui'
@@ -144,7 +145,12 @@ export default {
     },
     onExport(){
       this.listLoading = true
-      exportEmp().then(response => {
+      request({
+        url: '/admin/emp/export',
+        method: 'post',
+        data:{},
+        responseType: "blob"
+      }).then(response => {
         if(response.data instanceof Blob){
           exportExcel(response.data,'application/vnd.ms-excel','员工信息表.xlsx');
         }     

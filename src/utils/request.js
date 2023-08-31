@@ -9,7 +9,7 @@ import merge from 'lodash/merge'
 // create an axios instance
 const http = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
-  timeout: 5000,
+  timeout: 60000,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json; charset=utf-8'
