@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: '资产证券化系统',
+  title: 'JBOS支撑平台',
 
   /**
    * @type {boolean} true | false

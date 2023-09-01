@@ -118,5 +118,14 @@ export default {
 </script>
 
 <style scoped>
+.filter-container{
+  margin-bottom: 10px;
+}
+/deep/ .el-dialog__title {
+  color: #303133;
+}
+/deep/ .el-dialog__header {
+    border-bottom: 1px solid #e3e8ee;
+}
 
 </style>
