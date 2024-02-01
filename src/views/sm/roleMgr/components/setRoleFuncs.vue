@@ -4,7 +4,6 @@
       ref="tree"
       :data="items"
       show-checkbox
-      check-strictly
       node-key="id"
       :props="defaultProps"
       :filter-node-method="filterNode"
@@ -50,11 +49,23 @@ export default {
       await getRoleFuncs({ roleId: this.getRoleId}).then(response => {
         const res=response.data
         this.hasCheckedKeyIds = res.data
-        this.$refs.tree.setCheckedKeys(this.hasCheckedKeyIds,false)
+        //this.$refs.tree.setCheckedKeys(this.hasCheckedKeyIds,false)
+        let _this = this;
+        _this.$data.thisRefTree = setInterval(() =>{
+          this.hasCheckedKeyIds.forEach((i) => {
+            let node = _this.$refs.tree.getNode(i);
+            if(node.isLeaf){
+              _this.$refs.tree.setChecked(node, true);
+            }
+          });
+          clearInterval(_this.$data.thisRefTree)
+        },200)
+
       })
     },
     onSaveRoleFuncs() {
-      const checkedIds = this.$refs.tree.getCheckedKeys()
+      //const checkedIds = this.$refs.tree.getCheckedKeys()
+      const checkedIds = this.$refs.tree.getCheckedNodes(false,true).map(i => i.id)
       saveRoleFuncs({roleId: this.getRoleId,checkedIds: checkedIds}).then(response => {
         this.dialogFormVisible = false
         this.$message({

@@ -7,7 +7,7 @@
     <el-tab-pane  label="角色权限" name="roleFunc">
       <set-role-funcs ref="roleFunc" v-if="activeName=='roleFunc'" :getRoleId="getRoleId" :getRoleName="getRoleName"/>
     </el-tab-pane>
-    <el-tab-pane label="角色分配" name="roleEmp">
+    <el-tab-pane label="授权人员" name="roleEmp">
       <role-emp v-if="activeName=='roleEmp'" :getRoleId="getRoleId" :getRoleName="getRoleName"/>
     </el-tab-pane>
   </el-tabs>

@@ -52,7 +52,6 @@ http.interceptors.response.use(
     }
   },
   error => {
-    alert(error.response.status)
     if(error.response.status===401){
       store.dispatch('user/resetToken').then(() => {
         location.reload()
