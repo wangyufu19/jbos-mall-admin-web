@@ -8,9 +8,17 @@
         <el-input v-model="formObj.funcName" />
       </el-form-item>
       <el-form-item label="功能类型" prop="funcType">
-        <el-select v-model="formObj.funcType" placeholder="请选择">
-          <el-option label="目录" value="0" />
-          <el-option label="菜单" value="1" />
+        <el-select
+          v-model="formObj.funcType"
+          clearable
+          :loading="loading"
+          placeholder="请选择">
+          <el-option
+            v-for="item in funcTypeDict"
+            :key="item.DICTID"
+            :label="item.DICTNAME"
+            :value="item.DICTID"
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="路由地址" prop="funcUrl">
@@ -31,6 +39,7 @@
 </template>
 
 <script>
+import { getCacheDictCodeList } from '@/api/sm/dict'
 import { addFunc, updateFunc } from '@/api/sm/func'
 export default {
   name: 'AddOrEditFunc',
@@ -51,6 +60,7 @@ export default {
         icon: '',
         orderNo: ''
       },
+      funcTypeDict:[],
       rules: {
         funcCode: [{ required: true, message: '功能编码必须填写', trigger: 'change' }],
         funcName: [{ required: true, message: '功能名称必须填写', trigger: 'change' }],
@@ -85,6 +95,15 @@ export default {
         this.dialogFormVisible = true
         this.formObj = formObj
       }
+      this.initFuncType()
+    },
+    initFuncType(){
+      this.loading = true
+      getCacheDictCodeList({typeId: 'JBOS_FUNCTYPE'}).then(response => {
+        const res = response.data
+        this.funcTypeDict = res.data
+        this.loading = false
+      })
     },
     onAdd() {
       this.$refs['formObj'].validate((valid) => {

@@ -16,10 +16,11 @@ export function login(data) {
  * @param {*} accessToken 
  * @returns 
  */
-export function logout(accessToken) {
+export function logout(data) {
   return request({
     url: '/auth/logout',
-    method: 'post'
+    method: 'post',
+    data
   })
 }
 export function getInfo(accessToken) {

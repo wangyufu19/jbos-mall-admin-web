@@ -11,6 +11,7 @@ const loadView = (view) => { // 路由懒加载
   return resolve => require([`@/views/${view}`], resolve)
 }
 
+
 //白名单路由
 const whiteList = ['/home', '/auth-redirect']
 

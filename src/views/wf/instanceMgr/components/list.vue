@@ -42,7 +42,7 @@
       <el-table-column
         prop="bizNo"
         label="业务编号"
-        width="200"
+        width="260"
       />
       <el-table-column
         prop="bizType"
